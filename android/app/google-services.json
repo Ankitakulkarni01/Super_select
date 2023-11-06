@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922941533642",
+    "project_id": "superselect-1614d",
+    "storage_bucket": "superselect-1614d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922941533642:android:a469ec778194ce49dcf333",
+        "android_client_info": {
+          "package_name": "com.super_select"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMy6GtuGaYfOk-Zrt7tnmiosdnDwTEVfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
