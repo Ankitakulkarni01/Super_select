@@ -37,7 +37,7 @@ function Section({ children, title }: SectionProps): JSX.Element {
   useEffect(() => {
     createFirebaseToken();
 
-    sendOTP()
+    // logins()
   }, [])
 
   const sendOTP = async () => {
@@ -62,8 +62,8 @@ function Section({ children, title }: SectionProps): JSX.Element {
 
   const logins = async () => {
     const { success, message } = await login({
-      number: '7776007924',
-      password: 'test@1234',
+      number: '9876544422',
+      password: 'Test@123',
     })
     console.log(success, message)
   }
