@@ -10,9 +10,10 @@ import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as yup from 'yup';
 
-import { Colors } from '../../utils/colors';
 import ActionButton from '../../components/actionButton';
-import Logo from '../../assets/logo/logo.png'
+// import Logo from '../../assets/logo/logo.png'
+import { Colors } from '../../utils/color';
+import { Image } from 'react-native';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -44,8 +45,13 @@ const SignUpScreen = () => {
   return (
     <View style={styles.loginContainer}>
       <View style={styles.logoContainer}>
-        <Logo height={80} width={180} />
-      </View>
+                {/* <Logo height={80} width={180} /> */}
+                <Image
+                        source={require('../../assets/logo/logo.png')}
+                        resizeMode={'contain'}
+                        style={{ height: 80, width: '100%'}}
+                    />
+            </View>
       <Text style={styles.errorText}>{error}</Text>
       <Formik
         validationSchema={loginValidationSchema}
@@ -64,58 +70,18 @@ const SignUpScreen = () => {
         }) => (
           <>
             <View >
-              <View style={{ flexDirection: 'row', height: 40, marginHorizontal: 10, }}>
-                <View style={{ flexDirection: 'row', flex: 1, height: 30 }}>
-                  <TouchableWithoutFeedback
-                    onPress={() => setisComapny(false)}>
-                    <View style={isComapny ? styles.isNotFocus : styles.isFocus}
-                    >
-                      <Text style={isComapny ? styles.isNotFocusText : styles.isFocusText}>INDIVIDUAL</Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback
-                    onPress={() => setisComapny(true)}>
-                    <View style={isComapny ? styles.isFocus : styles.isNotFocus}
-                    >
-                      <Text style={isComapny ? styles.isFocusText : styles.isNotFocusText}>COMPANY</Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-              {
-                isComapny && <View style={styles.textinputParentContainer}>
-                  <View style={styles.textinputContainer}>
-                    <Ionicons name={'business-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
-                    <TextInput
-                      // name="email"
-                      placeholder="Company"
-                      style={styles.textInput}
-                      onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      value={values.email}
-                      keyboardType="email-address"
-                      placeholderTextColor={Colors.LIGTH_COLOR}
-                    />
-                  </View>
-                  {errors.email && touched.email &&
-                    <Text style={styles.errorMsgText}>{errors.email}</Text>
-                  }
-                </View>
-              }
-
-
-              <View style={styles.textinputParentContainer}>
+            <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'mail-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'call-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
                   <TextInput
                     // name="email"
-                    placeholder="Email"
+                    placeholder="Phone Number"
                     style={styles.textInput}
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
                     value={values.email}
                     keyboardType="email-address"
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.PURE_WHITE}
                   />
                 </View>
                 {errors.email && touched.email &&
@@ -138,7 +104,7 @@ const SignUpScreen = () => {
                       onBlur={handleBlur('email')}
                       value={values.email}
                       keyboardType="email-address"
-                      placeholderTextColor={Colors.LIGTH_COLOR}
+                      placeholderTextColor={Colors.PURE_WHITE}
                     />
                   </View>
                   {errors.email && touched.email &&
@@ -148,7 +114,7 @@ const SignUpScreen = () => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'person-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'person-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
                   <TextInput
                     // name="email"
                     placeholder="First Name"
@@ -157,58 +123,17 @@ const SignUpScreen = () => {
                     onBlur={handleBlur('email')}
                     value={values.email}
                     keyboardType="email-address"
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.PURE_WHITE}
                   />
                 </View>
                 {errors.email && touched.email &&
                   <Text style={styles.errorMsgText}>{errors.email}</Text>
                 }
               </View>
+            
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'person-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
-                  <TextInput
-                    // name="email"
-                    placeholder="Last Name"
-                    style={styles.textInput}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    keyboardType="email-address"
-                    placeholderTextColor={Colors.LIGTH_COLOR}
-                  />
-                </View>
-                {errors.email && touched.email &&
-                  <Text style={styles.errorMsgText}>{errors.email}</Text>
-                }
-              </View>
-              <View style={styles.textinputParentContainer}>
-                <View style={styles.textinputContainer}>
-                  <Ionicons name={'call-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
-                  <TextInput
-                    // name="email"
-                    placeholder="Phone Number"
-                    style={styles.textInput}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    keyboardType="email-address"
-                    placeholderTextColor={Colors.LIGTH_COLOR}
-                  />
-                </View>
-                {errors.email && touched.email &&
-                  <Text style={styles.errorMsgText}>{errors.email}</Text>
-                }
-              </View>
-              {/* {
-                                !isComapny && <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', alignSelf: 'flex-end', marginHorizontal: 10 }}>
-                                <ActionButton onPress={handleSubmit}
-                                    icons={<Ionicons name={'document'} size={20} color={Colors.PURE_WHITE} style={{ marginHorizontal: 15 }} />}
-                                    title="Update ID/Documents" /></View>
-                            } */}
-              <View style={styles.textinputParentContainer}>
-                <View style={styles.textinputContainer}>
-                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
                   <TextInput
                     // name="password"
                     placeholder="Password"
@@ -217,7 +142,7 @@ const SignUpScreen = () => {
                     onBlur={handleBlur('password')}
                     value={values.password}
                     secureTextEntry={showPassword}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.PURE_WHITE}
                   />
                 </View>
                 {/* {errors.password && touched.password &&
@@ -226,7 +151,7 @@ const SignUpScreen = () => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
                   <TextInput
                     // name="email"
                     placeholder="Confirm Paasword"
@@ -235,7 +160,7 @@ const SignUpScreen = () => {
                     onBlur={handleBlur('email')}
                     value={values.email}
                     keyboardType="email-address"
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.PURE_WHITE}
                   />
                 </View>
                 {errors.email && touched.email &&
@@ -256,8 +181,8 @@ const SignUpScreen = () => {
         <Text style={{ color: 'black', marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }}>Login</Text>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: Colors.LIGTH_COLOR, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.LIGTH_COLOR, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
-        <Text style={{ color: Colors.LIGTH_COLOR, fontSize: 12 }}>confirm you have read our <Text style={{ color: Colors.LIGTH_COLOR, marginHorizontal: 5, textDecorationLine: "underline", }}> Privacy Policy.</Text></Text>
+        <Text style={{ color: Colors.PURE_WHITE, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
+        <Text style={{ color: Colors.PURE_WHITE, fontSize: 12 }}>confirm you have read our <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", }}> Privacy Policy.</Text></Text>
       </View>
 
     </View>
@@ -270,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     elevation: 10,
-    backgroundColor: 'white',
+    backgroundColor: Colors.BLACK_COLR,
   },
   logoContainer: {
     alignItems: 'center',
@@ -314,14 +239,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.SOFT_COLOR
   },
   isNotFocusText: {
-    color: Colors.BLACK_COLR,
+    color: Colors.PURE_WHITE,
     fontWeight: 'bold'
   },
   isFocus: {
     flex: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.BLACK_COLR
+    backgroundColor: Colors.PURE_WHITE
   },
   isFocusText: {
     color: Colors.PURE_WHITE,
@@ -394,7 +319,7 @@ const styles = StyleSheet.create({
   linkText: {
     textAlign: 'right',
     textDecorationLine: 'underline',
-    color: Colors.BLACK_COLR,
+    color: Colors.PURE_WHITE,
     fontSize: 15,
   }
 })

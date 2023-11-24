@@ -7,11 +7,11 @@ export const currencyValueFormatter = (value: number) => {
   const fn = new Intl.NumberFormat(lang, {
     style: "currency",
     currency: "INR",
-    currencyDisplay: "narrowSymbol",
+    // currencyDisplay: "narrowSymbol",
 
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-    signDisplay: "never",
+    // signDisplay: "never",
   });
 
   return fn.format(value);

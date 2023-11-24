@@ -9,17 +9,19 @@ import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as yup from 'yup';
 
-import { Colors } from '../../utils/colors';
 import ActionButton from '../../components/actionButton';
-import Logo from '../../assets/svg/logo.svg'
-import { login } from '../../api/login_api';
+// import Logo from '../../assets/logo/logo.png'
+// import { login } from '../../api/login_api';
 import { StackActions } from '@react-navigation/native';
+import { Colors } from '../../utils/color';
+import { Image } from 'react-native';
+import { login } from '../../utils/extraAPIs/login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const loginValidationSchema = yup.object().shape({
-    email: yup
-        .string()
-        .email("Please enter valid email")
-        .required('Email Address is Required'),
+    phoneNumber: yup
+        .string(),
     password: yup
         .string()
         .min(8, ({ min }) => `Password must be at least ${min} characters`)
@@ -27,7 +29,7 @@ const loginValidationSchema = yup.object().shape({
         .required('Password is required'),
 })
 
-const SignInScreen = (props) => {
+const SignInScreen = (props: any) => {
     const [showResetPassword, setShowResetPassword] = useState(false);
     const [emails, setEmail] = useState("");
     const [error, setError] = useState("");
@@ -36,12 +38,20 @@ const SignInScreen = (props) => {
 
     const bagRef = useRef(null);
 
-    const logins = async (values) =>{
-        const {success, message} = await login(values.email, values.password)
+    const logins  = async (phoneNumber: string, password: string) =>{
+        console.log("hi")
+        const values = {
+            "number": "9876544422",
+            "password": "Test@123"
+        }
+        const {success, message, data} = await login(values)
+        console.log(message, success)
         if(success){
             props.navigation.dispatch(
-                StackActions.replace('Dashboard')
+                StackActions.replace('Wishlist')
             );
+            console.log(data.access_token)
+            await AsyncStorage.setItem("access_token", data.token)
         }
     }
 
@@ -53,14 +63,19 @@ const SignInScreen = (props) => {
     return (
         <View style={styles.loginContainer}>
             <View style={styles.logoContainer}>
-                <Logo height={80} width={180} />
+                {/* <Logo height={80} width={180} /> */}
+                <Image
+                        source={require('../../assets/logo/logo.png')}
+                        resizeMode={'contain'}
+                        style={{ height: 80, width: '100%'}}
+                    />
             </View>
             <Text style={styles.errorText}>{error}</Text>
             <Formik
                 validationSchema={loginValidationSchema}
-                initialValues={{ email: '', password: '' }}
+                initialValues={{phoneNumber: '', password: '' }}
                 onSubmit={values => {
-                    logins(values)
+                    logins(values.phoneNumber,values.password)
                 }}
 
                 innerRef={bagRef}
@@ -78,25 +93,25 @@ const SignInScreen = (props) => {
                     <View >
                         <View style={styles.textinputParentContainer}>
                             <View style={styles.textinputContainer}>
-                                <Ionicons name={'mail-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                                <Ionicons name={'mail-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
                                 <TextInput
                                     // name="email"
-                                    placeholder="Email"
+                                    placeholder="phoneNumber"
                                     style={styles.textInput}
-                                    onChangeText={handleChange('email')}
-                                    onBlur={handleBlur('email')}
-                                    value={values.email}
+                                    onChangeText={handleChange('phoneNumber')}
+                                    onBlur={handleBlur('phoneNumber')}
+                                    value={values.phoneNumber}
                                     keyboardType="email-address"
-                                    placeholderTextColor={Colors.LIGTH_COLOR}
+                                    placeholderTextColor={Colors.PURE_WHITE}
                                 />
                             </View>
-                            {errors.email && touched.email &&
+                            {/* {errors.email && touched.email &&
                                 <Text style={styles.errorMsgText}>{errors.email}</Text>
-                            }
+                            } */}
                         </View>
                         <View style={styles.textinputParentContainer}>
                             <View style={styles.textinputContainer}>
-                                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
                                 <TextInput
                                     // name="password"
                                     placeholder="Password"
@@ -105,7 +120,7 @@ const SignInScreen = (props) => {
                                     onBlur={handleBlur('password')}
                                     value={values.password}
                                     secureTextEntry={showPassword}
-                                    placeholderTextColor={Colors.LIGTH_COLOR}
+                                    placeholderTextColor={Colors.PURE_WHITE}
                                 />
                             </View>
                             {errors.password && touched.password &&
@@ -140,12 +155,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 25,
         elevation: 10,
-        backgroundColor: 'white',
+        backgroundColor: 'black',
     },
     logoContainer: {
         alignItems: 'center',
         marginBottom: 20,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth:2,
+        // borderColor:'while',
+        // height:100,
+        // width:100
     },
     textinputParentContainer: {
         marginVertical: 15,
@@ -164,7 +183,7 @@ const styles = StyleSheet.create({
     textInput: {
         height: 45,
         width: '70%',
-        color: "black"
+        color: Colors.PURE_WHITE
     },
     errorMsgText: {
         fontSize: 10,
@@ -242,7 +261,7 @@ const styles = StyleSheet.create({
     linkText: {
         textAlign: 'right',
         textDecorationLine: 'underline',
-        color: Colors.BLACK_COLR,
+        color: Colors.PURE_WHITE,
         fontSize: 15,
     }
 })

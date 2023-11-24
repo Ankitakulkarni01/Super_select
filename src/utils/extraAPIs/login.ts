@@ -10,11 +10,14 @@ export type SendLoginDataType = {
 };
 
 export const login = async (data: SendLoginDataType) => {
+  console.log(data)
   const res = await fetchExtended({
     url: `${API_BASE_PATH}/login`,
     method: "POST",
     payload: data,
   });
+  
+  
 
   return res;
 };
