@@ -16,8 +16,6 @@ export const login = async (data: SendLoginDataType) => {
     method: "POST",
     payload: data,
   });
-  
-  
 
   return res;
 };

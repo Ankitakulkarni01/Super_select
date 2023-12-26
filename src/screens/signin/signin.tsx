@@ -42,7 +42,7 @@ const SignInScreen = (props: any) => {
         console.log("hi")
         const values = {
             "number": "9876544422",
-            "password": "Test@123"
+            "password": "Test@123",
         }
         const {success, message, data} = await login(values)
         console.log(message, success)
@@ -52,6 +52,9 @@ const SignInScreen = (props: any) => {
             );
             console.log(data.access_token)
             await AsyncStorage.setItem("access_token", data.token)
+        }else{
+            console.log("Hello ji");
+            
         }
     }
 

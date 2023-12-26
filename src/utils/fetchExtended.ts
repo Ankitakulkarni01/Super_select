@@ -15,7 +15,7 @@ export const getHeaders = async (contentType?: string) => {
 
   const access_token = await AsyncStorage.getItem("access_token")
 
-  console.log(access_token)
+  console.log("access",access_token)
 
   const headers = {
     "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const fetchExtended = async (fetchdata: {
   //
 
   try {
-    console.log(fetchdata)
+    
     const req = await axios({
       method: fetchdata.method,
       url: fetchdata.url,
@@ -47,14 +47,11 @@ const fetchExtended = async (fetchdata: {
       data: fetchdata.payload
     });
 
-
-
     const { success, message, data } = await req.data;
-
 
     return { success, message, data };
   } catch (err) {
-    console.log("error", err);
+    console.log(err)
 
     return {
       success: false,

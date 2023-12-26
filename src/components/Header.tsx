@@ -18,7 +18,7 @@ const Header = ({ props }) => {
                 {/* <View style={styles.logoContainer}>
                     <Yoair height={70} width={70} />
                 </View> */}
-                <TouchableOpacity style={styles.favouriteContainer} onPress={() => props.navigation.navigate('WishList')}>
+                <TouchableOpacity style={styles.favouriteContainer} onPress={() => props.navigation.navigate('Wishlist')}>
                     <Feather name={'heart'} size={25} />
                     {/* {
                         cart.length > 0 &&

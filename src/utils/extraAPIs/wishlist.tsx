@@ -5,7 +5,7 @@ import { API_BASE_PATH } from "../constants";
 import fetchExtended from "../fetchExtended";
 
 export type WishlistDataType = {
-    carID: number;
+    carId: number;
   };
 
 export const getWishlistAPI = async () => {

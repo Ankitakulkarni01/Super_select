@@ -19,13 +19,25 @@ const Drawer = createDrawerNavigator();
 const HomeStack = () => {
     return (
         <Stack.Navigator>
-               <Stack.Screen
+           <Stack.Screen
                 name="SignIn"
                 component={SignInScreen}
                 options={{
                     headerShown: false
                 }}
 
+            />
+             <Stack.Screen
+                name="Home"
+                component={Homescreen}
+                options={{ header: props => <Header props={props} /> }}
+            /> 
+                <Stack.Screen
+                name="Wishlist"
+                component={WishListScreen}
+                options={{
+                    headerShown: false
+                }}
             />
             <Stack.Screen
                 name="Calculator"
@@ -35,19 +47,6 @@ const HomeStack = () => {
                 }}
             />
           
-            <Stack.Screen
-                name="Home"
-                component={Homescreen}
-                options={{ header: props => <Header props={props} /> }}
-            /> 
-          
-             <Stack.Screen
-                name="Wishlist"
-                component={WishListScreen}
-                options={{
-                    headerShown: false
-                }}
-            />
             <Stack.Screen
                 name="SignUp"
                 component={SignUpScreen}
