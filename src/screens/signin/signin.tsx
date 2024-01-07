@@ -17,6 +17,7 @@ import { Colors } from '../../utils/color';
 import { Image } from 'react-native';
 import { login } from '../../utils/extraAPIs/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createFirebaseToken } from '../../utils/firebase';
 
 
 const loginValidationSchema = yup.object().shape({
@@ -39,11 +40,13 @@ const SignInScreen = (props: any) => {
     const bagRef = useRef(null);
 
     const logins  = async (phoneNumber: string, password: string) =>{
-        console.log("hi")
         const values = {
             "number": "9876544422",
             "password": "Test@123",
+            "fcmToken": await createFirebaseToken()
         }
+
+        console.log(values)
         const {success, message, data} = await login(values)
         console.log(message, success)
         if(success){

@@ -21,7 +21,7 @@ const WishListScreen= (props:any) => {
         }
       ])
     useEffect(() => {
-        postWishlist()
+      getWishlist()
     }, [])
 
     const postWishlist = async () =>{
@@ -32,8 +32,6 @@ const WishListScreen= (props:any) => {
         console.log(success, message,  data)
 
         if(success){
-           
-            
             getWishlist()
         }
     }
