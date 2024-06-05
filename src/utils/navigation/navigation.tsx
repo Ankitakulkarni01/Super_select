@@ -11,6 +11,9 @@ import Header from '../../components/Header';
 
 import Calculatorscreen from '../../screens/calculator/calculator';
 import WishListScreen from '../../screens/Wishlist/wishlist';
+import InventoryPage from '../../screens/Inventory/inventory';
+import CarDetailsScreen from '../../screens/carDetails/carDetails';
+import InsuranceScreen from '../../screens/insurance/insurance';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,28 +22,25 @@ const Drawer = createDrawerNavigator();
 const HomeStack = () => {
     return (
         <Stack.Navigator>
-           
-             <Stack.Screen
-                name="Home"
-                component={Homescreen}
-                options={{ header: props => <Header props={props} /> }}
-            /> 
-                <Stack.Screen
-                name="Wishlist"
-                component={WishListScreen}
-                options={{
-                    headerShown: false
-                }}
-            />
 
-<Stack.Screen
-                name="SignIn"
-                component={SignInScreen}
+            <Stack.Screen
+                name="Insurance"
+                component={InsuranceScreen}
                 options={{
                     headerShown: false
                 }}
 
             />
+
+            <Stack.Screen
+                name="Inventory"
+                component={InventoryPage}
+                options={{
+                    headerShown: false
+                }}
+            />
+
+
             <Stack.Screen
                 name="Calculator"
                 component={Calculatorscreen}
@@ -48,7 +48,35 @@ const HomeStack = () => {
                     headerShown: false
                 }}
             />
-          
+
+            <Stack.Screen
+                name="CarDetails"
+                component={CarDetailsScreen}
+                options={{ header: props => <Header props={props} /> }}
+            />
+            <Stack.Screen
+                name="Home"
+                component={Homescreen}
+                options={{ header: props => <Header props={props} /> }}
+            />
+            <Stack.Screen
+                name="Wishlist"
+                component={WishListScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+
+
+            <Stack.Screen
+                name="SignIn"
+                component={SignInScreen}
+                options={{
+                    headerShown: false
+                }}
+
+            />
+
             <Stack.Screen
                 name="SignUp"
                 component={SignUpScreen}
@@ -56,8 +84,8 @@ const HomeStack = () => {
                     headerShown: false
                 }}
             />
-          
-          
+
+
             {/* <Stack.Screen
                 name="WishList"
                 component={WishList}

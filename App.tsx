@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from 'react';
+
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+
 import messaging from '@react-native-firebase/messaging';
 import {
   SafeAreaView, Text,
@@ -13,6 +20,10 @@ import { Alert } from 'react-native';
 
 
 const App = (props:any) => {
+
+  const queryClient = new QueryClient()
+
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -111,14 +122,22 @@ const App = (props:any) => {
  
  
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <PaperProvider>
-        <NavigationContainer>
-          <HomeStack />
-        </NavigationContainer>
-      </PaperProvider>
-    </SafeAreaView>
+  <QueryClientProvider client={queryClient}>
+         <SafeAreaView style={{ flex: 1 }}>
+      
+           <PaperProvider>
+             <NavigationContainer>
+               <HomeStack />
+             </NavigationContainer>
+            </PaperProvider>
+           </SafeAreaView>
+    </QueryClientProvider>
+
   );
 };
 
 export default App;
+
+
+
+

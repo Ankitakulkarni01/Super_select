@@ -1,0 +1,69 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Font License.txt",
+      "sha1": "3f9c599c292e729d202d714f98758a04b898917a"
+    },
+    {
+      "path": "assets/fonts/Oxanium-Bold.ttf",
+      "sha1": "49813cae515a4aa19fc7f44483c63b9d5855f03c"
+    },
+    {
+      "path": "assets/fonts/Oxanium-ExtraBold.ttf",
+      "sha1": "286419b4048ff8954ef9728bfa9f2235ac13a9e4"
+    },
+    {
+      "path": "assets/fonts/Oxanium-ExtraLight.ttf",
+      "sha1": "6492beb45c6e33d638720e344af5a953ee0a0bd5"
+    },
+    {
+      "path": "assets/fonts/Oxanium-Light.ttf",
+      "sha1": "586a7ef91a92066d6c7880983a248d98416a4bd2"
+    },
+    {
+      "path": "assets/fonts/Oxanium-Medium.ttf",
+      "sha1": "4f71ca0519c630b29dca878ddfdcc770404efc15"
+    },
+    {
+      "path": "assets/fonts/Oxanium-Regular.ttf",
+      "sha1": "f516f9aaeab4219b9b8da7f3370d6794c117b329"
+    },
+    {
+      "path": "assets/fonts/Oxanium-SemiBold.ttf",
+      "sha1": "072b65d86efc28a4fbb54c90ded46604e5d4e851"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Bold-Italic.otf",
+      "sha1": "abd6dbecf06d69e6d577f1257042d7b53ab6ebeb"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Bold.otf",
+      "sha1": "052f2a0421fd128c6a1f87428a1de4c2b808717f"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Condensed-Bold-Italic.otf",
+      "sha1": "fabbbad1837971b8218deecac7e3d03ca9d8c67f"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Condensed-Bold.otf",
+      "sha1": "a5676bdb18f7c4246fdfdd43d5684c48db7a0c4a"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Condensed-Italic.otf",
+      "sha1": "8219a0e33fba3d17a13363b910f40c630546d05d"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Condensed.otf",
+      "sha1": "9b015c458f7ed9a5c35fb7c1326eb88dd5674386"
+    },
+    {
+      "path": "assets/fonts/Zebulon-Italic.otf",
+      "sha1": "e47baa056e404598c2e74849d692a3f0a1cc5470"
+    },
+    {
+      "path": "assets/fonts/Zebulon.otf",
+      "sha1": "80c34d35360a4fabee4304956d2c128461140870"
+    }
+  ]
+}

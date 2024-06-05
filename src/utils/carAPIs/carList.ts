@@ -1,3 +1,4 @@
+import { log } from "react-native-reanimated";
 import { API_BASE_PATH } from "../constants";
 import fetchExtended from "../fetchExtended";
 import { queryObjectToString } from "../queryObjectToString";
@@ -30,9 +31,13 @@ export const getCarList = async (
 
     getFilter = false;
 
+
+    console.log(res);
+    
+
     return {
       ...res,
-      nextPageNo: res.totalPages > page ? page + 1 : undefined,
+      // nextPageNo: res?.totalPages > page ? page + 1 : undefined,
     };
   } catch (err) {
     return {
