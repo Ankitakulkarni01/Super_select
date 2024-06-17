@@ -16,6 +16,7 @@ import MenuItem from 'react-native-paper/lib/typescript/components/Menu/MenuItem
 import RadioInput from './RadioInput';
 import DateInput from './DateInput';
 import { addDaysToDate, formatDate, parseDate } from '../../src/utils/date-time';
+import ActionButton from '../../src/components/actionButton';
 
 
 export type FileInputType = "image"; // | "video"
@@ -269,38 +270,77 @@ const GeneralForm: FC<GeneralFormType> = ({
                     switch (d.type) {
                       case "date": {
                         return (
-                            <DateInput
-                              label={d?.placeholder ?? d.name}
-                              value={
-                                values[d.name]
-                                  ? parseDate(values[d.name] as string)
-                                  : null
-                              }
-                              onChange={(v) =>
-                                handleChange({
-                                  target: {
-                                    name: d.name,
-                                    value: formatDate(v),
-                                  },
-                                })
-                              }
-                              disablePast
-                              maxDate={addDaysToDate(new Date(), 28)}
-                              slotProps={{
-                                textField: {
-                                  id: formName + d.name,
-                                  name: d.name,
-                                  required: d?.required,
-                                  variant: "standard",
-                                  size: "medium",
-                                  error: hasError,
-                                  helperText:
-                                    !hideErrorText && hasError
-                                      ? errors[d.name]
-                                      : "",
-                                },
-                              }}
-                            />
+                          <TextInput
+                          label={d?.placeholder ?? d.name}
+                          multiline={d?.isTextField}
+                          variant="standard"
+                          // size="medium"
+                          maxLength={15}
+                          InputProps={{
+                            startAdornment: d?.prefix ? (
+                              <React.Fragment> //the change
+                                {" "}
+                                {d.prefix}//the change
+                              </React.Fragment>
+                            ) : null,
+                            endAdornment: d?.suffix ? (
+                              <React.Fragment>
+                                {d.suffix}
+                              </React.Fragment>
+                            ) : null,
+                          }}
+                          color={Colors.BLACK_COLR}
+                          value={String(values[d.name])}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          inputStyle={{   fontFamily: 'Oxanium-Medium',}}
+                          style={{marginVertical:5}}
+                          
+                          // error={hasError}
+                          helperText={
+                            !hideErrorText && hasError
+                              ? errors[d.name]
+                              : ""
+                          }
+                        >
+                          {/* {d?.selectOptions?.map((opt, k) => (
+                            <MenuItem value={opt.value} key={k}>
+                              {opt?.text ?? opt.value}
+                            </MenuItem>
+                          ))} */}
+                        </TextInput>
+                            // <DateInput
+                            //   label={d?.placeholder ?? d.name}
+                            //   value={
+                            //     values[d.name]
+                            //       ? parseDate(values[d.name] as string)
+                            //       : null
+                            //   }
+                            //   onChange={(v) =>
+                            //     handleChange({
+                            //       target: {
+                            //         name: d.name,
+                            //         value: formatDate(v),
+                            //       },
+                            //     })
+                            //   }
+                            //   disablePast
+                            //   maxDate={addDaysToDate(new Date(), 28)}
+                            //   slotProps={{
+                            //     textField: {
+                            //       id: formName + d.name,
+                            //       name: d.name,
+                            //       required: d?.required,
+                            //       variant: "standard",
+                            //       size: "medium",
+                            //       error: hasError,
+                            //       helperText:
+                            //         !hideErrorText && hasError
+                            //           ? errors[d.name]
+                            //           : "",
+                            //     },
+                            //   }}
+                            // />
                         );
                       }
 
@@ -327,10 +367,11 @@ const GeneralForm: FC<GeneralFormType> = ({
                         return (
                           <TextInput
                             label={d?.placeholder ?? d.name}
+                            
                             multiline={d?.isTextField}
                             variant="standard"
                             // size="medium"
-                            maxLength={15}
+                            maxLength={30}
                             // InputProps={{
                             //   startAdornment: d?.prefix ? (
                             //     <React.Fragment> //the change
@@ -344,9 +385,13 @@ const GeneralForm: FC<GeneralFormType> = ({
                             //     </React.Fragment>
                             //   ) : null,
                             // }}
+                            color={Colors.BLACK_COLR}
                             value={String(values[d.name])}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            inputStyle={{   fontFamily: 'Oxanium-Medium',}}
+                            style={{marginVertical:5}}
+                            
                             // error={hasError}
                             helperText={
                               !hideErrorText && hasError
@@ -366,6 +411,11 @@ const GeneralForm: FC<GeneralFormType> = ({
                 </>
               );
             })}
+             <View style={{ marginVertical: 10 }}>
+              <ActionButton onPress={handleSubmit}
+                title="Submit Request" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE} /></View>
+
+          
           </>
         </View>
       )}

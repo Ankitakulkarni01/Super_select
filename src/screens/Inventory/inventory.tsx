@@ -76,10 +76,10 @@ const InventoryPage = (props: any) => {
     <View>
       <ScrollView style={{ padding: 10 }}>
         <View style={{marginBottom:15}}>
-          <Text style={{ color: Colors.BLACK_COLR, marginVertical: 15, fontFamily: 'Oxanium-Bold', fontSize: 30 }}>Inventory</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 15, alignItems: 'center', justifyContent: 'center', marginRight: 15 }}>
-              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10 }} >Exclude Sold Out</Text>
+          <Text style={{ color: Colors.BLACK_COLR, marginVertical: 15, fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing:5 }}>Inventory</Text>
+          <View style={{ flexDirection: 'row', marginVertical:10 }}>
+            <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 15, alignItems: 'center', justifyContent: 'center', marginRight: 15, borderColor:Colors.BORDER_COLOR }}>
+              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, letterSpacing:2 }} >Exclude Sold Out</Text>
               <Switch
                 trackColor={{ false: '#767577', true: '#81b0ff' }}
                 thumbColor={Colors.BLACK_COLR}
@@ -90,8 +90,8 @@ const InventoryPage = (props: any) => {
 
             </View>
 
-            <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, padding: 10, justifyContent: 'space-between' }}>
-              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10 }} >Filters</Text>
+            <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, padding: 10, justifyContent: 'space-between', borderColor:Colors.BORDER_COLOR }}>
+              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10 , letterSpacing:2}} >Filters</Text>
               <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />
 
             </View>

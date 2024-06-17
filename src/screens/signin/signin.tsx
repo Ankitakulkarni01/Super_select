@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createFirebaseToken } from '../../utils/firebase';
 
 
+
 const loginValidationSchema = yup.object().shape({
     phoneNumber: yup
         .string(),
@@ -99,10 +100,10 @@ const SignInScreen = (props: any) => {
                     <View >
                         <View style={styles.textinputParentContainer}>
                             <View style={styles.textinputContainer}>
-                                <Ionicons name={'mail-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
-                                <TextInput
+                            <Ionicons name={'call-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
+                   <TextInput
                                     // name="email"
-                                    placeholder="phoneNumber"
+                                    placeholder="Phone Number"
                                     style={styles.textInput}
                                     onChangeText={handleChange('phoneNumber')}
                                     onBlur={handleBlur('phoneNumber')}

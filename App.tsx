@@ -8,14 +8,14 @@ import {
 
 import messaging from '@react-native-firebase/messaging';
 import {
-  SafeAreaView, Text,
+  SafeAreaView, StatusBar, Text,
 } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import HomeStack from './src/utils/navigation/navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
+import HomeStack from './src/utils/navigation/navigation';
 
 
 
@@ -127,6 +127,7 @@ const App = (props:any) => {
       
            <PaperProvider>
              <NavigationContainer>
+             <StatusBar animated={true} backgroundColor="#5856D6" />
                <HomeStack />
              </NavigationContainer>
             </PaperProvider>

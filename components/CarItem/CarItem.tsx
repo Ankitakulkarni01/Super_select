@@ -23,7 +23,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { getYearFromFormattedDateString } from "../../src/utils/date-time";
 // import soldOutImg from "../../src/assets/img/sold-out.png";
 
-const CarItem: FC<{ data: Car, props: any }> = ({
+const CarItem: FC<{ data: Car, props?: any }> = ({
   data, 
   props
 }) => {
@@ -40,7 +40,7 @@ const CarItem: FC<{ data: Car, props: any }> = ({
 
 
   return (
-    <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} >
+    <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} activeOpacity={0.8}>
       {/* <View  style={{height:270}}> */}
         <Image
           style={{ width: '100%', height: 270}}
@@ -48,15 +48,22 @@ const CarItem: FC<{ data: Car, props: any }> = ({
             uri: data.previewImage,
           }}
           alt="Preview"
-          resizeMode={'contain'}
+          resizeMode={'stretch'}
         />
       {/* </View> */}
 
-      <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Oxanium-SemiBold', fontSize:22,paddingHorizontal:10 }}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Zebulon-Condensed', fontSize:22,paddingHorizontal:10,fontWeight:'300' , marginTop:10}}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
-         
+            data.price > 0
+            ?
             <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Oxanium-Medium', fontSize:18,letterSpacing:2 }}>{currencyValueFormatter(data.price)} </Text>
+            :
+            <ActionButton
+
+            onPress={() => console.log("conat=")}
+                title="Contact For Price" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+            />
         ) : (
           <Image
             source={require("../../src/assets/img/sold-out.png")}
@@ -69,19 +76,19 @@ const CarItem: FC<{ data: Car, props: any }> = ({
 
       <View style={styles.info}>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Ionicons name={'car-sport-outline'} size={20} color={Colors.BORDER_COLOR} />
+          <Ionicons name={'car-sport-outline'} size={20} color={Colors.BLACK_COLR} style={{opacity:0.5, marginBottom:5}} />
           {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Oxanium-Regular',letterSpacing:2 }}>  {getYearFromFormattedDateString(data.manufacturingDate)} </Text>
+          <Text style={{ color: Colors.BLACK_COLR, letterSpacing:2,fontWeight:'300'}}>  {getYearFromFormattedDateString(data.manufacturingDate)} </Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Entypo name={'gauge'} size={20} color={Colors.BORDER_COLOR} />
+          <Entypo name={'gauge'} size={20} color={Colors.BLACK_COLR} style={{opacity:0.5, marginBottom:5}}  />
           {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR ,fontFamily: 'Oxanium-Regular',letterSpacing:2}}>  {data.driven}km </Text>
+          <Text style={{ color: Colors.BLACK_COLR, letterSpacing:2,fontWeight:'300'}}>  {data.driven}km </Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <FontAwesome5 name={'gas-pump'} size={20} color={Colors.BORDER_COLOR} />
+          <FontAwesome5 name={'gas-pump'} size={20} color={Colors.BLACK_COLR} style={{opacity:0.5, marginBottom:5}}  />
           {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Oxanium-Regular', letterSpacing:2}}>  {data.fuelType}</Text>
+          <Text style={{ color: Colors.BLACK_COLR, letterSpacing:2,fontWeight:'300'}}>  {data.fuelType}</Text>
         </View>
       </View>
 
@@ -114,11 +121,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PURE_WHITE,
     textAlign: "left",
     borderRadius: 5,
-    // borderColor: Colors.BORDER_COLOR,
+    borderColor: Colors.BORDER_COLOR,
     overflow: 'hidden',
     marginVertical: 10,
-    // elevation: 20,
-  
+    // opacity:0.5,
+
+  borderWidth:1,
     shadowColor: Colors.BORDER_COLOR,
   },
   price: {
@@ -127,7 +135,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: Colors.BORDER_COLOR,
     paddingHorizontal:10,
-    overflow: 'hidden'
+    overflow: 'hidden', 
+    marginVertical:10
   },
   info: {
     // flex:1,

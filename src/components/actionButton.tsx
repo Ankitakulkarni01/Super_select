@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import { Colors } from '../utils/color';
 
-const ActionButton: FC<{ title: string, onPress: () => void, icons?: any, backgroundColor?: string }> = ({ backgroundColor, title, icons, onPress }) => {
+const ActionButton: FC<{ title: string, onPress: () => void, icons?: any, backgroundColor?: string, color?: string }> = ({ backgroundColor, title, icons, onPress , color}) => {
     return (
         <TouchableOpacity onPress={onPress} style={[Styles.buttonContainer, { backgroundColor: backgroundColor ? backgroundColor : Colors.PURE_WHITE }]} activeOpacity={0.8}>
-            <Text style={Styles.titleText}>{title}</Text>
+            <Text style={[Styles.titleText,{color: color ? color : Colors.BLACK_COLR}]}>{title}</Text>
             {
                 icons && icons
             }
@@ -25,14 +25,17 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        marginHorizontal: 10,
+        // marginHorizontal: 10,
+        // width:200,
         borderRadius: 5,
+        marginVertical:10,
         paddingHorizontal: 15
     },
     titleText: {
         fontSize: 17,
         textAlign: 'center',
-        color: Colors.BLACK_COLR
+        fontFamily: 'Oxanium-Bold',
+        // /color: Colors.BLACK_COLR
     }
 });
 

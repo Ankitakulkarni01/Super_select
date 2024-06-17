@@ -41,10 +41,24 @@ const DateInput: FC<DateInputType> = ({
   slotProps,
 }) => {
   const [datePickerOpen, setDatePickerOpen] = useState(false);
+  const [date, setDate] = useState(new Date())
+
 
   return (
    <>
-   <DatePicker
+    <DatePicker
+        modal
+        open={open}
+        date={date}
+        // onConfirm={(date) => {
+        //   setOpen(false)
+        //   setDate(date)
+        // }}
+        // onCancel={() => {
+        //   setOpen(false)
+        // }}
+      />
+   {/* <DatePicker
         modal
         open={open}
         date={value}
@@ -56,7 +70,7 @@ const DateInput: FC<DateInputType> = ({
         onCancel={() => {
             setDatePickerOpen(false)
         }}
-      />
+      /> */}
    </>
   );
 };

@@ -5,7 +5,7 @@ import styles from "./InventoryPageComp.module.scss";
 import { MenuItem, Select, SelectChangeEvent, Slider } from "@mui/material";
 
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { arrayRange } from "../src/utils/arrayRange";
 import { currencyValueFormatter } from "../src/utils/numberOperations";
 

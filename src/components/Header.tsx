@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 // import Yoair from '../assets/logo/logo.png'
 // import userStore from '../stores/userStore';
 import { Colors } from '../utils/color';
+import { Image } from 'react-native';
 
 
 const Header = ({ props }) => {
@@ -12,12 +13,13 @@ const Header = ({ props }) => {
     return (
         <View style={styles.headerContainer}>
             <View style={styles.headerTopContainer}>
-                <TouchableOpacity style={styles.menuContainer} onPress={() => props.navigation.openDrawer()}>
-                    <Feather name={'menu'} size={25} />
-                </TouchableOpacity>
-                {/* <View style={styles.logoContainer}>
-                    <Yoair height={70} width={70} />
-                </View> */}
+                <View style={styles.logoContainer}>
+                    <Image
+                        source={require('../../assets/logo/icon.png')}
+                        resizeMode={'contain'}
+                        style={{ height: 30, width: 30 }}
+                    />
+                </View>
                 <TouchableOpacity style={styles.favouriteContainer} onPress={() => props.navigation.navigate('Wishlist')}>
                     <Feather name={'heart'} size={25} />
                     {/* {
@@ -29,23 +31,13 @@ const Header = ({ props }) => {
 
                 </TouchableOpacity>
             </View>
-            <View style={styles.headerBottomContainer}>
-                <TextInput
-                    placeholder={'Where to?'}
-                    placeholderTextColor={'rgba(0,0,0,0.5)'}
-                    style={styles.textInput}
-                />
-                <TouchableOpacity style={styles.searchIcon} onPress={() => props.navigation.openDrawer()}>
-                    <Feather name={'search'} size={15} color={Colors.PURE_WHITE} />
-                </TouchableOpacity>
-            </View>
         </View >
     )
 }
 
 const styles = StyleSheet.create({
     headerContainer: {
-        height: 120,
+        height: 60,
         paddingHorizontal: 20,
         paddingVertical: 10
     },

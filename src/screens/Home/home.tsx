@@ -6,6 +6,7 @@ import {
 import { Colors } from '../../utils/color';
 import { getPDF } from '../../utils/extraAPIs/getPDF';
 import { createFirebaseToken } from '../../utils/firebase';
+import LatestCollection from '../../../components/LinkingComponent/linkingComponet';
 
 
 const Homescreen = (props) => {
@@ -29,6 +30,7 @@ const Homescreen = (props) => {
     return (
         <ScrollView style={{ backgroundColor: Colors.PURE_WHITE }}>
             <View style={{ height: 3, backgroundColor: Colors.SKELETON_COLOR_1, marginHorizontal: 10 }} />
+            <LatestCollection  props={props}/>
         </ScrollView>
     );
 };
