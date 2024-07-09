@@ -32,28 +32,28 @@ const SettingScreen = (props: any) => {
       <View style={{ flex: 1 }}>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Inventory')}>
           <View style={styles.iconContainer}>
-            <Ionicons name={'calculator'} size={30} color={Colors.BORDER_COLOR} style={{ padding: 10, }} />
+            <Ionicons name={'calculator'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
           </View>
           <Text style={styles.titleText}>Buy Car</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Contact')}>
           <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name={'phone-settings'} size={30} color={Colors.BORDER_COLOR} style={{ padding: 10 }} />
+            <MaterialCommunityIcons name={'phone-settings'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
           </View>
           <Text style={styles.titleText}>Contact</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('CarService')}>
           <View style={styles.iconContainer}>
-            <Ionicons name={'car-sport-outline'} size={30} color={Colors.BORDER_COLOR} style={{ padding: 10 }} />
+            <Ionicons name={'car-sport-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
           </View>
           <Text style={styles.titleText}>Car Service</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
           <View style={styles.iconContainer}>
-            <Ionicons name={'car-sport-outline'} size={30} color={Colors.BORDER_COLOR} style={{ padding: 10 }} />
+            <Ionicons name={'car-sport-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
           </View>
 
           <Text style={styles.titleText}>Insurance</Text>
@@ -61,14 +61,14 @@ const SettingScreen = (props: any) => {
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
           <View style={styles.iconContainer}>
-            <Ionicons name={'location-outline'} size={30} color={Colors.BORDER_COLOR} style={{ padding: 10 }} />
+            <Ionicons name={'location-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
           </View>
           <Text style={styles.titleText}>Showrooms</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
           <View style={styles.iconContainer}>
-            <Ionicons name={'document-outline'} size={30} color={Colors.BORDER_COLOR} style={{ padding: 10 }} />
+            <Ionicons name={'document-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
           </View>
           <Text style={styles.titleText}>Registration</Text>
         </TouchableOpacity>
@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
   },
   iconContainer:{
     backgroundColor: Colors.SHADOW_COLOR, 
-    marginHorizontal: 15 
+    marginHorizontal: 15 ,
+    borderRadius:15
   },
   titleText:{ fontSize: 20, color: Colors.BLACK_COLR, fontWeight: '400' }
 });

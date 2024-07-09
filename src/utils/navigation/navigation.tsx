@@ -37,19 +37,31 @@ function MyTabs() {
         <Tab.Navigator  screenOptions={({route}) => ({
             tabBarHideOnKeyboard: true,
             tabBarStyle: {
-              display: 'flex',
-              position: 'absolute',
-              bottom: 20,
-              left: 25,
-              right: 25,
-              elevation: 5,
+            //   display: 'flex',
+            //   position: 'absolute',
+            //   bottom: 20,
+            //   left: 25,
+            //   right: 25,
+            //   elevation: 5,
               backgroundColor: Colors.BLACK_COLR,
-              borderRadius: 30,
-              height: 60,
+            //   borderRadius: 30,
+            //   height: 60,
             },
             tabBarShowLabel: false,
             headerShown: false,  })}>
-            <Tab.Screen name="Home"
+
+<Tab.Screen name="Home"
+                component={Homescreen}
+                options={{
+                    tabBarLabel: '',
+                    headerShown: false,
+
+                    tabBarIcon: ({ color, size, focused }) => (
+                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.SOFT_COLOR} />
+
+                    ),
+                }} />
+            <Tab.Screen name="BuyCar"
                 component={InventoryPage}
                 options={{
                     tabBarLabel: '',
@@ -68,21 +80,10 @@ function MyTabs() {
                     headerShown: false,
 
                     tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
+                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.SOFT_COLOR} />
 
                     ),
                 }} />
-            {/* <Tab.Screen name="CalculatorScreen"
-                component={Calculatorscreen}
-                options={{
-                    tabBarLabel: '',
-                    headerShown: false,
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'calculator'} size={30} color={focused ? Colors.BLACK_COLR : Colors.BORDER_COLOR} />
-
-                    ),
-                }} /> */}
-
             <Tab.Screen name="Setting"
                 component={SettingScreen}
                 options={{

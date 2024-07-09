@@ -74,8 +74,8 @@ const InventoryPage = (props: any) => {
 
   return (
     <View>
-      <ScrollView style={{ padding: 10 }}>
-        <View style={{marginBottom:15}}>
+      <ScrollView >
+        <View style={{marginBottom:15, padding:10}}>
           <Text style={{ color: Colors.BLACK_COLR, marginVertical: 15, fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing:5 }}>Inventory</Text>
           <View style={{ flexDirection: 'row', marginVertical:10 }}>
             <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 15, alignItems: 'center', justifyContent: 'center', marginRight: 15, borderColor:Colors.BORDER_COLOR }}>

@@ -17,12 +17,15 @@ import { useQuery } from "@tanstack/react-query";
 
 // //
 
-const DATA_LENGTH = 9;
+const DATA_LENGTH = 5;
 
 //
 
 const LatestCollection = (props:any) => {
   // Get Data
+
+  console.log(props.navigation);
+  
 
   
   const { isLoading, data: latestCollectionRES } = useQuery({
@@ -42,27 +45,21 @@ const LatestCollection = (props:any) => {
 
   return (
     <View style={styles.latestCollections}>
-      <View style={styles.topfix} id="latest-collection" />
-
       <Text style={styles.heading}>Latest Collection</Text>
-      <Text style={styles.sub_heading}>
-        Get the car of your dreams at an exciting price! We have a wide range of
-        collection for you to choose from.
-      </Text>
 
       <View style={styles.wrapper}>
         {isLoading ? (
           <></>
         ) : (
           data?.map((d, i) => (
-            <CarItem data={d} props={props} />
+            <CarItem data={d} props={props.props} />
           ))
         )}
       </View>
 
       <ActionButton
       title="View All"
-      onPress={() =>console.log("View All")}
+      onPress={() =>props.props.navigation.navigate('BuyCar')}
       backgroundColor={Colors.BLACK_COLR}
       color={Colors.PURE_WHITE}
       />
@@ -80,9 +77,8 @@ const styles = StyleSheet.create({
 
     latestCollections:{
         position: "relative",
-        padding: 10,
+        // padding: 10,
         display: "flex",
-        alignItems: 'center',
         paddingTop:25
     },
     topfix:{
@@ -101,11 +97,12 @@ const styles = StyleSheet.create({
       fontSize: 30,
       fontFamily: 'Oxanium-Bold',
       color: Colors.BLACK_COLR,
-      paddingVertical: 10,
+      padding: 20,
         lineHeight: 20,
+        // padding: 10,
     },
     wrapper:{
-        flex:1
+        flex:1,
     }
   })
   

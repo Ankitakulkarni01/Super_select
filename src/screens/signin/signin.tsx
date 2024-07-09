@@ -100,7 +100,7 @@ const SignInScreen = (props: any) => {
                     <View >
                         <View style={styles.textinputParentContainer}>
                             <View style={styles.textinputContainer}>
-                            <Ionicons name={'call-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
+                            <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
                    <TextInput
                                     // name="email"
                                     placeholder="Phone Number"
@@ -118,7 +118,7 @@ const SignInScreen = (props: any) => {
                         </View>
                         <View style={styles.textinputParentContainer}>
                             <View style={styles.textinputContainer}>
-                                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
+                                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
                                 <TextInput
                                     // name="password"
                                     placeholder="Password"
@@ -181,8 +181,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        // padding: 5,
-        borderColor: Colors.SKELETON_COLOR_2
+        borderColor: Colors.BORDER_COLOR
     },
     iconStyle: {
         marginHorizontal: 5,

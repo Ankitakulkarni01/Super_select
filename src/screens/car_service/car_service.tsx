@@ -9,6 +9,20 @@ import { Colors } from '../../utils/color';
 import GeneralForm from '../../../components/GeneralForm/generalForm';
 import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
+import CarouselComponent from '../../../components/Carousel/Carousel';
+// import { SliderBox } from "react-native-image-slider-box";
+
+
+const carServiceImages = [
+  require('../../../assets/img/car-service/1.jpg'),
+  require('../../../assets/img/car-service/2.jpg'),
+  require('../../../assets/img/car-service/3.jpg'),
+  require('../../../assets/img/car-service/4.jpg'),
+  require('../../../assets/img/car-service/5.jpg'),
+  require('../../../assets/img/car-service/6.jpg'),
+  require('../../../assets/img/car-service/7.jpg'),
+  require('../../../assets/img/car-service/8.jpg'),
+]
 
 const CarServiceScreen = () => {
 
@@ -35,10 +49,17 @@ const CarServiceScreen = () => {
           mechanics. Choose from our wide selection of services and hit the road
           with confidence!
       </Text> */}
-      <Text style={styles.heading}>
+        <View style={{ flex: 1, marginBottom: 20 }}>
+        <CarouselComponent
+          list={carServiceImages}
+        />
+        </View>
+
+
+      {/* <Text style={styles.heading}>
         To get the best service, fill this out and our executive will
         attend you shortly.
-      </Text>
+      </Text> */}
       <GeneralForm
         formName="insuranceForm"
         inputs={[
@@ -76,58 +97,6 @@ const CarServiceScreen = () => {
         ]}
         onSubmit={onFormSubmit}
       />
-      <View style={{ flex: 1, marginBottom: 20 }}>
-        <View style={{ flexDirection: 'row', height: 150, }}>
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/1.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/2.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-        </View>
-        <View style={{ flexDirection: 'row', height: 150, }}>
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/3.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/4.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-        </View>
-        <View style={{ flexDirection: 'row', height: 150, }}>
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/5.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/6.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-        </View>
-        <View style={{ flexDirection: 'row', height: 150, }}>
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/7.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-          <Image
-            source={require('D:/Projects/Super_select/assets/img/car-service/8.jpg')}
-            resizeMode={'contain'}
-            style={{ height: 150, width: '50%', margin: 10, flex: 1 }}
-          />
-        </View>
-
-      </View>
     </ScrollView>
   );
 };

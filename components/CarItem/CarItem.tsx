@@ -24,7 +24,7 @@ import { getYearFromFormattedDateString } from "../../src/utils/date-time";
 // import soldOutImg from "../../src/assets/img/sold-out.png";
 
 const CarItem: FC<{ data: Car, props?: any }> = ({
-  data, 
+  data,
   props
 }) => {
   //
@@ -35,40 +35,41 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
     props.navigation.navigate('CarDetails', {
       carData: data,
-     })
+    })
   }
 
 
   return (
     <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} activeOpacity={0.8}>
       {/* <View  style={{height:270}}> */}
-        <Image
-          style={{ width: '100%', height: 270}}
-          source={{
-            uri: data.previewImage,
-          }}
-          alt="Preview"
-          resizeMode={'stretch'}
-        />
+
+      <FastImage
+        style={{ width: '100%', height: 270 }}
+        source={{
+          uri: data.previewImage,
+
+        }}
+        resizeMode={FastImage.resizeMode.stretch}
+      />
       {/* </View> */}
 
-      <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Zebulon-Condensed', fontSize:22,paddingHorizontal:10,fontWeight:'300' , marginTop:10}}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300', marginTop: 10 }}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
-            data.price > 0
+          data.price > 0
             ?
-            <Text style={{ color: Colors.BLACK_COLR,fontFamily: 'Oxanium-Medium', fontSize:18,letterSpacing:2 }}>{currencyValueFormatter(data.price)} </Text>
+            <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Oxanium-Medium', fontSize: 18, letterSpacing: 2 }}>{currencyValueFormatter(data.price)} </Text>
             :
             <ActionButton
 
-            onPress={() => console.log("conat=")}
-                title="Contact For Price" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+              onPress={() => console.log("conat=")}
+              title="Contact For Price" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
             />
         ) : (
           <Image
             source={require("../../src/assets/img/sold-out.png")}
             resizeMode={'contain'}
-            style={{ height: 80, width: '100%' }}
+            style={{ height: 40, width: 100, padding: 10 }}
             alt="SOLD OUT"
           />
         )}
@@ -76,30 +77,30 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
       <View style={styles.info}>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Ionicons name={'car-sport-outline'} size={20} color={Colors.BLACK_COLR} style={{opacity:0.5, marginBottom:5}} />
+          <Ionicons name={'car-sport-outline'} size={20} color={Colors.BLACK_COLR} style={{ opacity: 0.5, marginBottom: 5 }} />
           {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR, letterSpacing:2,fontWeight:'300'}}>  {getYearFromFormattedDateString(data.manufacturingDate)} </Text>
+          <Text style={{ color: Colors.BLACK_COLR, letterSpacing: 2, fontWeight: '300' }}>  {getYearFromFormattedDateString(data.manufacturingDate)} </Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Entypo name={'gauge'} size={20} color={Colors.BLACK_COLR} style={{opacity:0.5, marginBottom:5}}  />
+          <Entypo name={'gauge'} size={20} color={Colors.BLACK_COLR} style={{ opacity: 0.5, marginBottom: 5 }} />
           {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR, letterSpacing:2,fontWeight:'300'}}>  {data.driven}km </Text>
+          <Text style={{ color: Colors.BLACK_COLR, letterSpacing: 2, fontWeight: '300' }}>  {data.driven}km </Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <FontAwesome5 name={'gas-pump'} size={20} color={Colors.BLACK_COLR} style={{opacity:0.5, marginBottom:5}}  />
+          <FontAwesome5 name={'gas-pump'} size={20} color={Colors.BLACK_COLR} style={{ opacity: 0.5, marginBottom: 5 }} />
           {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR, letterSpacing:2,fontWeight:'300'}}>  {data.fuelType}</Text>
+          <Text style={{ color: Colors.BLACK_COLR, letterSpacing: 2, fontWeight: '300' }}>  {data.fuelType}</Text>
         </View>
       </View>
 
-      {data.status !== "soldOut" && (
+      {/* {data.status !== "soldOut" && (
         <View
         // style={ data.status === "booked" && styles.booked,
         //   data?.special === 1 && styles.special,
         //   alt="Preview"
         // }
         >
-          <Text>
+          <Text style={{color:'red'}}>
             {data.status === "booked"
               ? "BOOKED"
               : data?.special === 1
@@ -107,7 +108,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
                 : ""}
           </Text>
         </View>
-      )}
+      )} */}
     </TouchableOpacity>
   );
 };
@@ -119,35 +120,25 @@ const styles = StyleSheet.create({
   CarItem: {
     position: 'relative',
     backgroundColor: Colors.PURE_WHITE,
-    textAlign: "left",
-    borderRadius: 5,
     borderColor: Colors.BORDER_COLOR,
     overflow: 'hidden',
-    marginVertical: 10,
-    // opacity:0.5,
-
-  borderWidth:1,
-    shadowColor: Colors.BORDER_COLOR,
+    paddingBottom: 10
   },
   price: {
     backgroundColor: Colors.PURE_WHITE,
     textAlign: "left",
     borderRadius: 5,
-    borderColor: Colors.BORDER_COLOR,
-    paddingHorizontal:10,
-    overflow: 'hidden', 
-    marginVertical:10
+    margin: 13,
   },
   info: {
-    // flex:1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
-    
-    marginTop:15,
+    margin: 10,
+    paddingTop: 15,
+    marginTop: 15,
     borderColor: Colors.BORDER_COLOR,
-    borderTopWidth:1
+    borderTopWidth: 1
   },
   special: {
 

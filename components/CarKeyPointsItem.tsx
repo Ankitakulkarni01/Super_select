@@ -15,15 +15,15 @@ const CarKeyPointsItem: FC<{
 }> = ({ name, value, prefix, suffix }) => {
   if (!value) return;
 
+  console.log(name);
+  
+
   return (
-    <View style={{}}>
-      <View style={{}}>
+    <View style={styles.carKeyContainer}>
+      <View style={styles.carKeyContainer}>
         <Icon name={name} />
         <Text style={styles.heading}>{name} </Text>
-      </View>
-
-      <View style={{}}>
-     <Text style={styles.heading}> {prefix} {value} {suffix}</Text>
+        <Text style={styles.subheading}> {prefix} {value} {suffix}</Text>
       </View>
     </View>
   );
@@ -33,12 +33,20 @@ export default CarKeyPointsItem;
 
 
 const styles = StyleSheet.create({
-
+  carKeyContainer:{
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
   heading:{
     color: Colors.BLACK_COLR,
-
+    fontWeight:'300',
+    // marginVertical:5
+  },
+  subheading:{
+    color: Colors.BLACK_COLR,
+    fontSize: 17
   }
-  
 })
 
 
