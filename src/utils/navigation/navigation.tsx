@@ -24,6 +24,8 @@ import SettingScreen from '../../screens/setting/setting';
 import SplashScreen from '../../screens/splash/splash';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ShowRoomScreen from '../../screens/showroom/showroom';
+import SellPage from '../../screens/sell_car/sellCar';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,7 +59,7 @@ function MyTabs() {
                     headerShown: false,
 
                     tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.SOFT_COLOR} />
+                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.BORDER_COLOR} />
 
                     ),
                 }} />
@@ -68,19 +70,19 @@ function MyTabs() {
                     headerShown: false,
 
                     tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.SOFT_COLOR} />
+                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.BORDER_COLOR} />
 
                     ),
                 }} />
 
-            <Tab.Screen name="Contact"
-                component={ContactScreen}
+            <Tab.Screen name="SellPage"
+                component={SellPage}
                 options={{
                     tabBarLabel: '',
                     headerShown: false,
 
                     tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.SOFT_COLOR} />
+                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
 
                     ),
                 }} />
@@ -130,12 +132,24 @@ const HomeStack = () => {
             /> */}
 
 
+
+
             <Stack.Screen
                 name="Tab"
                 component={MyTabs}
                 options={{ header: props => <Header props={props} /> }}
 
             />
+
+<Stack.Screen
+                name="SignIn"
+                component={SignInScreen}
+                options={{
+                    headerShown: false
+                }}
+
+            />
+
 
             <Stack.Screen
                 name="Contact"
@@ -198,6 +212,15 @@ const HomeStack = () => {
                     headerShown: false
                 }}
             />
+
+<Stack.Screen
+                name="ShowRoom"
+                component={ShowRoomScreen}
+                options={{
+                    headerShown: false
+                }}
+
+            /> 
             <Stack.Screen
                 name="SignUp"
                 component={SignUpScreen}

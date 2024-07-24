@@ -5,19 +5,22 @@ import {
   View,
 } from 'react-native';
 import { Colors } from '../../utils/color';
-import Slider from '@react-native-community/slider';
+import { Slider } from '@miblanchard/react-native-slider';
 import PieChart from 'react-native-pie-chart'
 import { Text } from 'react-native';
 import { currencyValueFormatter } from '../../utils/numberOperations';
 import { ZebulonCondensed } from '../../utils/fonts';
+import { StyleSheet } from 'react-native';
 
 const MIN_VALUATION = 500000;
 const MAX_VALUATION = 50000000;
 
 
 
-const Calculatorscreen = (props: any) => {
+const Calculatorscreen = ({ route, navigation }) => {
   const sliceColor = ["#e7e7e7", "#2a2a2a"]
+
+
 
   const [inputValues, setInputValues] = useState({
     valuation: 5000000,
@@ -32,12 +35,31 @@ const Calculatorscreen = (props: any) => {
     totalAmount: 5099291,
   });
 
+  const valuation = route.params.valuation
+  
+  
+  // Valuation Query - Auto
+  useEffect(() => {
+    try {
+      let value = parseInt(valuation as string);
+      if (!value || value < MIN_VALUATION) return;
+
+      setInputValues({
+        valuation: value,
+        downPayment: value * 0.2,
+        rateOfInterest: 10,
+        tenureMonths: 60,
+      });
+    } catch (err) {}
+  }, [valuation]);
+
+  
+
 
   // On Set Input Values
   const onSetInputValues = useCallback(
     (values: Partial<typeof inputValues>) => {
       setInputValues((st) => {
-        console.log(st)
         const newSt = { ...st, ...values };
         return newSt;
       });
@@ -136,17 +158,26 @@ const Calculatorscreen = (props: any) => {
         onChange={(tenureMonths) => onSetInputValues({ tenureMonths })}
         setHasError={setError}
       />
-      <View style={{ alignItems: 'center', marginTop: 40 }}>
-        <PieChart
-          sliceColor={sliceColor}
-          series={[
-            outputValues.principalAmount,
-            outputValues.totalInterest,
+      <View >
+        <View style={styles.calculationView}>
+          <Text style={styles.titleText}>Monthly EMI</Text>
+          <Text style={styles.titleText}>{currencyValueFormatter(outputValues.emi)}</Text>
+        </View>
 
-          ]}
-          style={{ padding: 30 }}
-          widthAndHeight={190}
-        />
+        <View style={styles.calculationView}>
+          <Text style={styles.titleText}>Principal amount</Text>
+          <Text style={styles.titleText}>{currencyValueFormatter(outputValues.principalAmount)}</Text>
+        </View>
+
+        <View style={styles.calculationView}>
+          <Text style={styles.titleText}>Interest amount</Text>
+          <Text style={styles.titleText}>{currencyValueFormatter(outputValues.totalInterest)}</Text>
+        </View>
+
+        <View style={styles.calculationView}>
+          <Text style={styles.titleText}>Total amount</Text>
+          <Text style={styles.titleText}>{currencyValueFormatter(outputValues.totalAmount)}</Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -162,10 +193,6 @@ const CustomInput: FC<{
   onChange: (value: number) => void;
   setHasError: (value: boolean) => void;
 }> = ({ label, info, value, min, max, onChange }) => {
-
-  console.log(value);
-
-
 
   // Slider
   const sliderValue = useMemo(() => {
@@ -227,7 +254,7 @@ const CustomInput: FC<{
 
       <Slider
         aria-label={label}
-        style={{ width: '100%' }}
+        // thumbStyle={{ width: '100%' }}
         value={sliderValue}
         onValueChange={onSliderChange}
         minimumTrackTintColor={Colors.BLACK_COLR}
@@ -238,6 +265,25 @@ const CustomInput: FC<{
   );
 };
 //
+
+const styles = StyleSheet.create({
+  calculationView: {
+    flexDirection: 'row'
+  },
+  titleText: {
+    flex: 1,
+    fontSize: 20,
+    color: Colors.BLACK_COLR,
+    fontWeight: '400'
+  },
+  valueText:{
+    flex: 1,
+    fontSize: 20,
+    color: Colors.BLACK_COLR,
+    fontWeight: '400',
+    textAlign:'right'
+  }
+});
 
 export default Calculatorscreen;
 

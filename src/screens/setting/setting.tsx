@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -7,10 +7,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Colors } from '../../utils/color';
 import { Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const SettingScreen = (props: any) => {
+
+  const [access_token, setaccess_token] = useState('')
+
+  useEffect(() => {
+    validateAccessToken()
+  }, [])
+
+
+
+  const validateAccessToken = async () => {
+    const accessToken = await AsyncStorage.getItem("access_token")
+
+    setaccess_token(accessToken)
+  }
 
 
   const handlePress = async (url: string) => {
@@ -30,11 +45,11 @@ const SettingScreen = (props: any) => {
   return (
     <View style={styles.mainContainer}>
       <View style={{ flex: 1 }}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Inventory')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Calculator')}>
           <View style={styles.iconContainer}>
             <Ionicons name={'calculator'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
           </View>
-          <Text style={styles.titleText}>Buy Car</Text>
+          <Text style={styles.titleText}>Emi Calculator</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Contact')}>
@@ -59,26 +74,29 @@ const SettingScreen = (props: any) => {
           <Text style={styles.titleText}>Insurance</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('ShowRoom')}>
           <View style={styles.iconContainer}>
             <Ionicons name={'location-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
           </View>
           <Text style={styles.titleText}>Showrooms</Text>
         </TouchableOpacity>
+        {
+          access_token &&
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
-          <View style={styles.iconContainer}>
-            <Ionicons name={'document-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-          </View>
-          <Text style={styles.titleText}>Registration</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
+            <View style={styles.iconContainer}>
+              <Ionicons name={'document-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+            </View>
+            <Text style={styles.titleText}>Registration</Text>
+          </TouchableOpacity>
+        }
 
       </View>
       {/* <View style={{ flexShrink: 0 }}>
         <Text style={{ fontSize: 12, color: Colors.BLACK_COLR, margin: 10 }} onPress={() => handlePress("https://www.superselect.in/about")}>About US</Text>
       </View> */}
 
-       {/* <View style={{alignItems:'flex-end',width:'50%',  justifyContent:'flex-end', marginBottom:10, borderWidth:1}}>
+      {/* <View style={{alignItems:'flex-end',width:'50%',  justifyContent:'flex-end', marginBottom:10, borderWidth:1}}>
        <Image
                         source={require('D:/Projects/Super_select/assets/logo/pngwing.png')}
                         resizeMode={'contain'}
@@ -90,27 +108,27 @@ const SettingScreen = (props: any) => {
 }
 
 const styles = StyleSheet.create({
-  mainContainer:{ 
-    marginTop: 25, 
-    marginHorizontal: 15, 
-    justifyContent: 'space-between', 
-    flex: 1, 
-    marginBottom: 10 ,
-    flexDirection:'row'
+  mainContainer: {
+    marginTop: 25,
+    marginHorizontal: 15,
+    justifyContent: 'space-between',
+    flex: 1,
+    marginBottom: 10,
+    flexDirection: 'row'
   },
-  
-  buttonContainer: { 
-    alignItems: 'center', 
-    flexDirection: 'row', 
-    padding: 10, 
-    marginBottom: 15 
+
+  buttonContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 10,
+    marginBottom: 15
   },
-  iconContainer:{
-    backgroundColor: Colors.SHADOW_COLOR, 
-    marginHorizontal: 15 ,
-    borderRadius:15
+  iconContainer: {
+    backgroundColor: Colors.SHADOW_COLOR,
+    marginHorizontal: 15,
+    borderRadius: 15
   },
-  titleText:{ fontSize: 20, color: Colors.BLACK_COLR, fontWeight: '400' }
+  titleText: { fontSize: 20, color: Colors.BLACK_COLR, fontWeight: '400' }
 });
 
 

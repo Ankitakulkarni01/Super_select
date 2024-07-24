@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   CarItem: {
     position: 'relative',
     backgroundColor: Colors.PURE_WHITE,
-    borderColor: Colors.BORDER_COLOR,
+    borderColor: Colors.SOFT_COLOR,
     overflow: 'hidden',
     paddingBottom: 10
   },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingTop: 15,
     marginTop: 15,
-    borderColor: Colors.BORDER_COLOR,
+    borderColor: Colors.SOFT_COLOR,
     borderTopWidth: 1
   },
   special: {

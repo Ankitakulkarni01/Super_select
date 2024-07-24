@@ -21,16 +21,16 @@ const SplashScreen = (props) => {
     const background = require('../../../assets/video/video.mp4');
 
 
-    // useEffect(() => {
-    //      loading()
-    // }, []);
+    useEffect(() => {
+         loading()
+    }, []);
 
-    // const loading = async () => {
+    const loading = async () => {
 
-    //         props.navigation.dispatch(
-    //             StackActions.replace('SignIn')
-    //         );
-    // }
+            props.navigation.dispatch(
+                StackActions.replace('SignIn')
+            );
+    }
 
 
     //

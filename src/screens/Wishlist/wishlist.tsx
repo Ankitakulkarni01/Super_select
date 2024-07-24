@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
     ScrollView,
     View,
@@ -8,41 +8,50 @@ import {
 } from 'react-native';
 import { Colors } from '../../utils/color';
 import { getWishlistAPI, postWishlistAPI } from '../../utils/extraAPIs/wishlist';
+import CarItem from '../../../components/CarItem/CarItem';
+import { CarList } from '../cars/carsDetail';
+import { useQuery } from '@tanstack/react-query';
 
 
 
 
 
 const WishListScreen= (props:any) => {
-    const [carData, setcarData] = useState([
-        {
-          id: "",
-          name: ""
-        }
-      ])
+  const [carData, setCarData] = useState<CarList>([]);
+
+
     useEffect(() => {
       getWishlist()
     }, [])
 
-    const postWishlist = async () =>{
-        const values = {
-            "carId": 69
-        }
-        const {success, message, data} = await postWishlistAPI(values)
-        console.log(success, message,  data)
+    // const postWishlist = async () =>{
+    //     const values = {
+    //         "carId": 69
+    //     }
+    //     const {success, message, data} = await postWishlistAPI(values)
+    //     console.log(success, message,  data)
 
-        if(success){
-            getWishlist()
-        }
-    }
+    //     if(success){
+    //         getWishlist()
+    //     }
+    // }
 
       
+  // const { isLoading, data: carDataRes } = useQuery({
+  //   queryKey: [],
+  //   queryFn: () => getWishlistAPI(),
+  // });
+
+  // const carData: CarList = useMemo(
+  //   () => carDataRes?.data,
+  //   [carDataRes]
+  // );
     
     const getWishlist = async () =>{
         const {success, message, data} = await getWishlistAPI()
         console.log(success, message,  data)
         if(success){
-            setcarData(data)
+            // setcarData(data)
             console.log(carData);
         }
     }
@@ -60,9 +69,10 @@ const WishListScreen= (props:any) => {
       return (
         <View style={styles.container}>
         {carData?.map((d, i) => (
-              <View style={styles.item}>
-           <Text style={styles.title}>{d?.name}</Text>
-            </View>
+              <CarItem
+              data={d}
+              props={props}
+            />
             ))}
         </View>
       );

@@ -1,22 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 import { Colors } from '../../utils/color';
-import { getPDF } from '../../utils/extraAPIs/getPDF';
-import { createFirebaseToken } from '../../utils/firebase';
-import clsx from 'clsx';
 import getEMI from '../../utils/getEMI';
 import { stringToJson } from '../../utils/commons'
 import SwipeableButton from '../../../components/swipeButton/swipeButton';
 import { Car } from '../../../interface/car';
 import { getCarDetails } from '../../utils/carAPIs/carDetails';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import CarKeyPointsItem from '../../../components/CarKeyPointsItem';
 import { Text } from 'react-native';
+import PagerView from 'react-native-pager-view';
+import TabViewExample from './tabCarDetails';
+import DynamicCarouselComponent from '../../../components/Carousel/DynamicCarousel';
+import ActionButton from '../../components/actionButton';
+import { currencyValueFormatter } from '../../utils/numberOperations';
 
 
 const CarDetailsScreen = ({ navigation, route }) => {
@@ -54,9 +57,13 @@ const CarDetailsScreen = ({ navigation, route }) => {
   );
 
   const allImages = useMemo(() => {
+    // console.log(carDataRes?.data);
+
 
     if (carDataRes?.data.exteriorImages !== undefined) {
       const dataImages = [...carDataRes?.data.exteriorImages]
+      console.log(dataImages);
+
 
       const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
       const previewIndex = both?.findIndex((x) => x === carDataRes?.data?.previewImage);
@@ -69,8 +76,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
       return both;
     }
 
-  }, [carDataRes]
-  );
+  }, [carDataRes]);
 
 
   // Estimate Pay
@@ -148,13 +154,17 @@ const CarDetailsScreen = ({ navigation, route }) => {
   const soldOut = route.params.carData.status === "soldOut";
 
 
+  const carSoldOut = carData.status === "soldOut";
+  const carIsCallForPrice = carData?.callForPrice === 1;
+
+
 
   // On Test Drive Click
 
 
   //
 
-  //   const reserveBtnClasses = clsx(oxaniumFont.className, styles.reserve_btn);
+  //   const reserveBtnClasses = clsx(oxaniumFont.style, styles.reserve_btn);
 
   //
   //
@@ -169,6 +179,27 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
   // const [isLoading, setIsLoading] = useState(false);
 
+  // On Reserve Btn Click
+  const onReserveBtnClick = useCallback(() => {
+    if (soldOut) return;
+
+    // let newQuery = router.query;
+    // newQuery[RESERVE_NOW_POPUP_NAME] = "true";
+
+    // router.push({ pathname: router.pathname, query: newQuery }, undefined, {
+    //   shallow: true,
+    // });
+  }, [soldOut]);
+  //
+
+  const onEmailCalculator = () =>{
+    navigation.navigate('Calculator', {valuation: carData.price })
+    // {
+      //   !carSoldOut && !carIsCallForPrice
+      //     ? "?valuation=" + carData.price
+      //     : ""
+  }
+
   const makeSomeRequest = () => {
     // setIsLoading(true);
     // setTimeout(() => {
@@ -179,15 +210,15 @@ const CarDetailsScreen = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1, padding: 10 }}>
       <ScrollView>
-       <View style={styles.brief_n_option}>
-       <Text style={styles.heading}>{carData.name}</Text>
-              <Text style={styles.subHeading}>
-                Model: <Text style={{fontWeight: '300'}}>{carData.model}</Text>
-              </Text>
+        <View style={styles.brief_n_option}>
+          <Text style={styles.heading}>{carData.name}</Text>
+          <Text style={styles.subHeading}>
+            Model: <Text style={{ fontWeight: '300' }}>{carData.model}</Text>
+          </Text>
 
-              {/* <View>
+          {/* <View>
                 <button
-                  className={styles.small_outline_btn}
+                  style={styles.small_outline_btn}
                   disabled={soldOut}
                   onClick={onTestDriveClick}
                 >
@@ -195,42 +226,115 @@ const CarDetailsScreen = ({ navigation, route }) => {
                 </button>
 
                 <button
-                  className={styles.icon_btn}
+                  style={styles.icon_btn}
                   title="Share"
                   onClick={shareHandler}
                 >
                   <IoShareSocialOutline />
                 </button>
               </View> */}
+        </View>
+        <View>
+          {
+            allImages &&
+            <DynamicCarouselComponent
+              list={allImages}
+            />
+          }
+
+        </View>
+        <ScrollView style={styles.key_points} horizontal={true}>
+          <CarKeyPointsItem
+            name="Engine"
+            value={carData?.engine}
+            suffix="CC"
+          />
+          <CarKeyPointsItem
+            name="Driven"
+            value={carData?.driven}
+            suffix="km"
+          />
+          <CarKeyPointsItem
+            name="Transmission"
+            value={carData?.transmission}
+          />
+          <CarKeyPointsItem name="Fuel" value={carData?.fuelType} />
+          <CarKeyPointsItem name="Type" value={carData?.type} />
+        </ScrollView>
+
+        <View style={styles.main_area_part2}>
+          <View>
+            <View style={styles.priceContainer}>
+              <View>
+                {!carSoldOut ? (
+                  !carIsCallForPrice ? (
+                    <>
+                      <Text style={styles.price}>{currencyValueFormatter(carData.price)}</Text>
+                      <Text style={carData?.tcs > 0 ? { opacity: 1, color: Colors.BLACK_COLR } : { color: Colors.BLACK_COLR }}>
+                        {carData?.tcs > 0
+                          ? carData.tcs + "% TCS"
+                          : "including fees & taxes"}
+                      </Text>
+                    </>
+                  ) : (
+                    <>
+                      {/* <Text
+                          href={`/contact?${contactForPriceQuery(
+                            carData.name
+                          )}#contact-form`}
+                          target="_blank"
+                        > */}
+                      <ActionButton
+
+                        onPress={onReserveBtnClick}
+                        title=" Contact For Price" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+                      />
+                    </>
+                  )
+                ) : (
+                  <Image
+                    source={require('../../assets/img/sold-out.png')}
+                    resizeMode={'contain'}
+                    style={{ height: 30, width: 30 }}
+                  />
+                )}
+              </View>
             </View>
-      <View style={styles.key_points}>
-        <View style={{flexDirection:'row', marginVertical:10, alignItems:'center'}}>
-        <CarKeyPointsItem
-          name="Engine"
-          value={carData?.engine}
-          suffix="CC"
-        />
-        <CarKeyPointsItem
-          name="Driven"
-          value={carData?.driven}
-          suffix="km"
-        />
-         <CarKeyPointsItem
-          name="Transmission"
-          value={carData?.transmission}
-        />
+          </View>
+
+          <View id="emi" style={styles.payment}>
+            <Text style={styles.payment_header_text}>Estimated EMI*</Text>
+            <View style={styles.emi_details}>
+              {!carSoldOut && !carIsCallForPrice && (
+                <>
+                  <Text style={styles.email_text}>{currencyValueFormatter(estimatePay.emi)}/month</Text>
+                  <Text style={styles.payment_down_text}>
+                    {currencyValueFormatter(estimatePay.downPayment)} Down
+                    Payment
+                  </Text>
+                  <Text style={styles.month_text}>
+                    {estimatePay.tenureMonths} Months @{" "}
+                    {estimatePay.rateOfInterest}% ROI
+                  </Text>
+
+                </>
+              )}
+              <ActionButton
+                onPress={onEmailCalculator}
+                title="EMI Calculator " backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+              />
+            </View>
+          </View>
         </View>
-        <View style={{flexDirection:'row'}}>
-       
-        <CarKeyPointsItem name="Fuel" value={carData?.fuelType} />
-        <CarKeyPointsItem name="Type" value={carData?.type} />
-        </View>
-      </View>
+
+        <TabViewExample data={carData} featuresArray={featuresArray} />
+
+      
       </ScrollView>
       <View style={{ flexShrink: 1 }}>
         <SwipeableButton onSwipe={makeSomeRequest} isLoading={isLoading} />
       </View>
-      
+
     </View>
   );
 };
@@ -238,26 +342,73 @@ const CarDetailsScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   key_points: {
     // flexDirection:'row',
-    alignItems:'center', 
-    justifyContent:'space-between'
+    // alignItems:'center', 
+    // justifyContent:'space-between'
   },
   root: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  brief_n_option:{
-    paddingVertical:10
+  brief_n_option: {
+    paddingVertical: 10
   },
-  heading:{
+  heading: {
     color: Colors.BLACK_COLR,
-    fontFamily: 'Zebulon-Condensed', 
-    fontSize:22,
-    fontWeight:'300' , 
-    marginTop:10
+    fontFamily: 'Zebulon-Condensed',
+    fontSize: 22,
+    fontWeight: '300',
+    marginTop: 10
   },
-  subHeading:{
+  subHeading: {
     color: Colors.BLACK_COLR,
-    letterSpacing:2,
+    letterSpacing: 2,
+  },
+  pagerViewStyle: {
+    flex: 1
+  },
+  soldout_img_small: {
+
+  },
+  main_area_part2: {
+    borderWidth:1,
+    borderColor: Colors.BORDER_COLOR,
+    padding:10
+  },
+  priceContainer:{
+    flex:1,
+    marginVertical:10
+  },
+  price: {
+    color: Colors.BLACK_COLR,
+    fontSize: 24
+  },
+  emi_details: {
+
+  },
+  payment: {
+
+  },
+  soldout_img: {
+
+  },
+  mobile_footer_cta: {
+
+  },
+  email_text:{
+    color: Colors.BLACK_COLR,
+    fontSize: 18
+  },
+  payment_header_text:{
+    color: Colors.BLACK_COLR,
+    fontSize: 18
+  },
+  payment_down_text:{
+    color: Colors.BLACK_COLR,
+    fontSize: 18
+  },
+  month_text:{
+    color: Colors.BLACK_COLR,
+    fontSize: 18
   }
 });
 

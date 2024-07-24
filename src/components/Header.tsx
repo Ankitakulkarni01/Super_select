@@ -6,10 +6,25 @@ import Feather from 'react-native-vector-icons/Feather';
 // import userStore from '../stores/userStore';
 import { Colors } from '../utils/color';
 import { Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Header = ({ props }) => {
     // const cart = userStore((state) => state.cart);
+
+
+    const validateAccessToken = async() =>{
+        const access_token = await AsyncStorage.getItem("access_token")
+
+        if(access_token !== null){
+            props.navigation.navigate('Wishlist')
+        }else{
+            props.navigation.navigate('SignIn')
+        }
+        
+    }
+
+    
     return (
         <View style={styles.headerContainer}>
             <View style={styles.headerTopContainer}>
@@ -20,15 +35,8 @@ const Header = ({ props }) => {
                         style={{ height: 30, width: 30 }}
                     />
                 </View>
-                <TouchableOpacity style={styles.favouriteContainer} onPress={() => props.navigation.navigate('Wishlist')}>
+                <TouchableOpacity style={styles.favouriteContainer} onPress={validateAccessToken}>
                     <Feather name={'heart'} size={25} />
-                    {/* {
-                        cart.length > 0 &&
-                        <View style={styles.badgeCOntainer}>
-                            <Badge style={{ backgroundColor: Colors.ACCENTCOLOR }}>{cart.length}</Badge>
-                        </View>
-                    } */}
-
                 </TouchableOpacity>
             </View>
         </View >

@@ -42,20 +42,11 @@ const CarServiceScreen = () => {
         <Text style={{ color: Colors.BLACK_COLR, marginVertical: 10, fontFamily: 'Oxanium-Bold', fontSize: 30 }}>Car Service</Text>
 
       </View>
-      {/* <Text style={styles.sub_heading}>
-      Rev up your ride with our diverse range of car services! From routine
-          maintenance to top-notch wheel care, we've got you covered. Keep your
-          vehicle running smoothly and looking sharp with our expert team of
-          mechanics. Choose from our wide selection of services and hit the road
-          with confidence!
-      </Text> */}
         <View style={{ flex: 1, marginBottom: 20 }}>
         <CarouselComponent
           list={carServiceImages}
         />
         </View>
-
-
       {/* <Text style={styles.heading}>
         To get the best service, fill this out and our executive will
         attend you shortly.
