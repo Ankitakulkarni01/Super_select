@@ -28,3 +28,13 @@ export const postWishlistAPI = async (data:WishlistDataType) => {
     return res;
   };
   
+
+  export const removeWishlistAPI = async (wishlistId: Number) => {
+    const res = await fetchExtended({
+      url: `${API_BASE_PATH}/wishlist-remove/${wishlistId}`,
+      method: "POST",
+    });
+  
+    return res;
+  };
+  

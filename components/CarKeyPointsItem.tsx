@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Colors } from "../src/utils/color";
 import { StyleSheet } from "react-native";
+import { Image } from "react-native";
 
 const CarKeyPointsItem: FC<{
   name: string;
@@ -14,9 +15,6 @@ const CarKeyPointsItem: FC<{
   suffix?: string;
 }> = ({ name, value, prefix, suffix }) => {
   if (!value) return;
-
-  console.log(name);
-  
 
   return (
     <View style={styles.carKeyContainer}>
@@ -63,19 +61,39 @@ const styles = StyleSheet.create({
 const Icon: FC<{ name: string }> = ({ name }) => {
   switch (name.toLowerCase()) {
     case "engine":
-      return  <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />;
+      return  <Image
+      source={require("../src/assets/img/icons/PiEngineLight.png")}
+      resizeMode={'contain'}
+      style={{ height: 40, width: 100, padding: 10 }}
+    />
 
     case "driven":
-      return   <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />;
+      return    <Image
+      source={require("../src/assets/img/icons/PiGaugeLight.png")}
+      resizeMode={'contain'}
+      style={{ height: 40, width: 100, padding: 10 }}
+    />;
 
     case "transmission":
-      return   <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />      ;
+      return    <Image
+      source={require("../src/assets/img/icons/PiLineSegmentsLight.png")}
+      resizeMode={'contain'}
+      style={{ height: 40, width: 100, padding: 10 }}
+    />     ;
 
     case "fuel":
-      return   <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />;
+      return    <Image
+      source={require("../src/assets/img/icons/PiGasPumpLight.png")}
+      resizeMode={'contain'}
+      style={{ height: 40, width: 100, padding: 10 }}
+    />;
 
     case "type":
-      return   <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />;
+      return    <Image
+      source={require("../src/assets/img/icons/PiCarLight.png")}
+      resizeMode={'contain'}
+      style={{ height: 40, width: 100, padding: 10 }}
+    />;
 
     default:
       return null;

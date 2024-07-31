@@ -26,6 +26,7 @@ import SplashScreen from '../../screens/splash/splash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ShowRoomScreen from '../../screens/showroom/showroom';
 import SellPage from '../../screens/sell_car/sellCar';
+import RegistrationScreen from '../../screens/registration/registration';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,85 +36,86 @@ const Tab = createBottomTabNavigator();
 
 
 function MyTabs() {
-    return (
-        <Tab.Navigator  screenOptions={({route}) => ({
-            tabBarHideOnKeyboard: true,
-            tabBarStyle: {
-            //   display: 'flex',
-            //   position: 'absolute',
-            //   bottom: 20,
-            //   left: 25,
-            //   right: 25,
-            //   elevation: 5,
-              backgroundColor: Colors.BLACK_COLR,
-            //   borderRadius: 30,
-            //   height: 60,
-            },
-            tabBarShowLabel: false,
-            headerShown: false,  })}>
+  return (
+    <Tab.Navigator screenOptions={({ route }) => ({
+      tabBarHideOnKeyboard: true,
+      tabBarStyle: {
+        //   display: 'flex',
+        //   position: 'absolute',
+        //   bottom: 20,
+        //   left: 25,
+        //   right: 25,
+        //   elevation: 5,
+        backgroundColor: Colors.BLACK_COLR,
+        //   borderRadius: 30,
+        //   height: 60,
+      },
+      tabBarShowLabel: false,
+      headerShown: false,
+    })}>
 
-<Tab.Screen name="Home"
-                component={Homescreen}
-                options={{
-                    tabBarLabel: '',
-                    headerShown: false,
+      <Tab.Screen name="Home"
+        component={Homescreen}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
 
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.BORDER_COLOR} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={'home'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
 
-                    ),
-                }} />
-            <Tab.Screen name="BuyCar"
-                component={InventoryPage}
-                options={{
-                    tabBarLabel: '',
-                    headerShown: false,
+          ),
+        }} />
+      <Tab.Screen name="BuyCar"
+        component={InventoryPage}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
 
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE: Colors.BORDER_COLOR} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
 
-                    ),
-                }} />
+          ),
+        }} />
 
-            <Tab.Screen name="SellPage"
-                component={SellPage}
-                options={{
-                    tabBarLabel: '',
-                    headerShown: false,
+      <Tab.Screen name="SellPage"
+        component={SellPage}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
 
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={'car-sport-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
 
-                    ),
-                }} />
-            <Tab.Screen name="Setting"
-                component={SettingScreen}
-                options={{
-                    tabBarLabel: '',
-                    headerShown: false,
-                    tabBarIcon: ({ color, size, focused }) => (
-                        // <MaterialCommunityIcons name={'phone-settings'} size={30} color={focused ? Colors.BLACK_COLR : Colors.BORDER_COLOR} />
-                        <Ionicons name={'menu-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
-                    ),
-                }} />
-
-
-
+          ),
+        }} />
+      <Tab.Screen name="Setting"
+        component={SettingScreen}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
+          tabBarIcon: ({ color, size, focused }) => (
+            // <MaterialCommunityIcons name={'phone-settings'} size={30} color={focused ? Colors.BLACK_COLR : Colors.BORDER_COLOR} />
+            <Ionicons name={'menu-outline'} size={30} color={focused ? Colors.PURE_WHITE : Colors.BORDER_COLOR} />
+          ),
+        }} />
 
 
 
 
-        </Tab.Navigator>
-    );
+
+
+
+    </Tab.Navigator>
+  );
 }
 
 
 const HomeStack = () => {
-    return (
+  return (
 
-        <Stack.Navigator>
+    <Stack.Navigator>
 
-            {/* <Stack.Screen
+      {/* <Stack.Screen
                 name="Splash"
                 component={SplashScreen}
                 options={{
@@ -134,102 +136,110 @@ const HomeStack = () => {
 
 
 
-            <Stack.Screen
-                name="Tab"
-                component={MyTabs}
-                options={{ header: props => <Header props={props} /> }}
+      <Stack.Screen
+        name="Tab"
+        component={MyTabs}
+        options={{ header: props => <Header props={props} /> }}
 
-            />
+      />
 
-<Stack.Screen
-                name="SignIn"
-                component={SignInScreen}
-                options={{
-                    headerShown: false
-                }}
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{
+          headerShown: false
+        }}
 
-            />
-
-
-            <Stack.Screen
-                name="Contact"
-                component={ContactScreen}
-                options={{
-                    headerShown: false
-                }}
-
-            />
-
-            <Stack.Screen
-                name="CarService"
-                component={CarServiceScreen}
-                options={{
-                    headerShown: false
-                }}
-
-            />
-
-            <Stack.Screen
-                name="Insurance"
-                component={InsuranceScreen}
-                options={{
-                    headerShown: false
-                }}
-
-            />
-
-            <Stack.Screen
-                name="Inventory"
-                component={InventoryPage}
-                options={{
-                    headerShown: false
-                }}
-            />
+      />
 
 
-            <Stack.Screen
-                name="Calculator"
-                component={Calculatorscreen}
-                options={{
-                    headerShown: false
-                }}
-            />
+      <Stack.Screen
+        name="Contact"
+        component={ContactScreen}
+        options={{
+          headerShown: false
+        }}
 
-            <Stack.Screen
-                name="CarDetails"
-                component={CarDetailsScreen}
-                options={{ header: props => <Header props={props} /> }}
-            />
-            <Stack.Screen
-                name="Home"
-                component={Homescreen}
-                options={{ header: props => <Header props={props} /> }}
-            />
-            <Stack.Screen
-                name="Wishlist"
-                component={WishListScreen}
-                options={{
-                    headerShown: false
-                }}
-            />
+      />
 
-<Stack.Screen
-                name="ShowRoom"
-                component={ShowRoomScreen}
-                options={{
-                    headerShown: false
-                }}
+      <Stack.Screen
+        name="CarService"
+        component={CarServiceScreen}
+        options={{
+          headerShown: false
+        }}
 
-            /> 
-            <Stack.Screen
-                name="SignUp"
-                component={SignUpScreen}
-                options={{
-                    headerShown: false
-                }}
-            />
-        </Stack.Navigator>
-    );
+      />
+
+      <Stack.Screen
+        name="Insurance"
+        component={InsuranceScreen}
+        options={{
+          headerShown: false
+        }}
+
+      />
+      <Stack.Screen
+        name="Registration"
+        component={RegistrationScreen}
+        options={{
+          headerShown: false
+        }}
+
+      />
+
+      <Stack.Screen
+        name="Inventory"
+        component={InventoryPage}
+        options={{
+          headerShown: false
+        }}
+      />
+
+
+      <Stack.Screen
+        name="Calculator"
+        component={Calculatorscreen}
+        options={{
+          headerShown: false
+        }}
+      />
+
+      <Stack.Screen
+        name="CarDetails"
+        component={CarDetailsScreen}
+        options={{ header: props => <Header props={props} /> }}
+      />
+      <Stack.Screen
+        name="Home"
+        component={Homescreen}
+        options={{ header: props => <Header props={props} /> }}
+      />
+      <Stack.Screen
+        name="Wishlist"
+        component={WishListScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+
+      <Stack.Screen
+        name="ShowRoom"
+        component={ShowRoomScreen}
+        options={{
+          headerShown: false
+        }}
+
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+    </Stack.Navigator>
+  );
 };
 
 // const MainStack = () => {

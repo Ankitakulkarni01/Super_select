@@ -11,7 +11,7 @@ const enabled =
 
     if(enabled){
         const fcmToken = await messaging().getToken();
-        console.log("access,",fcmToken)
+        console.log("FCM access,",fcmToken)
 
         await AsyncStorage.setItem('firebase_token', fcmToken);
 

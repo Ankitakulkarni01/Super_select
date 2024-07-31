@@ -31,8 +31,6 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
 
   const onOpenCarDetails = () => {
-    console.log("hello")
-
     props.navigation.navigate('CarDetails', {
       carData: data,
     })

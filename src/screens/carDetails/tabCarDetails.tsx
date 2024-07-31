@@ -118,7 +118,6 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
   const [index, setIndex] = React.useState(0);
 
   const renderTabBar = (props) => {
-    console.log(props.position.interpolate)
     
     const inputRange = props.navigationState.routes.map((x, i) => i);
 
@@ -128,23 +127,20 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
           const backgroundColor =  props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex) =>{
-              console.log(inputIndex);
+    
               
               return  inputIndex === i ? 'black' : 'white'
             }
              
             ),
           });
-
-          console.log(backgroundColor);
           
 
 
           const opacity = props.position.interpolate({
             inputRange,
             outputRange: inputRange.map((inputIndex) =>{
-              console.log(inputIndex);
-              
+
               return  inputIndex === i ? 1 : 0.5
             }
              
@@ -169,20 +165,22 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
       renderScene={renderScene}
       renderTabBar={renderTabBar}
       onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
     />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: Colors.PURE_WHITE,
-    paddingVertical:10
+    paddingVertical:10,
+    // borderWidth:1
   },
   tabBar: {
     flexDirection: 'row',
-    paddingTop: StatusBar.currentHeight,
+    // flex:1,
+    // borderWidth:1,
+    // paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,

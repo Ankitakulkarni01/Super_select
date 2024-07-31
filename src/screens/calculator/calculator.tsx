@@ -35,7 +35,7 @@ const Calculatorscreen = ({ route, navigation }) => {
     totalAmount: 5099291,
   });
 
-  const valuation = route.params.valuation
+  const valuation = route?.params?.valuation
   
   
   // Valuation Query - Auto

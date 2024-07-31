@@ -256,7 +256,7 @@ const GeneralForm: FC<GeneralFormType> = ({
         touched,
         isSubmitting,
       }) => (
-        <View style={{ backgroundColor: Colors.PURE_WHITE ,padding:10,borderWidth:1}}>
+        <View style={{ backgroundColor: Colors.PURE_WHITE ,padding:10}}>
           <>
             {inputs.map((d, i) => {
               const hasError =

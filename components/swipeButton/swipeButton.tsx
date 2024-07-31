@@ -100,7 +100,7 @@ const SwipeableButton = ({
         <Ionicons name={'chevron-forward-outline'} size={20} color={Colors.BLACK_COLR}  /></Animated.View>
       </PanGestureHandler>
      
-      <Animated.Text style={[styles.swipeText, AnimatedStyles.swipeText]}>Enquiry</Animated.Text>
+      <Animated.Text style={[styles.swipeText, AnimatedStyles.swipeText]}>Reserve</Animated.Text>
       
     </View>
     </GestureHandlerRootView>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    width: BUTTON_WIDTH,
+    width: BUTTON_WIDTH - 50,
     backgroundColor: Colors.BLACK_COLR,
   },
   swipeButton: {

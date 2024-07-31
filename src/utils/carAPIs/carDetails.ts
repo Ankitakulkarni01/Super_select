@@ -2,13 +2,10 @@ import { API_BASE_PATH } from "../constants";
 import fetchExtended from "../fetchExtended";
 
 export const getCarDetails = async (id: string) => {
-  console.log("getCar",id);
-  
   const res = await fetchExtended({
-    url: `${API_BASE_PATH}/car-details/${id}`,
+    url: `${API_BASE_PATH}/car-details/${id}?userId=2`,
     method: "GET",
   });
-
   return res;
 };
 

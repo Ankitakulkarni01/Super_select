@@ -83,7 +83,7 @@ const SettingScreen = (props: any) => {
         {
           access_token &&
 
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Registration')}>
             <View style={styles.iconContainer}>
               <Ionicons name={'document-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
             </View>

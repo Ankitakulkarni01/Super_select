@@ -52,12 +52,13 @@ const SignInScreen = (props: any) => {
         console.log(message, success)
         if(success){
             props.navigation.dispatch(
-                StackActions.replace('Wishlist')
+                StackActions.replace('Home')
             );
-            console.log(data.access_token)
+            console.log(data)
             await AsyncStorage.setItem("access_token", data.token)
+            await AsyncStorage.setItem("userId", data.id)
         }else{
-            console.log("Hello ji");
+            console.log(message);
             
         }
     }

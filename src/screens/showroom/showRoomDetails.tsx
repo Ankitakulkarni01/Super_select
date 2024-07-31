@@ -5,9 +5,29 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { Colors } from '../../utils/color';
 import siteInfo from '../../utils/data/siteDetails';
 import CarouselComponent from '../../../components/Carousel/Carousel';
+import { Image } from "react-native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-
+const showroomImages = {
+    pune:[
+        require('../../assets/Showrooms/Pune/pune-showroom(1).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(2).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(3).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(4).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(5).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(6).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(7).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(8).jpg'),
+        require('../../assets/Showrooms/Pune/pune-showroom(9).jpg'),
+    ],
+    hyderabad:[
+        require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(1).jpg'),
+        require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(2).jpg'),
+        require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(3).jpg'),
+        require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(4).jpg'),
+    ]
+}
 
 // Showroom Details Item
 const ShowroomDetailsItem: FC<{
@@ -19,47 +39,46 @@ const ShowroomDetailsItem: FC<{
 }> = ({ title, mapLink, address, phone, email }) => {
     return (
         <View style={styles.ShowroomDetailsItem}>
-            <Text style={styles.heading} >{title} Showroom</Text>
+            {/* <Text style={styles.heading} >{title} Showroom</Text> */}
 
-            <Text >
-                {/* <IoLocationOutline /> */}
+            <View style={styles.headingContainer}>
+            <Ionicons name={'location-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
                 <Text style={styles.heading}>{address}</Text>
-            </Text>
-            <Text  style={styles.heading}>
-                {/* <IoCallOutline /> */}
-                {phone}
-            </Text>
-            <Text style={styles.heading} >
-                {/* <IoMailOutline /> */}
-                {email}
-            </Text>
+            </View>
+            <View  style={styles.headingContainer}>
+            <Ionicons name={'call-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
+             <Text style={styles.heading}> {phone}</Text>  
+            </View>
+            <View style={styles.headingContainer} >
+            <Ionicons name={'mail-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
+            <Text style={styles.heading}> {email}</Text>  
+            </View>
         </View>
     );
 };
 //
 
 
-// // Showroom Image Gallery
-// const ShowroomImageGallery: FC<{
-//     images: [];
-// }> = ({ images }) => {
-//     const imgSrcList = useMemo(() => images.map((d) => d.src), [images]);
+// Showroom Image Gallery
+const ShowroomImageGallery: FC<{
+    images: [];
+}> = ({ images }) => {
 
 
-//     //
-//     //
+    //
+    //
 
-//     return (
-//         <>
-//             <View style={styles.ShowroomImageGallery}>
-//                 <CarouselComponent list={imgSrcList} />
-//             </View>
+    return (
+        <>
+            <View style={styles.ShowroomImageGallery}>
+                <CarouselComponent list={images} displayPaginOrNot={false} />
+            </View>
 
 
-//         </>
-//     );
-// }
-// //
+        </>
+    );
+}
+//
 
 // Showroom Map Embed Item
 const ShowroomMapEmbedItem: FC<{
@@ -85,13 +104,18 @@ const FirstRoute = () => {
                 phone={siteInfo.showrooms.pune.phone}
                 email={siteInfo.showrooms.pune.email}
             />
-
-            {/* <ShowroomImageGallery images={showroomImages.pune} /> */}
-
-            <ShowroomMapEmbedItem
-                title="Pune"
-                mapEmbedLink={siteInfo.showrooms.pune.mapEmbedLink}
-            />
+            
+            {/* <View style={{height:450}}> */}
+            <ShowroomImageGallery images={showroomImages.pune} />
+            {/* </View> */}
+            
+            <View style={{margin:10}}>
+             <Image
+                source={require("../../assets//showroom/Pune_location.png")}
+                resizeMode={'stretch'}
+                style={{  width: '100%' }}
+              />
+              </View>
         </View>
     )
 
@@ -108,12 +132,14 @@ const SecondRoute = () => {
                 email={siteInfo.showrooms.hyderabad.email}
             />
 
-            {/* <ShowroomImageGallery images={showroomImages.hyderabad} /> */}
-
-            <ShowroomMapEmbedItem
-                title="Hyderabad"
-                mapEmbedLink={siteInfo.showrooms.hyderabad.mapEmbedLink}
-            />
+            <ShowroomImageGallery images={showroomImages.hyderabad} />
+            <View style={{margin:10}}>
+            <Image
+                source={require("../../assets//showroom/Hydrabad_location.png")}
+                resizeMode={'stretch'}
+                style={{ height: 300, width: '100%' }}
+              />
+            </View>
         </View>
     )
 
@@ -148,7 +174,7 @@ const ShowRoomDetailsTab= () => {
         return (
             <View style={styles.tabBar}>
                 {props.navigationState.routes.map((route, i) => {
-                    const backgroundColor = props.position.interpolate({
+                    const background_Color = props.position.interpolate({
                         inputRange,
                         outputRange: inputRange.map((inputIndex) => {
                             console.log(inputIndex);
@@ -158,8 +184,6 @@ const ShowRoomDetailsTab= () => {
 
                         ),
                     });
-
-                    console.log(backgroundColor);
 
 
 
@@ -212,14 +236,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.PURE_WHITE,
-        paddingVertical: 10
+        paddingVertical: 10,
+        borderWidth:1
     },
     tabBar: {
         flexDirection: 'row',
         paddingTop: StatusBar.currentHeight,
     },
     ShowroomDetailsItem: {
-        flex: 1,
+        marginHorizontal:10,
     },
     tabItem: {
         flex: 1,
@@ -232,14 +257,15 @@ const styles = StyleSheet.create({
     ShowroomImageGallery: {
         flex: 1
     },
+    headingContainer:{
+        margin:10,
+        alignItems:'center',
+        flexDirection:'row'
+    },
     heading: {
         color: Colors.BLACK_COLR,
-        fontWeight: '600',
+        fontWeight: '400',
         fontSize: 18,
-        margin: 10,
-        paddingBottom: 15,
-        borderBottomWidth: 1,
-        borderColor: Colors.SOFT_COLOR
     },
     featuresItem: {
         flex: 1,

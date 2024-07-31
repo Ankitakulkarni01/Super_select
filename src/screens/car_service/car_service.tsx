@@ -42,15 +42,12 @@ const CarServiceScreen = () => {
         <Text style={{ color: Colors.BLACK_COLR, marginVertical: 10, fontFamily: 'Oxanium-Bold', fontSize: 30 }}>Car Service</Text>
 
       </View>
-        <View style={{ flex: 1, marginBottom: 20 }}>
+      <View style={{ flex: 1, marginBottom: 20 }}>
         <CarouselComponent
           list={carServiceImages}
+          displayPaginOrNot={true}
         />
-        </View>
-      {/* <Text style={styles.heading}>
-        To get the best service, fill this out and our executive will
-        attend you shortly.
-      </Text> */}
+      </View>
       <GeneralForm
         formName="insuranceForm"
         inputs={[

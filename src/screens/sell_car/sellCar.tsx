@@ -1,31 +1,16 @@
 import { FC, ReactNode, useCallback, useState } from "react";
 import clsx from "clsx";
-// import dynamic from "next/dynamic";
-
-// import {
-//   FaGears,
-//   FaHandshake,
-//   FaListCheck,
-//   FaMoneyCheck,
-//   FaTag,
-// } from "react-icons/fa6";
 import ScheduleIcon from "../../assets/svg/schedule.svg";
 import CarInspectionIcon from "../../assets/svg/car-inspection.svg";
 import SellCarIcon from "../../assets/svg/sell-car.svg";
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-// import sellCarHeroImg from "@/assets/img/sellcar-hero.jpg";
-
-// import CoolHeading from "@/components/CoolHeading";
-// import { Text } from "@/components/GeneralForm";
 import { type SellCarDataType } from "../../utils/formAPIs/sellCar";
-// import { imageCompression } from "@/utils/imageCompression";
-// import siteInfo from "@/data/siteInfo";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import GeneralForm from "../../../components/GeneralForm/generalForm";
 import { Colors } from "../../utils/color";
 import { Image } from "react-native";
+import ActionButton from "../../components/actionButton";
+import siteInfo from "../../utils/data/siteDetails";
 
 //
 //
@@ -75,17 +60,45 @@ export default function SellPage() {
 
   //
   //
+  const onCall = (number: string) => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
+    else { phoneNumber = `telprompt:${number}`; }
+    Linking.openURL(phoneNumber)
+
+  }
+
+  const onWhatappChat = (mobileNumber: string) => {
+    let url =
+      'whatsapp://send?' +
+      'phone=91' + mobileNumber;
+    Linking.openURL(url)
+      .then((data) => {
+        console.log('WhatsApp Opened');
+      })
+      .catch(() => {
+        Alert.alert('Make sure Whatsapp installed on your device');
+      });
+  }
+
 
   return (
     <>
       <ScrollView style={styles.SellPage}>
         <View style={styles.fold1}>
           <View style={styles.part1}>
-            <View style={styles.title}>
-              <Text style={styles.heading}>Sell Your Luxury Car in</Text>
-              <Text style={styles.heading}>Just 3 Easy Steps</Text>
-            </View>
+            <View style={styles.part2}>
+              <Image
+                source={require("../../assets/img/img/sellcar-hero.jpg")}
+                resizeMode={'contain'}
+                style={{ height: 300, width: '100%' }}
+              />
+              <View style={styles.title}>
+                <Text style={styles.heading}>Sell Your Luxury Car in</Text>
+                <Text style={styles.heading}>Just 3 Easy Steps</Text>
+              </View>
 
+            </View>
             <View style={styles.kp_group} >
               <KeyPointsItem icon={<ScheduleIcon height={50} width={50} color={Colors.BLACK_COLR} />} title="Book Appointment" />
               <KeyPointsItem
@@ -94,26 +107,9 @@ export default function SellPage() {
               />
               <KeyPointsItem icon={<SellCarIcon height={50} width={50} color={Colors.BLACK_COLR} />} title="Sell Your Call" />
             </View>
-
-            <View style={styles.btn_group}>
-              {/* <a href={`tel:${siteInfo.showrooms.pune.phone}`}>
-                <button>Call Now: {siteInfo.showrooms.pune.phone}</button>
-              </a> */}
-
-              {/* <a
-                href={siteInfo.social.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="WhatsApp"
-              >
-                <button style={styles.wa}>Chat on WhatsApp</button>
-              </a> */}
-            </View>
           </View>
 
-          {/* <View style={styles.part2}>
-            <img src={sellCarHeroImg.src} alt="Car" />
-          </View> */}
+
         </View>
 
         <View style={styles.wrapper}>
@@ -128,14 +124,12 @@ export default function SellPage() {
                 source={require("../../assets/img/icons/FaTag.png")}
                 resizeMode={'contain'}
                 style={{ height: 40, width: 100, padding: 10 }}
-                alt="SOLD OUT"
               />
               } title="Competitive Price" />
               <TopPointsItem icon={<Image
                 source={require("../../assets/img/icons/FaMoneyCheck.png")}
                 resizeMode={'contain'}
                 style={{ height: 40, width: 100, padding: 10 }}
-                alt="SOLD OUT"
               />
               } title="Fast Transaction" />
               <TopPointsItem
@@ -143,7 +137,6 @@ export default function SellPage() {
                   source={require("../../assets/img/icons/FaListCheck.png")}
                   resizeMode={'contain'}
                   style={{ height: 40, width: 100, padding: 10 }}
-                  alt="SOLD OUT"
                 />
                 }
                 title="Multiple Checkpoints"
@@ -152,14 +145,12 @@ export default function SellPage() {
                 source={require("../../assets/img/icons/FaGears.png")}
                 resizeMode={'contain'}
                 style={{ height: 40, width: 100, padding: 10 }}
-                alt="SOLD OUT"
               />
               } title="Seamless Process" />
               <TopPointsItem icon={<Image
                 source={require("../../assets/img/icons/FaHandshake.png")}
                 resizeMode={'contain'}
                 style={{ height: 40, width: 100, padding: 10 }}
-                alt="SOLD OUT"
               />
               } title="Complete Privacy" />
             </ScrollView>
@@ -175,15 +166,15 @@ export default function SellPage() {
                 {
                   name: "makeModel",
                   type: "text",
-                  placeholder: "Car Make & Model",
+                  placeholder: "Car Make & Model*",
                   required: true,
                 },
-                { name: "name", type: "text", required: true },
-                { name: "email", type: "email", required: true },
+                { name: "Name *", type: "text", required: true },
+                { name: "Email *", type: "email", required: true },
                 {
                   name: "phone",
                   type: "tel",
-                  placeholder: "Phone no",
+                  placeholder: "Phone no *",
                   required: true,
                 },
               ]}
@@ -202,6 +193,16 @@ export default function SellPage() {
             />
           </View>
         </View>
+        <View style={styles.btn_group}>
+          <ActionButton
+            onPress={() => onCall(siteInfo.showrooms.pune.phone)}
+            title={`Call Now: ${siteInfo.showrooms.pune.phone}`} backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+          />
+          <ActionButton
+            onPress={() => onWhatappChat(siteInfo.showrooms.pune.phone)}
+            title="Chat On Whatsapp " backgroundColor={'green'} color={Colors.PURE_WHITE}
+          />
+        </View>
       </ScrollView >
     </>
   );
@@ -219,7 +220,7 @@ const KeyPointsItem: FC<{ icon: ReactNode; title: string }> = ({
   return (
     <View style={styles.kp_item}>
       <View style={styles.icon_wrap}>{icon}</View>
-      <Text style={styles.subTitle}>{title}</Text>
+      <Text style={styles.subTitle} ellipsizeMode="tail">{title}</Text>
     </View>
   );
 };
@@ -233,10 +234,6 @@ const TopPointsItem: FC<{ icon: ReactNode; title: string }> = ({
   icon,
   title,
 }) => {
-  // const tpItemClasses = clsx(zebulonFont.style, styles.tp_item);
-
-  //
-
   return (
     <View style={styles.tp_item}>
       {icon}
@@ -248,32 +245,41 @@ const TopPointsItem: FC<{ icon: ReactNode; title: string }> = ({
 
 const styles = StyleSheet.create({
   SellPage: {
-    padding: 10
+    // padding: 10,
+    marginBottom: 15
   },
   subTitle: {
     color: Colors.BLACK_COLR,
-   fontSize:18,
-   padding:10
+    fontSize: 16,
+    padding: 10,
+    fontFamily: 'Oxanium-Medium',
+    textAlign: 'center',
+    display:'flex'
   },
   heading: {
     color: Colors.BLACK_COLR,
     marginVertical: 5,
     fontSize: 22,
+    fontFamily: 'Oxanium-Medium',
   },
   fold1: {
 
+  },
+  part2: {
+    marginVertical: 5,
   },
   part1: {
 
   },
   title: {
-
+    padding: 10
   },
   kp_group: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flexWrap:'wrap',
   },
   btn_group: {
-
+    padding: 10
   },
   wrapper: {
 
@@ -290,8 +296,7 @@ const styles = StyleSheet.create({
   kp_item: {
 
     flex: 1,
-    margin: 10,
-    padding: 10,
+    marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
 
@@ -304,7 +309,8 @@ const styles = StyleSheet.create({
   },
   tp_item: {
     backgroundColor: Colors.PURE_WHITE,
-    padding: 20,
+    padding: 10,
+    alignItems: 'center',
     margin: 10,
     borderRadius: 10
   }

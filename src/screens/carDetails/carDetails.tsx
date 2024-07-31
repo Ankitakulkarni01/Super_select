@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Colors } from '../../utils/color';
@@ -20,6 +20,9 @@ import TabViewExample from './tabCarDetails';
 import DynamicCarouselComponent from '../../../components/Carousel/DynamicCarousel';
 import ActionButton from '../../components/actionButton';
 import { currencyValueFormatter } from '../../utils/numberOperations';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishlist';
 
 
 const CarDetailsScreen = ({ navigation, route }) => {
@@ -42,6 +45,8 @@ const CarDetailsScreen = ({ navigation, route }) => {
   // );
   // //
 
+  const [wishlist, setwishlist] = useState(false)
+
 
 
   const { isLoading, data: carDataRes } = useQuery({
@@ -57,13 +62,15 @@ const CarDetailsScreen = ({ navigation, route }) => {
   );
 
   const allImages = useMemo(() => {
-    // console.log(carDataRes?.data);
 
 
     if (carDataRes?.data.exteriorImages !== undefined) {
       const dataImages = [...carDataRes?.data.exteriorImages]
-      console.log(dataImages);
 
+      setwishlist(carDataRes?.data?.wishListId !== null)
+
+      console.log("wishlist", carDataRes?.data?.wishListId !== null)
+      
 
       const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
       const previewIndex = both?.findIndex((x) => x === carDataRes?.data?.previewImage);
@@ -85,12 +92,29 @@ const CarDetailsScreen = ({ navigation, route }) => {
   }, [carDataRes]);
   //
 
+
   // Features Array
   const featuresArray = useMemo(() => {
     return stringToJson(carData?.features) as Array<string>;
   }, [carDataRes]);
   //
 
+      const postWishlist = async () =>{
+        if(carDataRes?.data?.wishListId !== null){
+          const {success, message, data} = await removeWishlistAPI(carDataRes?.data?.wishListId)
+          if(success){
+              setwishlist(false)
+          }
+        }else{
+        const values = {
+            "carId": carDataRes?.data.id
+        }
+        const {success, message, data} = await postWishlistAPI(values)
+        if(success){
+            setwishlist(true)
+        }
+        }
+    }
 
 
   //
@@ -331,8 +355,19 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
       
       </ScrollView>
-      <View style={{ flexShrink: 1 }}>
+      <View style={{ flexShrink: 1, flexDirection:'row' }}>
         <SwipeableButton onSwipe={makeSomeRequest} isLoading={isLoading} />
+        <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={postWishlist}>
+          {
+            wishlist
+            ?
+            <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+        
+            :
+            <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+        
+          }
+        </TouchableOpacity> 
       </View>
 
     </View>

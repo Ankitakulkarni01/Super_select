@@ -19,13 +19,15 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 interface Props extends LazyComponentProps {
   list: Array<any>;
+  displayPaginOrNot: boolean
 }
 
 
 //
 
 const CarouselComponent: FC<Props> = ({
-  list
+  list,
+  displayPaginOrNot
 }) => {
 
   const [index, setIndex] = useState(0)
@@ -80,20 +82,24 @@ const CarouselComponent: FC<Props> = ({
                   onSnapToItem={(index) => setIndex(index)}
            // onSnapToItem = { index => this.setState({activeIndex:index}) }
                    />
-                     <Pagination
-        dotsLength={list.length}
-        activeDotIndex={index}
-        dotStyle={{
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            marginHorizontal: 8,
-            backgroundColor: "black"
-        }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-        tappableDots={true}
-      />
+                   {
+                    displayPaginOrNot && 
+                    <Pagination
+                    dotsLength={list.length}
+                    activeDotIndex={index}
+                    dotStyle={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        marginHorizontal: 8,
+                        backgroundColor: "black"
+                    }}
+                    inactiveDotOpacity={0.4}
+                    inactiveDotScale={0.6}
+                    tappableDots={true}
+                  />
+                   }
+                    
             </View>
     </View>
   );
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: SLIDER_WIDTH,
-    height: 300,
+    height: '100%',
   },
   buttonContainer: {
     alignItems: 'center',

@@ -1,5 +1,5 @@
 
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import ActionButton from "../../src/components/actionButton";
 import CarItem from "../CarItem/CarItem";
 import { getLatestCollection } from "../../src/utils/carAPIs/latestCollection";
@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { CarList } from "../../interface/car";
 import { Colors } from "../../src/utils/color";
 import { useQuery } from "@tanstack/react-query";
+import { ActivityIndicator } from "react-native-paper";
 
 //
 
@@ -22,10 +23,6 @@ const DATA_LENGTH = 5;
 //
 
 const LatestCollection = (props:any) => {
-  // Get Data
-
-  console.log(props.navigation);
-  
 
   
   const { isLoading, data: latestCollectionRES } = useQuery({
@@ -49,10 +46,16 @@ const LatestCollection = (props:any) => {
 
       <View style={styles.wrapper}>
         {isLoading ? (
-          <></>
+        
+              Platform.OS === "ios" ? (
+                <ActivityIndicator size="small" color="purple" />
+              ) : (
+                <ActivityIndicator size={50} color="green" />
+              )
+              
         ) : (
           data?.map((d, i) => (
-            <CarItem data={d} props={props.props} />
+            <CarItem data={d} props={props.props} key={i} />
           ))
         )}
       </View>

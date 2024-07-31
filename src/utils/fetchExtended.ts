@@ -15,7 +15,7 @@ export const getHeaders = async (contentType?: string) => {
 
   const access_token = await AsyncStorage.getItem("access_token")
 
-  console.log("access",access_token)
+  // console.log("access",access_token)
 
   const headers = {
     "Content-Type": "application/json",

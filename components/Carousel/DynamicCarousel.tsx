@@ -48,7 +48,6 @@ const DynamicCarouselComponent: FC<Props> = ({
     );
   };
 
-  console.log(list)
 
   return (
     <View style={{ flexDirection: 'row', flex: 1 }}>
