@@ -6,9 +6,11 @@ import fetchExtended from "../fetchExtended";
 
 export type SendOTPDataType = {
   number: string;
+  type? : string
 };
 
 export const doSendOTP = async (data: SendOTPDataType) => {
+  console.log(data)
   const res = await fetchExtended({
     url: `${API_BASE_PATH}/send-otp`,
     method: "POST",

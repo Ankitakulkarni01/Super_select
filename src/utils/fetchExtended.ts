@@ -15,8 +15,6 @@ export const getHeaders = async (contentType?: string) => {
 
   const access_token = await AsyncStorage.getItem("access_token")
 
-  // console.log("access",access_token)
-
   const headers = {
     "Content-Type": "application/json",
     authorization: access_token
@@ -34,9 +32,7 @@ const fetchExtended = async (fetchdata: {
   payload?: Array<any> | Object;
   headersContentType?: "application/json" | string;
 }): Promise<ApiResponseType> => {
-  // console.log("request", fe?.payload);
 
-  //
 
   try {
     
@@ -51,7 +47,8 @@ const fetchExtended = async (fetchdata: {
 
     return { success, message, data };
   } catch (err) {
-    console.log(err)
+    const res = await err.response.data;
+    console.log("errpr",res)
 
     return {
       success: false,

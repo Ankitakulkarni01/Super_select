@@ -3,7 +3,7 @@ import messaging from '@react-native-firebase/messaging'
 
 export const createFirebaseToken = async() =>{
     const authStatus = await messaging().requestPermission({
-  provisional: true,
+    provisional: true,
 });
 const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -11,7 +11,6 @@ const enabled =
 
     if(enabled){
         const fcmToken = await messaging().getToken();
-        console.log("FCM access,",fcmToken)
 
         await AsyncStorage.setItem('firebase_token', fcmToken);
 

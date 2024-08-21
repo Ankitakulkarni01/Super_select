@@ -45,8 +45,6 @@ const CarouselComponent: FC<Props> = ({
     );
   };
 
-  console.log(list)
-
   return (
     <View style={{ flexDirection: 'row', flex: 1 }}>
       {/* {list?.map((d, i) => (

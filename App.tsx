@@ -16,6 +16,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import HomeStack from './src/utils/navigation/navigation';
+import RemoteNotification from './src/components/RemoteNotification';
 
 
 
@@ -23,14 +24,15 @@ const App = (props:any) => {
 
   const queryClient = new QueryClient()
 
+  
+
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      console.log(remoteMessage);
-      
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));  
     });
 
     return unsubscribe;
@@ -63,7 +65,9 @@ const App = (props:any) => {
   }, []);
 
   const requestUserPermission = async () => {
-    const user_id = await AsyncStorage.getItem('user_id');
+    const user_id = await AsyncStorage.getItem('fcmToken');
+    console.log("fcm  ", user_id);
+    
 
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -73,10 +77,7 @@ const App = (props:any) => {
       checkToken();
       messaging().setBackgroundMessageHandler(async remoteMessage => {
       
-        console.log('remoteMessage.data.type')
-
-        
-
+        console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
         console.log('notifycallback')
 
        
@@ -127,6 +128,7 @@ const App = (props:any) => {
       
            <PaperProvider>
              <NavigationContainer>
+              <RemoteNotification/>
              <StatusBar animated={true} backgroundColor="#5856D6" />
                <HomeStack />
              </NavigationContainer>

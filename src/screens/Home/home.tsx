@@ -15,6 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const carouselItems = [
@@ -45,7 +46,7 @@ const Homescreen = (props) => {
 
   const getPDFList = async () => {
     const fcm = await createFirebaseToken()
-    console.log(fcm);
+    console.log("fcm",fcm);
 
     const { success, message, data } = await getPDF()
     console.log(success, message, data)

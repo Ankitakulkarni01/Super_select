@@ -20,9 +20,13 @@ const WishListScreen = (props: any) => {
 
   const getWishlist = async () => {
     const { success, message, data } = await getWishlistAPI()
-    console.log(success, message, data)
     if (success) {
       setCarData(data)
+      console.log("wishlist data", data);
+      
+    }
+    else{
+      console.log(message)
     }
   }
 
@@ -30,7 +34,6 @@ const WishListScreen = (props: any) => {
    <View style={{flex:1}}>
       <View style={{ padding: 10 }}>
         <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>Wishlist
-
         </Text>
       </View>
       {

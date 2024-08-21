@@ -22,10 +22,11 @@ const ActionButton: FC<{ title: string, onPress: () => void, icons?: any, backgr
 const Styles = StyleSheet.create({
     buttonContainer: {
         height: 50,
+        // flex:1,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        // marginHorizontal: 10,
+        marginHorizontal: 10,
         // width:200,
         borderRadius: 5,
         marginVertical:10,

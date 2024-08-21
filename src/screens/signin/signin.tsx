@@ -4,6 +4,7 @@ import {
     View,
     Text,
     TextInput,
+    TouchableOpacity,
 } from 'react-native'
 import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,6 +19,7 @@ import { Image } from 'react-native';
 import { login } from '../../utils/extraAPIs/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createFirebaseToken } from '../../utils/firebase';
+import { doSendOTP } from '../../utils/extraAPIs/sendOTP';
 
 
 
@@ -37,13 +39,19 @@ const SignInScreen = (props: any) => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setshowPassword] = useState(true)
+    const [phoneNumber, setphoneNumber] = useState("");
 
     const bagRef = useRef(null);
 
     const logins  = async (phoneNumber: string, password: string) =>{
-        const values = {
-            "number": "9876544422",
-            "password": "Test@123",
+        // const values = {
+        //     "number": "9876544422",
+        //     "password": "Test@123",
+        //     "fcmToken": await createFirebaseToken()
+        // }
+         const values = {
+            "number": phoneNumber,
+            "password": password,
             "fcmToken": await createFirebaseToken()
         }
 
@@ -52,18 +60,76 @@ const SignInScreen = (props: any) => {
         console.log(message, success)
         if(success){
             props.navigation.dispatch(
-                StackActions.replace('Home')
+                StackActions.replace('MyTabs')
             );
             console.log(data)
             await AsyncStorage.setItem("access_token", data.token)
-            await AsyncStorage.setItem("userId", data.id)
+            await AsyncStorage.setItem("userId", data.userId)
         }else{
             console.log(message);
             
         }
     }
 
+    const sendOTP = async (phoneNumber: string) => {
+        console.log("forgot")
+        const { success, message, data } = await doSendOTP({ number: phoneNumber, type:'forgot-password' });
+    
+        if (success) {
+          console.log("its ", message, data)
+          props.navigation.navigate('ForgotPassword', { phoneNumber })
+        }
+      }
+
     //
+
+    
+  if (showResetPassword)
+    return (
+      <View style={styles.forgotPassMainContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../assets/logo/logo.png')}
+            resizeMode={'contain'}
+            style={{ height: 80, width: '100%' }}
+          />
+        </View>
+        {/* <div className={styles.server_error}>{error}</div> */}
+
+        <View style={styles.forgotPassword}>
+          {/* <View style={styles.server_error}>{error}</View> */}
+          {/* <TouchableOpacity
+            style={styles.change_email}
+            onPress={() => setShowResetPassword(false)}
+          >
+            <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
+          </TouchableOpacity> */}
+
+
+
+          <View style={styles.textinputContainer}>
+            <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
+            <TextInput
+              // name="email"
+              placeholder="Phone Number"
+              style={styles.textInput}
+              onChangeText={(text) => setphoneNumber(text)}
+              keyboardType="email-address"
+            />
+
+          </View>
+
+          <Text style={styles.headerText}>
+            We will sent you an OTP and other instructions if you have an
+            account with this Phone Number.
+          </Text>
+
+          <TouchableOpacity style={styles.processButton} onPress={() =>{sendOTP(phoneNumber)}}>
+            <Text style={styles.processText}>Proceed</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
     //
 
     //
@@ -136,8 +202,15 @@ const SignInScreen = (props: any) => {
                             }
                             <View style={styles.linkContainer}>
                             <Text style={styles.linkText} onPress={() => {
-                               console.log("Forgot Password")
-                            }}>Forgot Password?</Text>
+                    setShowResetPassword(true)
+                    // const { email } = bagRef.current.values
+                    // const link = `${CONSTANTS.yoair_web_sit}/account/password_reset${email ? `?email=${email}` : ''}`
+                    // Linking.canOpenURL(link).then(supported => {
+                    //     if (supported)
+                    //         Linking.openURL(link);
+                    //     else console.log("Don't know how to open URI: " + link);
+                    // });
+                }}>Forgot Password?</Text>
                         </View>
                         </View>
                         </View>
@@ -149,8 +222,8 @@ const SignInScreen = (props: any) => {
                 )}
             </Formik>
             <View style={styles.signUpContainer}>
-                <Text style={{color: 'black', fontSize:14}}>Dont have an Account?</Text>
-                <Text style={{color: 'black', marginHorizontal:5, textDecorationLine:"underline", fontWeight:'bold', fontSize:14}}>Open an Account</Text>
+                <Text style={{color: Colors.PURE_WHITE, fontSize:14}}>Dont have an Account?</Text>
+                <Text style={{color: Colors.PURE_WHITE, marginHorizontal:5, textDecorationLine:"underline", fontWeight:'bold', fontSize:14}}>Open an Account</Text>
             </View>
 
         </View>
@@ -231,7 +304,7 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     headerText: {
-        color: Colors.FONT_COLOR,
+        color: Colors.PURE_WHITE,
         fontSize: 17,
         marginVertical: 10,
         textAlign: 'center'
@@ -241,19 +314,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 25,
         elevation: 10,
-        backgroundColor: 'white',
+        backgroundColor: Colors.BLACK_COLR,
     },
     processButton: {
         width: '100%',
-        backgroundColor: Colors.ACCENTCOLOR,
-        height: 40,
+        backgroundColor: Colors.PURE_WHITE,
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,
-        marginHorizontal: 10
+        // marginHorizontal: 10
     },
     processText: {
-        color: Colors.PURE_WHITE,
+        color: Colors.BLACK_COLR,
         fontSize: 17
     },
     forgotPassword: {

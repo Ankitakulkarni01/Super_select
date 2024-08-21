@@ -27,6 +27,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ShowRoomScreen from '../../screens/showroom/showroom';
 import SellPage from '../../screens/sell_car/sellCar';
 import RegistrationScreen from '../../screens/registration/registration';
+import OTPScreen from '../../screens/OTPScreen/OtpScreen';
+import ForgotPasswordScreen from '../../screens/forgotPassword/forgotPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -129,12 +131,9 @@ const HomeStack = () => {
                 component={SignInScreen}
                 options={{
                     headerShown: false
-                }}
+
 
             /> */}
-
-
-
 
       <Stack.Screen
         name="Tab"
@@ -143,9 +142,35 @@ const HomeStack = () => {
 
       />
 
-      <Stack.Screen
+<Stack.Screen
         name="SignIn"
         component={SignInScreen}
+        options={{
+          headerShown: false
+        }}
+
+      />
+
+<Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+<Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+
+      
+
+<Stack.Screen
+        name="OTP"
+        component={OTPScreen}
         options={{
           headerShown: false
         }}
@@ -231,13 +256,7 @@ const HomeStack = () => {
         }}
 
       />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{
-          headerShown: false
-        }}
-      />
+    
     </Stack.Navigator>
   );
 };

@@ -2,16 +2,12 @@ import React from 'react';
 import { TouchableOpacity, View, TextInput, StyleSheet } from 'react-native';
 import { Badge } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
-// import Yoair from '../assets/logo/logo.png'
-// import userStore from '../stores/userStore';
 import { Colors } from '../utils/color';
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Header = ({ props }) => {
-    // const cart = userStore((state) => state.cart);
-
 
     const validateAccessToken = async() =>{
         const access_token = await AsyncStorage.getItem("access_token")

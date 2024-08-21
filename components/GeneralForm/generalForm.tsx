@@ -1,6 +1,10 @@
 import React, { FC, useMemo, useState, useCallback } from 'react';
 import {
+  Alert,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { object, ObjectShape, string, number, mixed } from "yup";
@@ -17,7 +21,10 @@ import RadioInput from './RadioInput';
 import DateInput from './DateInput';
 import { addDaysToDate, formatDate, parseDate } from '../../src/utils/date-time';
 import ActionButton from '../../src/components/actionButton';
-
+import {
+  launchCamera,
+  launchImageLibrary
+} from 'react-native-image-picker';
 
 export type FileInputType = "image"; // | "video"
 
@@ -84,6 +91,7 @@ const GeneralForm: FC<GeneralFormType> = ({
   acknowledgmentTitle = "Request Submitted",
   onSubmit,
 }) => {
+  const [filePath, setFilePath] = useState({});
   // Initial Values
   const initialValues = useMemo(() => {
     const values: FormValueType = {};
@@ -202,6 +210,33 @@ const GeneralForm: FC<GeneralFormType> = ({
   }, [inputs, fileInputs]);
   //
 
+  const chooseFile = (type) => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+    };
+    launchImageLibrary(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+       Alert.alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        Alert.alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        Alert.alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        Alert.alert(response.errorMessage);
+        return;
+      }
+      console.log(response.assets)
+      setFilePath(response);
+    });
+  };
   //
 
   const [globalError, setGlobalError] = useState("");
@@ -408,6 +443,20 @@ const GeneralForm: FC<GeneralFormType> = ({
                         );
                     }
                   })()}
+                    <>
+              {fileInputs?.map((d, i) => {
+                const hasError =
+                  errors[d.name] && touched[d.name] ? true : false;
+
+                return (
+                  <View style={styles.custom_input_file} key={i}>
+                    <TouchableOpacity  onPress={() => chooseFile('photo')} style={styles.btnSection}  >
+                <Text style={styles.btnText}>Choose File</Text>
+              </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </>
                 </>
               );
             })}
@@ -422,5 +471,19 @@ const GeneralForm: FC<GeneralFormType> = ({
     </Formik>
   );
 };
+
+const styles = StyleSheet.create({
+  custom_input_file:{
+
+  },
+  btnSection:{
+    flex:1,
+
+  },
+  btnText:{
+    color: Colors.BLACK_COLR
+  }
+});
+
 
 export default GeneralForm;
