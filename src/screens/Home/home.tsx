@@ -75,12 +75,12 @@ const Homescreen = (props) => {
             </View>
             <Text style={styles.titleText}>Buy Car</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Inventory')}>
+          {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Sell')}>
             <View style={styles.iconContainer}>
             <Ionicons name={'car-sport-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
             </View>
             <Text style={styles.titleText}>Sell Car</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Contact')}>
             <View style={styles.iconContainer}>
@@ -88,7 +88,7 @@ const Homescreen = (props) => {
             </View>
             <Text style={styles.titleText}>Contact</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Contact')}>
+          {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Contact')}>
             <View style={styles.iconContainer}>
               <MaterialCommunityIcons name={'phone-settings'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
             </View>
@@ -105,7 +105,7 @@ const Homescreen = (props) => {
               <MaterialCommunityIcons name={'phone-settings'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
             </View>
             <Text style={styles.titleText}>Contact</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </ScrollView>
       </View>
       {/* <View style={{ height: 3, backgroundColor: Colors.SKELETON_COLOR_1, marginHorizontal: 10 }} /> */}

@@ -43,11 +43,34 @@ const CarServiceScreen = () => {
 
       </View>
       <View style={{ flex: 1, marginBottom: 20 }}>
-        <CarouselComponent
-          list={carServiceImages}
-          displayPaginOrNot={true}
-        />
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <Image resizeMode='contain'
+            style={{ width: 150, height: 150, margin: 5 }}
+            source={require("../../assets/img/car_service_logo/value_added_services.png")} />
+          <Image resizeMode='contain'
+            style={{ width: 150, height: 150, margin: 5 }}
+            source={require("../../assets/img/car_service_logo/scanning_diagnostics.png")} />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <Image resizeMode='contain'
+            style={{ width: 150, height: 150, margin: 5 }}
+            source={require("../../assets/img/car_service_logo/periodic_service.png")} />
+          <Image resizeMode='contain'
+            style={{ width: 150, height: 150, margin: 5 }}
+            source={require("../../assets/img/car_service_logo/common_repairs.png")} />
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <Image resizeMode='contain'
+            style={{ width: 150, height: 150, margin: 5 }}
+            source={require("../../assets/img/car_service_logo/body_shop.png")} />
+          <Image resizeMode='contain'
+            style={{ width: 150, height: 150, margin: 5 }}
+            source={require("../../assets/img/car_service_logo/detailing.png")} />
+        </View>
       </View>
+      <Text style={styles.heading}>
+        To get the best service, fill this out and our executive will attend you shortly.
+      </Text>
       <GeneralForm
         formName="insuranceForm"
         inputs={[
@@ -101,7 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Oxanium-Medium',
     color: Colors.BLACK_COLR,
-    paddingVertical: 10,
+    padding: 10,
     lineHeight: 20,
   },
 

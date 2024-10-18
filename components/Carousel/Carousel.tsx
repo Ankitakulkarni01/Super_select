@@ -35,7 +35,7 @@ const CarouselComponent: FC<Props> = ({
 
   const renderItem = ({item}: {item: any}) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.8}>
     <Image
             source={item}
             resizeMode={'stretch'}

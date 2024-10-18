@@ -88,6 +88,7 @@ const InventoryPage = (props: any) => {
                 thumbColor={Colors.BLACK_COLR}
                 ios_backgroundColor="#3e3e3e"
                 // onValueChange={toggleSwitch}
+                disabled={false}
                 value={false}
               />
 
@@ -96,7 +97,6 @@ const InventoryPage = (props: any) => {
             <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, padding: 10, justifyContent: 'space-between', borderColor: Colors.BLACK_COLR }}>
               <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, letterSpacing: 2 }} >Filters</Text>
               <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />
-
             </View>
           </View>
           <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, width: 100, padding: 10, margin: 5, borderColor: Colors.BLACK_COLR }}>

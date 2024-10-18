@@ -91,6 +91,21 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         </View>
       </View>
 
+      {data.status !== "soldOut" && data?.special === 1 && (
+          <View
+            style={
+              [styles.tags]
+            }
+          >
+          <Text style={{color: Colors.BLACK_COLR}}>  {data.status === "booked"
+              ? "BOOKED"
+              : data?.special === 1
+              ? "SPECIAL"
+              : ""}
+            </Text>
+          </View>
+        )}
+
       {/* {data.status !== "soldOut" && (
         <View
         // style={ data.status === "booked" && styles.booked,
@@ -145,7 +160,12 @@ const styles = StyleSheet.create({
 
   },
   tags: {
-
+    margin: 0,
+    padding: 10,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor:'yellow',  
   }
 })
 

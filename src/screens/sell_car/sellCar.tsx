@@ -11,6 +11,8 @@ import { Colors } from "../../utils/color";
 import { Image } from "react-native";
 import ActionButton from "../../components/actionButton";
 import siteInfo from "../../utils/data/siteDetails";
+import { launchImageLibrary } from 'react-native-image-picker';
+import { Button } from "react-native";
 
 //
 //
@@ -80,6 +82,17 @@ export default function SellPage() {
         Alert.alert('Make sure Whatsapp installed on your device');
       });
   }
+
+  const [photo, setPhoto] = useState(null);
+
+  const handleChoosePhoto = () => {
+    launchImageLibrary({ noData: true }, (response) => {
+      console.log(response);
+      if (response) {
+        setPhoto(response);
+      }
+    });
+  };
 
 
   return (
@@ -193,6 +206,17 @@ export default function SellPage() {
             />
           </View>
         </View>
+        {photo && (
+        <>
+          <Image
+            source={{ uri: photo.uri }}
+            style={{ width: 300, height: 300 }}
+          />
+          <Button title="Upload Photo" onPress={() => console.log("Hill")
+          } />
+        </>
+      )}
+      <Button title="Choose Photo" onPress={handleChoosePhoto} />
         <View style={styles.btn_group}>
           <ActionButton
             onPress={() => onCall(siteInfo.showrooms.pune.phone)}

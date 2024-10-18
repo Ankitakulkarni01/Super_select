@@ -1,6 +1,7 @@
 import React, { FC, useMemo, useState, useCallback } from 'react';
 import {
   Alert,
+  Button,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +9,8 @@ import {
   View,
 } from 'react-native';
 import { object, ObjectShape, string, number, mixed } from "yup";
+import DatePicker from 'react-native-date-picker'
+import moment from 'moment';
 
 
 import { Colors } from '../../src/utils/color';
@@ -17,7 +20,7 @@ import { Formik } from 'formik';
 import { imageArray } from './customScheme';
 import { TextInput } from '@react-native-material/core';
 import MenuItem from 'react-native-paper/lib/typescript/components/Menu/MenuItem';
-import RadioInput from './RadioInput';
+import { RadioButton } from 'react-native-paper';
 import DateInput from './DateInput';
 import { addDaysToDate, formatDate, parseDate } from '../../src/utils/date-time';
 import ActionButton from '../../src/components/actionButton';
@@ -92,6 +95,8 @@ const GeneralForm: FC<GeneralFormType> = ({
   onSubmit,
 }) => {
   const [filePath, setFilePath] = useState({});
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false)
   // Initial Values
   const initialValues = useMemo(() => {
     const values: FormValueType = {};
@@ -100,7 +105,7 @@ const GeneralForm: FC<GeneralFormType> = ({
       const ele = inputs[i];
       values[ele.name] = ele?.defaultValue ? ele.defaultValue : "";
     }
-
+    console.log("values", values)
     for (let i = 0; i < fileInputs.length; i++) {
       const ele = fileInputs[i];
       values[ele.name] = [];
@@ -109,6 +114,19 @@ const GeneralForm: FC<GeneralFormType> = ({
     return values;
   }, [inputs, fileInputs]);
   //
+  const showDatePicker = () => {
+    console.log("open",open)
+    setOpen(true);
+  };
+
+  const hideDatePicker = () => {
+    setOpen(false);
+  };
+
+  const handleConfirm = date => {
+    setDate(date);
+    hideDatePicker();
+  };
 
   // Form Schema
   const formSchema = useMemo(() => {
@@ -221,7 +239,7 @@ const GeneralForm: FC<GeneralFormType> = ({
       console.log('Response = ', response);
 
       if (response.didCancel) {
-       Alert.alert('User cancelled camera picker');
+        Alert.alert('User cancelled camera picker');
         return;
       } else if (response.errorCode == 'camera_unavailable') {
         Alert.alert('Camera not available on device');
@@ -247,18 +265,18 @@ const GeneralForm: FC<GeneralFormType> = ({
   const onSubmitExtra = useCallback(
     async (values: FormValueType, options: { resetForm: () => void }) => {
       setGlobalError("");
+      console.log("Value", values)
+      // const response = await onSubmit(values);
 
-      const response = await onSubmit(values);
+      // if (response) {
+      //   const { success, message, data } = response;
 
-      if (response) {
-        const { success, message, data } = response;
+      //   if (success) {
+      //     options?.resetForm();
 
-        if (success) {
-          options?.resetForm();
-
-          if (withAcknowledgment) setShowSubmittedAcknowledgment(true);
-        } else setGlobalError(message);
-      }
+      //     if (withAcknowledgment) setShowSubmittedAcknowledgment(true);
+      //   } else setGlobalError(message);
+      // }
     },
     [
       onSubmit,
@@ -274,6 +292,9 @@ const GeneralForm: FC<GeneralFormType> = ({
 
   //
   //
+
+
+
 
   return (
     <Formik
@@ -291,7 +312,7 @@ const GeneralForm: FC<GeneralFormType> = ({
         touched,
         isSubmitting,
       }) => (
-        <View style={{ backgroundColor: Colors.PURE_WHITE ,padding:10}}>
+        <View style={{ backgroundColor: Colors.PURE_WHITE, padding: 10 }}>
           <>
             {inputs.map((d, i) => {
               const hasError =
@@ -305,90 +326,67 @@ const GeneralForm: FC<GeneralFormType> = ({
                     switch (d.type) {
                       case "date": {
                         return (
-                          <TextInput
-                          label={d?.placeholder ?? d.name}
-                          multiline={d?.isTextField}
-                          variant="standard"
-                          // size="medium"
-                          maxLength={15}
-                          InputProps={{
-                            startAdornment: d?.prefix ? (
-                              <React.Fragment> //the change
-                                {" "}
-                                {d.prefix}//the change
-                              </React.Fragment>
-                            ) : null,
-                            endAdornment: d?.suffix ? (
-                              <React.Fragment>
-                                {d.suffix}
-                              </React.Fragment>
-                            ) : null,
-                          }}
-                          color={Colors.BLACK_COLR}
-                          value={String(values[d.name])}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          inputStyle={{   fontFamily: 'Oxanium-Medium',}}
-                          style={{marginVertical:5}}
+
+                          <TouchableOpacity onPress={showDatePicker}>
+                            <TextInput
+                              label={d?.placeholder ?? d.name}
+                              multiline={d?.isTextField}
+                              variant="standard"
+                              // size="medium"
+                              editable={false}
+                              maxLength={15}
                           
-                          // error={hasError}
-                          helperText={
-                            !hideErrorText && hasError
-                              ? errors[d.name]
-                              : ""
-                          }
-                        >
-                          {/* {d?.selectOptions?.map((opt, k) => (
-                            <MenuItem value={opt.value} key={k}>
-                              {opt?.text ?? opt.value}
-                            </MenuItem>
-                          ))} */}
-                        </TextInput>
-                            // <DateInput
-                            //   label={d?.placeholder ?? d.name}
-                            //   value={
-                            //     values[d.name]
-                            //       ? parseDate(values[d.name] as string)
-                            //       : null
-                            //   }
-                            //   onChange={(v) =>
-                            //     handleChange({
-                            //       target: {
-                            //         name: d.name,
-                            //         value: formatDate(v),
-                            //       },
-                            //     })
-                            //   }
-                            //   disablePast
-                            //   maxDate={addDaysToDate(new Date(), 28)}
-                            //   slotProps={{
-                            //     textField: {
-                            //       id: formName + d.name,
-                            //       name: d.name,
-                            //       required: d?.required,
-                            //       variant: "standard",
-                            //       size: "medium",
-                            //       error: hasError,
-                            //       helperText:
-                            //         !hideErrorText && hasError
-                            //           ? errors[d.name]
-                            //           : "",
-                            //     },
-                            //   }}
-                            // />
+                              color={Colors.BLACK_COLR}
+                              value={
+                                moment(values[d.name]).format('DD-MM-YYYY')
+                              }
+                              inputStyle={{ fontFamily: 'Oxanium-Medium', }}
+                              style={{ marginVertical: 5, }}
+                              // error={hasError}
+                              helperText={
+                                !hideErrorText && hasError
+                                  ? errors[d.name]
+                                  : ""
+                              }
+                            >
+                            
+                            {/* <Text style={styles.errorMsgText}>{date}</Text> */}
+                      
+                            </TextInput>
+                            <DatePicker
+                               modal
+                               open={open}
+                               date={
+                                  values[d.name]
+                                    ? parseDate(values[d.name] as string)
+                                    : date
+                                }
+                                mode='date'
+                               onConfirm={(date) => {
+                                 setOpen(false)
+                                 handleChange({
+                                      target: {
+                                        name: d.name,
+                                        value: formatDate(date),
+                                      },
+                                    })
+                               }}
+                               onCancel={() => {
+                                 setOpen(false)
+                               }}
+                               maximumDate={addDaysToDate(new Date(), 28)}
+                               minimumDate={date}
+                               disablePast
+                          />
+                          </TouchableOpacity>
                         );
                       }
 
                       case "radio":
                         return (
-                          <RadioInput
-                            id={formName + d.name}
-                            name={d.name}
-                            label={d?.placeholder ?? d.name}
-                            required={d?.required}
-                            size="medium"
-                            direction="row"
-                            value={values[d.name]}
+                          <RadioButton
+                 
+                            value={String(values[d.name])}
                             options={d?.selectOptions}
                             onChange={handleChange}
                             error={hasError}
@@ -402,69 +400,52 @@ const GeneralForm: FC<GeneralFormType> = ({
                         return (
                           <TextInput
                             label={d?.placeholder ?? d.name}
-                            
+
                             multiline={d?.isTextField}
                             variant="standard"
-                            // size="medium"
+                            numberOfLines={d?.isTextField ? 4 : 1}
                             maxLength={30}
-                            // InputProps={{
-                            //   startAdornment: d?.prefix ? (
-                            //     <React.Fragment> //the change
-                            //       {" "}
-                            //       {d.prefix}//the change
-                            //     </React.Fragment>
-                            //   ) : null,
-                            //   endAdornment: d?.suffix ? (
-                            //     <React.Fragment>
-                            //       {d.suffix}
-                            //     </React.Fragment>
-                            //   ) : null,
-                            // }}
-                            color={Colors.BLACK_COLR}
+                            color={!hideErrorText && hasError ? 'red' : Colors.BLACK_COLR}
                             value={String(values[d.name])}
-                            onChange={handleChange}
+                            onChangeText={handleChange(d.name)}
                             onBlur={handleBlur}
-                            inputStyle={{   fontFamily: 'Oxanium-Medium',}}
-                            style={{marginVertical:5}}
-                            
-                            // error={hasError}
-                            helperText={
-                              !hideErrorText && hasError
-                                ? errors[d.name]
-                                : ""
-                            }
+                            inputStyle={{ fontFamily: 'Oxanium-Medium', }}
+                            style={{ marginVertical: 5 }}
+
+                          // error={hasError}
+
                           >
-                            {/* {d?.selectOptions?.map((opt, k) => (
-                              <MenuItem value={opt.value} key={k}>
-                                {opt?.text ?? opt.value}
-                              </MenuItem>
-                            ))} */}
+
+
                           </TextInput>
                         );
                     }
                   })()}
-                    <>
-              {fileInputs?.map((d, i) => {
-                const hasError =
-                  errors[d.name] && touched[d.name] ? true : false;
+                  {!hideErrorText && hasError &&
+                    <Text style={styles.errorMsgText}>{errors[d.name]}</Text>
+                  }
+                  <>
+                    {fileInputs?.map((d, i) => {
+                      const hasError =
+                        errors[d.name] && touched[d.name] ? true : false;
 
-                return (
-                  <View style={styles.custom_input_file} key={i}>
-                    <TouchableOpacity  onPress={() => chooseFile('photo')} style={styles.btnSection}  >
-                <Text style={styles.btnText}>Choose File</Text>
-              </TouchableOpacity>
-                  </View>
-                );
-              })}
-            </>
+                      return (
+                        <View style={styles.custom_input_file} key={i}>
+                          <TouchableOpacity onPress={() => chooseFile('photo')} style={styles.btnSection}  >
+                            <Text style={styles.btnText}>Choose File</Text>
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    })}
+                  </>
                 </>
               );
             })}
-             <View style={{ marginVertical: 10 }}>
+            <View style={{ marginVertical: 10 }}>
               <ActionButton onPress={handleSubmit}
                 title="Submit Request" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE} /></View>
 
-          
+
           </>
         </View>
       )}
@@ -473,15 +454,20 @@ const GeneralForm: FC<GeneralFormType> = ({
 };
 
 const styles = StyleSheet.create({
-  custom_input_file:{
+  custom_input_file: {
 
   },
-  btnSection:{
-    flex:1,
-
+  btnSection: {
+    flex: 1,
+    borderWidth: 1
   },
-  btnText:{
+  btnText: {
     color: Colors.BLACK_COLR
+  },
+  errorMsgText: {
+    fontSize: 14,
+    color: 'red',
+    paddingBottom: 10
   }
 });
 

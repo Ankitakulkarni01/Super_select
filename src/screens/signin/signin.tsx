@@ -28,8 +28,6 @@ const loginValidationSchema = yup.object().shape({
         .string(),
     password: yup
         .string()
-        .min(8, ({ min }) => `Password must be at least ${min} characters`)
-        .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/, "Password must contain a uppercase, lowercase & number and should be between 8-32 characters.")
         .required('Password is required'),
 })
 
@@ -43,62 +41,63 @@ const SignInScreen = (props: any) => {
 
     const bagRef = useRef(null);
 
-    const logins  = async (phoneNumber: string, password: string) =>{
+    const logins = async (phoneNumber: string, password: string) => {
         // const values = {
         //     "number": "9876544422",
         //     "password": "Test@123",
         //     "fcmToken": await createFirebaseToken()
         // }
-         const values = {
+        const values = {
             "number": phoneNumber,
             "password": password,
             "fcmToken": await createFirebaseToken()
         }
 
-        console.log(values)
-        const {success, message, data} = await login(values)
-        console.log(message, success)
-        if(success){
+        const { success, message, data } = await login(values)
+        if (success) {
             props.navigation.dispatch(
-                StackActions.replace('MyTabs')
+                StackActions.replace('Splash')
             );
-            console.log(data)
             await AsyncStorage.setItem("access_token", data.token)
-            await AsyncStorage.setItem("userId", data.userId)
-        }else{
+            // await AsyncStorage.setItem("userId", data.userId)
+        } else {
             console.log(message);
-            
+            setError(message)
         }
     }
 
     const sendOTP = async (phoneNumber: string) => {
         console.log("forgot")
-        const { success, message, data } = await doSendOTP({ number: phoneNumber, type:'forgot-password' });
-    
+        const { success, message, data } = await doSendOTP({ number: phoneNumber, type: 'forgot-password' });
+
         if (success) {
-          console.log("its ", message, data)
-          props.navigation.navigate('ForgotPassword', { phoneNumber })
+            console.log("its ", message, data)
+            props.navigation.navigate('ForgotPassword', { phoneNumber })
+        } else {
+            console.log(message);
+            setError("No account found with this number")
         }
-      }
+    }
 
     //
 
-    
-  if (showResetPassword)
-    return (
-      <View style={styles.forgotPassMainContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../../assets/logo/logo.png')}
-            resizeMode={'contain'}
-            style={{ height: 80, width: '100%' }}
-          />
-        </View>
-        {/* <div className={styles.server_error}>{error}</div> */}
 
-        <View style={styles.forgotPassword}>
-          {/* <View style={styles.server_error}>{error}</View> */}
-          {/* <TouchableOpacity
+    if (showResetPassword)
+        return (
+            <View style={styles.forgotPassMainContainer}>
+                <View style={styles.logoContainer}>
+                    <Image
+                        source={require('../../assets/logo/logo.png')}
+                        resizeMode={'contain'}
+                        style={{ height: 80, width: '100%' }}
+                    />
+                </View>
+                <Text style={styles.errorText}>{error}</Text>
+                {/* <div className={styles.server_error}>{error}</div> */}
+
+                <View style={styles.forgotPassword}>
+                    {/* <View style={styles.server_error}>{error}</View> */}
+                    {/* <TouchableOpacity
             style={styles.change_email}
             onPress={() => setShowResetPassword(false)}
           >
@@ -107,29 +106,28 @@ const SignInScreen = (props: any) => {
 
 
 
-          <View style={styles.textinputContainer}>
-            <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
-            <TextInput
-              // name="email"
-              placeholder="Phone Number"
-              style={styles.textInput}
-              onChangeText={(text) => setphoneNumber(text)}
-              keyboardType="email-address"
-            />
+                    <View style={styles.textinputContainer}>
+                        <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
+                        <TextInput
+                            // name="email"
+                            placeholder="Phone Number"
+                            style={styles.textInput}
+                            onChangeText={(text) => setphoneNumber(text)}
+                            keyboardType="email-address"
+                        />
 
-          </View>
+                    </View>
 
-          <Text style={styles.headerText}>
-            We will sent you an OTP and other instructions if you have an
-            account with this Phone Number.
-          </Text>
+                    <Text style={styles.headerText}>
+                        We will check if there is any account associated with super select by this mobile number using OTP verification
+                    </Text>
 
-          <TouchableOpacity style={styles.processButton} onPress={() =>{sendOTP(phoneNumber)}}>
-            <Text style={styles.processText}>Proceed</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
+                    <TouchableOpacity style={styles.processButton} onPress={() => { sendOTP(phoneNumber) }}>
+                        <Text style={styles.processText}>Proceed</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
     //
 
     //
@@ -139,17 +137,17 @@ const SignInScreen = (props: any) => {
             <View style={styles.logoContainer}>
                 {/* <Logo height={80} width={180} /> */}
                 <Image
-                        source={require('../../assets/logo/logo.png')}
-                        resizeMode={'contain'}
-                        style={{ height: 80, width: '100%'}}
-                    />
+                    source={require('../../assets/logo/logo.png')}
+                    resizeMode={'contain'}
+                    style={{ height: 80, width: '100%' }}
+                />
             </View>
             <Text style={styles.errorText}>{error}</Text>
             <Formik
                 validationSchema={loginValidationSchema}
-                initialValues={{phoneNumber: '', password: '' }}
+                initialValues={{ phoneNumber: '', password: '' }}
                 onSubmit={values => {
-                    logins(values.phoneNumber,values.password)
+                    logins(values.phoneNumber, values.password)
                 }}
 
                 innerRef={bagRef}
@@ -164,66 +162,71 @@ const SignInScreen = (props: any) => {
                     isValid,
                 }) => (
                     <>
-                    <View >
-                        <View style={styles.textinputParentContainer}>
-                            <View style={styles.textinputContainer}>
-                            <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
-                   <TextInput
-                                    // name="email"
-                                    placeholder="Phone Number"
-                                    style={styles.textInput}
-                                    onChangeText={handleChange('phoneNumber')}
-                                    onBlur={handleBlur('phoneNumber')}
-                                    value={values.phoneNumber}
-                                    keyboardType="email-address"
-                                    placeholderTextColor={Colors.PURE_WHITE}
-                                />
+                        <View >
+                            <View style={styles.textinputParentContainer}>
+                                <View style={styles.textinputContainer}>
+                                    <Ionicons name={'call-outline'} size={25} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                                    <TextInput
+                                        // name="email"
+                                        placeholder="Phone Number"
+                                        style={styles.textInput}
+                                        onChangeText={handleChange('phoneNumber')}
+                                        onBlur={handleBlur('phoneNumber')}
+                                        value={values.phoneNumber}
+                                        keyboardType="number-pad"
+                                        placeholderTextColor={Colors.BLACK_COLR}
+                                    />
+                                </View>
+                                {errors.phoneNumber && touched.phoneNumber &&
+                                    <Text style={styles.errorMsgText}>{errors.phoneNumber}</Text>
+                                }
                             </View>
-                            {/* {errors.email && touched.email &&
-                                <Text style={styles.errorMsgText}>{errors.email}</Text>
-                            } */}
-                        </View>
-                        <View style={styles.textinputParentContainer}>
-                            <View style={styles.textinputContainer}>
-                                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
-                                <TextInput
-                                    // name="password"
-                                    placeholder="Password"
-                                    style={styles.textInput}
-                                    onChangeText={handleChange('password')}
-                                    onBlur={handleBlur('password')}
-                                    value={values.password}
-                                    secureTextEntry={showPassword}
-                                    placeholderTextColor={Colors.PURE_WHITE}
-                                />
+                            <View style={styles.textinputParentContainer}>
+                                <View style={styles.textinputContainer}>
+                                    <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                                    <TextInput
+                                        // name="password"
+                                        placeholder="Password"
+                                        style={styles.textInput}
+                                        onChangeText={handleChange('password')}
+                                        onBlur={handleBlur('password')}
+                                        value={values.password}
+                                        secureTextEntry={showPassword}
+                                        placeholderTextColor={Colors.BLACK_COLR}
+                                    />
+                                </View>
+                                {errors.password && touched.password &&
+                                    <Text style={styles.errorMsgText}>{errors.password}</Text>
+                                }
+                                <View style={styles.linkContainer}>
+                                    <Text style={styles.linkText} onPress={() => {
+                                        setShowResetPassword(true)
+                                        // const { email } = bagRef.current.values
+                                        // const link = `${CONSTANTS.yoair_web_sit}/account/password_reset${email ? `?email=${email}` : ''}`
+                                        // Linking.canOpenURL(link).then(supported => {
+                                        //     if (supported)
+                                        //         Linking.openURL(link);
+                                        //     else console.log("Don't know how to open URI: " + link);
+                                        // });
+                                    }}>Forgot Password?</Text>
+                                </View>
                             </View>
-                            {errors.password && touched.password &&
-                                <Text style={styles.errorMsgText}>{errors.password}</Text>
-                            }
-                            <View style={styles.linkContainer}>
-                            <Text style={styles.linkText} onPress={() => {
-                    setShowResetPassword(true)
-                    // const { email } = bagRef.current.values
-                    // const link = `${CONSTANTS.yoair_web_sit}/account/password_reset${email ? `?email=${email}` : ''}`
-                    // Linking.canOpenURL(link).then(supported => {
-                    //     if (supported)
-                    //         Linking.openURL(link);
-                    //     else console.log("Don't know how to open URI: " + link);
-                    // });
-                }}>Forgot Password?</Text>
-                        </View>
-                        </View>
                         </View>
                         <View>
-                            <ActionButton onPress={handleSubmit}
+                            <ActionButton
+                                backgroundColor={Colors.BLACK_COLR}
+                                color={Colors.PURE_WHITE}
+                                onPress={handleSubmit}
                                 title="Login" /></View>
 
                     </>
                 )}
             </Formik>
             <View style={styles.signUpContainer}>
-                <Text style={{color: Colors.PURE_WHITE, fontSize:14}}>Dont have an Account?</Text>
-                <Text style={{color: Colors.PURE_WHITE, marginHorizontal:5, textDecorationLine:"underline", fontWeight:'bold', fontSize:14}}>Open an Account</Text>
+                <Text style={{ color: Colors.BLACK_COLR, fontSize: 14 }}>Dont have an Account?</Text>
+                <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() =>
+                    props.navigation.navigate('SignUp')
+                }>Open an Account</Text>
             </View>
 
         </View>
@@ -236,20 +239,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 25,
         elevation: 10,
-        backgroundColor: 'black',
+        // backgroundColor: 'black',
     },
     logoContainer: {
         alignItems: 'center',
         marginBottom: 20,
         justifyContent: 'center',
-        borderWidth:2,
+        borderWidth: 2,
         // borderColor:'while',
         // height:100,
         // width:100
     },
     textinputParentContainer: {
         marginVertical: 15,
-        marginHorizontal:10
+        marginHorizontal: 10
     },
     textinputContainer: {
         flexDirection: 'row',
@@ -263,23 +266,24 @@ const styles = StyleSheet.create({
     textInput: {
         height: 45,
         width: '70%',
-        color: Colors.PURE_WHITE
+        color: Colors.BLACK_COLR
     },
     errorMsgText: {
-        fontSize: 10,
+        fontSize: 18,
         color: 'red'
     },
     errorText: {
-        fontSize: 10,
+        fontSize: 16,
         color: 'red',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingVertical: 10
     },
     signUpContainer: {
         flexDirection: "row",
         flexWrap: 'wrap',
         padding: 20,
-        marginTop:15,
-        justifyContent:'center',
+        marginTop: 15,
+        justifyContent: 'center',
         alignItems: 'center'
     },
     accountText: {
@@ -304,7 +308,7 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     headerText: {
-        color: Colors.PURE_WHITE,
+        color: Colors.BLACK_COLR,
         fontSize: 17,
         marginVertical: 10,
         textAlign: 'center'
@@ -318,7 +322,7 @@ const styles = StyleSheet.create({
     },
     processButton: {
         width: '100%',
-        backgroundColor: Colors.PURE_WHITE,
+        backgroundColor: Colors.BLACK_COLR,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -341,7 +345,7 @@ const styles = StyleSheet.create({
     linkText: {
         textAlign: 'right',
         textDecorationLine: 'underline',
-        color: Colors.PURE_WHITE,
+        color: Colors.BLACK_COLR,
         fontSize: 15,
     }
 })

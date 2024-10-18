@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo, useState } from "react"
-import { Animated, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { Animated, Linking, Platform, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { Colors } from '../../utils/color';
@@ -8,9 +8,11 @@ import CarouselComponent from '../../../components/Carousel/Carousel';
 import { Image } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 
 const showroomImages = {
-    pune:[
+    pune: [
         require('../../assets/Showrooms/Pune/pune-showroom(1).jpg'),
         require('../../assets/Showrooms/Pune/pune-showroom(2).jpg'),
         require('../../assets/Showrooms/Pune/pune-showroom(3).jpg'),
@@ -21,7 +23,7 @@ const showroomImages = {
         require('../../assets/Showrooms/Pune/pune-showroom(8).jpg'),
         require('../../assets/Showrooms/Pune/pune-showroom(9).jpg'),
     ],
-    hyderabad:[
+    hyderabad: [
         require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(1).jpg'),
         require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(2).jpg'),
         require('../../assets/Showrooms/Hyderabad/hyderabad-showroom(3).jpg'),
@@ -42,16 +44,16 @@ const ShowroomDetailsItem: FC<{
             {/* <Text style={styles.heading} >{title} Showroom</Text> */}
 
             <View style={styles.headingContainer}>
-            <Ionicons name={'location-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
+                <Ionicons name={'location-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
                 <Text style={styles.heading}>{address}</Text>
             </View>
-            <View  style={styles.headingContainer}>
-            <Ionicons name={'call-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
-             <Text style={styles.heading}> {phone}</Text>  
+            <View style={styles.headingContainer}>
+                <Ionicons name={'call-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
+                <Text style={styles.heading}> {phone}</Text>
             </View>
             <View style={styles.headingContainer} >
-            <Ionicons name={'mail-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
-            <Text style={styles.heading}> {email}</Text>  
+                <Ionicons name={'mail-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10, }} />
+                <Text style={styles.heading}> {email}</Text>
             </View>
         </View>
     );
@@ -84,17 +86,33 @@ const ShowroomImageGallery: FC<{
 const ShowroomMapEmbedItem: FC<{
     title: string;
     mapEmbedLink: string;
-  }> = ({ title, mapEmbedLink }) => {
+}> = ({ title, mapEmbedLink }) => {
     return (
-      <View style={styles.ShowroomMapEmbedItem}>
-      </View>
+        <View style={styles.ShowroomMapEmbedItem}>
+        </View>
     );
-  };
-  //
+};
+//
 
 
 
 const FirstRoute = () => {
+    const openMap = () => {
+
+        const latitude = 18.555357;
+        const longitude = 73.795845
+
+        const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${latitude},${longitude}`;
+        const label = 'Super Select';
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+
+        Linking.openURL(url);
+    }
+
     return (
         <View style={styles.container} >
             <ShowroomDetailsItem
@@ -104,24 +122,40 @@ const FirstRoute = () => {
                 phone={siteInfo.showrooms.pune.phone}
                 email={siteInfo.showrooms.pune.email}
             />
-            
+
             {/* <View style={{height:450}}> */}
             <ShowroomImageGallery images={showroomImages.pune} />
             {/* </View> */}
-            
-            <View style={{margin:10}}>
-             <Image
-                source={require("../../assets//showroom/Pune_location.png")}
-                resizeMode={'stretch'}
-                style={{  width: '100%' }}
-              />
-              </View>
+
+            <TouchableOpacity style={{ margin: 10 }} onPress={openMap}>
+                <Image
+                    source={require("../../assets//showroom/Pune_location.png")}
+                    resizeMode={'stretch'}
+                    style={{ width: '100%' }}
+                />
+            </TouchableOpacity>
         </View>
     )
 
 };
 
 const SecondRoute = () => {
+    const openMap = () => {
+        
+
+        const latitude = 17.407649;
+        const longitude = 78.43975
+
+        const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${latitude},${longitude}`;
+        const label = 'Super Select';
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+
+        Linking.openURL(url);
+    }
     return (
         <View style={styles.container} >
             <ShowroomDetailsItem
@@ -133,13 +167,13 @@ const SecondRoute = () => {
             />
 
             <ShowroomImageGallery images={showroomImages.hyderabad} />
-            <View style={{margin:10}}>
-            <Image
-                source={require("../../assets//showroom/Hydrabad_location.png")}
-                resizeMode={'stretch'}
-                style={{ height: 300, width: '100%' }}
-              />
-            </View>
+            <TouchableOpacity style={{ margin: 10 }} onPress={openMap}>
+                <Image
+                    source={require("../../assets//showroom/Hydrabad_location.png")}
+                    resizeMode={'stretch'}
+                    style={{ height: 300, width: '100%' }}
+                />
+            </TouchableOpacity>
         </View>
     )
 
@@ -147,11 +181,11 @@ const SecondRoute = () => {
 
 
 const routes = [
-    { key: 'first', title: 'Description' },
-    { key: 'second', title: 'Features' },
+    { key: 'first', title: 'Pune' },
+    { key: 'second', title: 'Hydrabad' },
 ];
 
-const ShowRoomDetailsTab= () => {
+const ShowRoomDetailsTab = () => {
 
     const renderScene = ({ route }) => {
         switch (route.key) {
@@ -174,25 +208,13 @@ const ShowRoomDetailsTab= () => {
         return (
             <View style={styles.tabBar}>
                 {props.navigationState.routes.map((route, i) => {
-                    const background_Color = props.position.interpolate({
-                        inputRange,
-                        outputRange: inputRange.map((inputIndex) => {
-                            console.log(inputIndex);
-
-                            return inputIndex === i ? 'black' : 'white'
-                        }
-
-                        ),
-                    });
-
-
 
                     const opacity = props.position.interpolate({
                         inputRange,
                         outputRange: inputRange.map((inputIndex) => {
                             console.log(inputIndex);
 
-                            return inputIndex === i ? 1 : 0.5
+                            return inputIndex === i ? 1 : 0.7
                         }
 
                         ),
@@ -202,7 +224,7 @@ const ShowRoomDetailsTab= () => {
                         <TouchableOpacity
                             style={[styles.tabItem]}
                             onPress={() => setIndex(i)}>
-                            <Animated.Text style={{ opacity, color: Colors.BLACK_COLR }}>{route.title}</Animated.Text>
+                            <Animated.Text style={{ color: Colors.PURE_WHITE, opacity }}>{route.title}</Animated.Text>
                         </TouchableOpacity>
                     );
                 })}
@@ -216,15 +238,15 @@ const ShowRoomDetailsTab= () => {
             renderScene={renderScene}
             renderTabBar={renderTabBar}
             onIndexChange={setIndex}
-            initialLayout={{ width: layout.width,     }}
-            // style={{
-            //     display: 'flex',
-            //     flex:1,
-            //                 backgroundColor: Colors.BLACK_COLR,
-            //                   borderRadius: 30,
-            //                   margin:10
-                
-            // }}
+            initialLayout={{ width: layout.width, }}
+
+            style={{
+                display: 'flex',
+                flex: 1,
+                backgroundColor: Colors.BLACK_COLR,
+
+
+            }}
         />
     );
 }
@@ -237,14 +259,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.PURE_WHITE,
         paddingVertical: 10,
-        borderWidth:1
+        borderWidth: 1
     },
     tabBar: {
         flexDirection: 'row',
         paddingTop: StatusBar.currentHeight,
     },
     ShowroomDetailsItem: {
-        marginHorizontal:10,
+        marginHorizontal: 10,
     },
     tabItem: {
         flex: 1,
@@ -257,10 +279,10 @@ const styles = StyleSheet.create({
     ShowroomImageGallery: {
         flex: 1
     },
-    headingContainer:{
-        margin:10,
-        alignItems:'center',
-        flexDirection:'row'
+    headingContainer: {
+        margin: 10,
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     heading: {
         color: Colors.BLACK_COLR,
@@ -274,8 +296,8 @@ const styles = StyleSheet.create({
         color: Colors.BLACK_COLR,
         fontSize: 18
     },
-    ShowroomMapEmbedItem:{
-        flex:1
+    ShowroomMapEmbedItem: {
+        flex: 1
     }
 });
 

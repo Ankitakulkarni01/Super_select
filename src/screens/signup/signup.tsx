@@ -83,6 +83,7 @@ if(success){
     console.log("signup", message)
 }else{
     console.log(message);
+    setError(message)
     
 }
  }
@@ -143,7 +144,7 @@ if(success){
                     onChangeText={handleChange('phoneNumber')}
                     onBlur={handleBlur('phoneNumber')}
                     value={values.phoneNumber}
-                    keyboardType="email-address"
+                    keyboardType="number-pad"
                     placeholderTextColor={Colors.LIGTH_COLOR}
                   />
                 </View>
@@ -152,9 +153,9 @@ if(success){
                 }
               </View>
               <View style={{  marginHorizontal: 10, marginVertical: 10 }}>
-                {/* {
+                {
                   showOTP
-                  ? */}
+                  ?
                   <>
                   <Text style={styles.title}>OTP</Text>
                   <CodeField
@@ -176,12 +177,13 @@ if(success){
                     </Text>
                   )}
                 />
-{/*              
+                     </>
+             
                   :
                   <ActionButton onPress={() => sendOTP(values.phoneNumber)}
                   title="GET OTP" />
-                } */}
-                   </>
+                }
+              
               </View>
 
               <View style={styles.textinputParentContainer}>
@@ -250,25 +252,14 @@ if(success){
       </Formik>
       <View style={styles.signUpContainer}>
         <Text style={{ color: Colors.PURE_WHITE, fontSize: 14 }}>Already have an account?</Text>
-        <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }}>Login</Text>
+        <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() => 
+                props.navigation.navigate('SignIn')
+}>Login</Text>
       </View>
-      <View style={styles.linkContainer}>
-                <Text style={styles.linkText} onPress={() => {
-                    setShowResetPassword(true)
-                    // const { email } = bagRef.current.values
-                    // const link = `${CONSTANTS.yoair_web_sit}/account/password_reset${email ? `?email=${email}` : ''}`
-                    // Linking.canOpenURL(link).then(supported => {
-                    //     if (supported)
-                    //         Linking.openURL(link);
-                    //     else console.log("Don't know how to open URI: " + link);
-                    // });
-                }}>Forgot Password?</Text>
-            </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ color: Colors.PURE_WHITE, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
         <Text style={{ color: Colors.PURE_WHITE, fontSize: 12 }}>confirm you have read our <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", }}> Privacy Policy.</Text></Text>
       </View>
-
     </View>
   )
 }

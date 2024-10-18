@@ -141,7 +141,7 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
             inputRange,
             outputRange: inputRange.map((inputIndex) =>{
 
-              return  inputIndex === i ? 1 : 0.5
+              return  inputIndex === i ? 1 : 0.7
             }
              
             ),
@@ -151,7 +151,7 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
             <TouchableOpacity
               style={[styles.tabItem]}
               onPress={() => setIndex(i)}>
-              <Animated.Text style={{ opacity, color:Colors.BLACK_COLR}}>{route.title}</Animated.Text>
+              <Animated.Text style={{ opacity, color:Colors.PURE_WHITE}}>{route.title}</Animated.Text>
             </TouchableOpacity>
           );
         })}
@@ -165,6 +165,10 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
       renderScene={renderScene}
       renderTabBar={renderTabBar}
       onIndexChange={setIndex}
+      style={{
+        backgroundColor: Colors.BLACK_COLR,
+        borderRadius:10
+    }}
     />
   );
 }
@@ -179,7 +183,8 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
     // flex:1,
-    // borderWidth:1,
+    borderWidth:1,
+    borderColor:'red'
     // paddingTop: StatusBar.currentHeight,
   },
   tabItem: {

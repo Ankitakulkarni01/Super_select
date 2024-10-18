@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { Colors } from '../utils/color';
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SuperSelectDrawer from '../../components/drawer';
 
 
 const Header = ({ props }) => {
@@ -21,18 +22,23 @@ const Header = ({ props }) => {
     }
 
     
+    
     return (
         <View style={styles.headerContainer}>
             <View style={styles.headerTopContainer}>
-                <View style={styles.logoContainer}>
+             
+            <TouchableOpacity style={styles.menuContainer} onPress={() => props.navigation.openDrawer()}>
+                    <Feather name={'menu'} size={25} color={Colors.BLACK_COLR} />
+                </TouchableOpacity>
+                {/* <View style={styles.logoContainer}>
                     <Image
                         source={require('../../assets/logo/icon.png')}
                         resizeMode={'contain'}
                         style={{ height: 30, width: 30 }}
                     />
-                </View>
+                </View> */}
                 <TouchableOpacity style={styles.favouriteContainer} onPress={validateAccessToken}>
-                    <Feather name={'heart'} size={25} />
+                    <Feather name={'heart'} size={25} color={Colors.BLACK_COLR}  />
                 </TouchableOpacity>
             </View>
         </View >
@@ -60,7 +66,8 @@ const styles = StyleSheet.create({
         marginTop: 8
     },
     menuContainer: {
-        width: 50
+        width: 50,
+        flex:1
     },
     logoContainer: {
         flex: 1,

@@ -26,10 +26,10 @@ const SplashScreen = (props) => {
     }, []);
 
     const loading = async () => {
-
-            props.navigation.dispatch(
-                StackActions.replace('SignIn')
-            );
+        setTimeout(() =>  props.navigation.dispatch(
+            StackActions.replace('Home')
+        ), 3000);
+           
     }
 
 

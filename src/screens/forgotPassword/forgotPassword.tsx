@@ -22,6 +22,7 @@ import { Image } from 'react-native';
 import { Colors } from '../../utils/color';
 import ActionButton from '../../components/actionButton';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
+import { forgotPassword } from '../../utils/extraAPIs/forgotPassword';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -29,14 +30,14 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 
 const loginValidationSchema = yup.object().shape({
   otp: yup
-    .string()
+    .number()
     .required('Email Address is Required'),
   phoneNumber: yup
-  .string()
-  .required("required")
-  .matches(phoneRegExp, 'Phone number is not valid')
-  .min(10, "too short")
-  .max(10, "too long"),
+    .string()
+    .required("required")
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, "too short")
+    .max(10, "too long"),
   password: yup
     .string()
     .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/, "Password must contain a uppercase, lowercase & number and should be between 8-32 characters.")
@@ -57,7 +58,7 @@ const ForgotPasswordScreen = (props: any) => {
   const [value, setValue] = useState('');
 
 
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
@@ -68,7 +69,22 @@ const ForgotPasswordScreen = (props: any) => {
   const doReset = async (values) => {
     setLoading(true);
     console.log(values);
+    const value= {
+      password: values.password,
+	confirmPassword: values.confirmPassword,
+      number: values.phoneNumber,
+      otp: parseInt(values.otp)
+  }
 
+  console.log(value)
+  const {success, message, data} = await forgotPassword(value)
+  console.log(message, success)
+  if(success){
+     console.log("message", message)
+  }else{
+      console.log(message);
+      
+  }
 
     setLoading(false);
   };
@@ -87,7 +103,7 @@ const ForgotPasswordScreen = (props: any) => {
       {!complete ? (
         <Formik
           validationSchema={loginValidationSchema}
-          initialValues={{ phoneNumber: route.params.phoneNumber, password: '', confirmPassword: '', otp: '' }}
+          initialValues={{ phoneNumber: route.params.phoneNumber, password: '', confirmPassword: '', otp: 0 }}
           onSubmit={values => doReset(values)}
         >
           {({
@@ -101,27 +117,27 @@ const ForgotPasswordScreen = (props: any) => {
           }) => (
             <>
               <View style={styles.textinputParentContainer}>
-              <View style={{   marginVertical: 10 }}>
-              <Text style={styles.title}>OTP:</Text>
-                  <CodeField                  
-                  ref={ref}
-                  {...prop}
-                  value={values.otp}
-                  onChangeText={handleChange('otp')}
-                  cellCount={CELL_COUNT}
-                  autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
-                  rootStyle={styles.codeFieldRoot}
-                  keyboardType="number-pad"
-                  textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
-                    <Text
-                      key={index}
-                      style={[styles.cell, isFocused && styles.focusCell]}
-                      onLayout={getCellOnLayoutHandler(index)}>
-                      {symbol || (isFocused ? <Cursor /> : null)}
-                    </Text>
-                  )}
-                />
+                <View style={{ marginVertical: 10 }}>
+                  <Text style={styles.title}>OTP:</Text>
+                  <CodeField
+                    ref={ref}
+                    {...prop}
+                    value={values.otp}
+                    onChangeText={handleChange('otp')}
+                    cellCount={CELL_COUNT}
+                    autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
+                    rootStyle={styles.codeFieldRoot}
+                    keyboardType="number-pad"
+                    textContentType="oneTimeCode"
+                    renderCell={({ index, symbol, isFocused }) => (
+                      <Text
+                        key={index}
+                        style={[styles.cell, isFocused && styles.focusCell]}
+                        onLayout={getCellOnLayoutHandler(index)}>
+                        {symbol || (isFocused ? <Cursor /> : null)}
+                      </Text>
+                    )}
+                  />
                 </View>
                 {errors.otp && touched.otp &&
                   <Text style={styles.errorMsgText}>{errors.otp}</Text>
@@ -129,7 +145,7 @@ const ForgotPasswordScreen = (props: any) => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                 <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
                   <TextInput
                     placeholder="Phone Number"
                     style={styles.textInput}
@@ -137,7 +153,7 @@ const ForgotPasswordScreen = (props: any) => {
                     onBlur={handleBlur('phoneNumber')}
                     value={values.phoneNumber}
                     keyboardType="email-address"
-                    editable={false} 
+                    editable={false}
                     selectTextOnFocus={false}
                     placeholderTextColor={Colors.LIGTH_COLOR}
                   />
@@ -148,8 +164,8 @@ const ForgotPasswordScreen = (props: any) => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
-                <TextInput
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <TextInput
                     placeholder="Password"
                     style={styles.textInput}
                     onChangeText={handleChange('password')}
@@ -165,8 +181,8 @@ const ForgotPasswordScreen = (props: any) => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
-                <TextInput
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <TextInput
                     // name="password"
                     placeholder="Confirm Password"
                     style={styles.textInput}
@@ -334,21 +350,21 @@ const styles = StyleSheet.create({
   },
   codeFieldRoot: { marginTop: 20 },
   cell: {
-      width: 60,
-      height: 40,
-      lineHeight: 40,
-      fontSize: 24,
-      borderWidth: 1,
-      marginHorizontal: 5,
-      borderColor: Colors.BORDER_COLOR,
-      textAlign: 'center',
-      color: Colors.PURE_WHITE
+    width: 60,
+    height: 40,
+    lineHeight: 40,
+    fontSize: 24,
+    borderWidth: 1,
+    marginHorizontal: 5,
+    borderColor: Colors.BORDER_COLOR,
+    textAlign: 'center',
+    color: Colors.PURE_WHITE
   },
   focusCell: {
-      borderColor: Colors.BORDER_COLOR,
-      color: Colors.PURE_WHITE
+    borderColor: Colors.BORDER_COLOR,
+    color: Colors.PURE_WHITE
   },
-  title:{
+  title: {
     fontSize: 18,
     color: Colors.PURE_WHITE
   }

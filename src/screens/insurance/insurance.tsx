@@ -42,6 +42,10 @@ const InsuranceScreen = () => {
         global insurance providers for cars to ensure you get the best
         coverage possible.
       </Text> */}
+   
+      <View style={{ flex: 1 }}>
+        <InsuranceHeroSvg height={350} width={350} />
+      </View>
       <Text style={styles.heading}>
         To get the best quote, submit your details and hear from our
         insurance partners.
@@ -61,9 +65,6 @@ const InsuranceScreen = () => {
         onSubmit={onFormSubmit}
         withAcknowledgment
       />
-      <View style={{ flex: 1 }}>
-        <InsuranceHeroSvg height={350} width={350} />
-      </View>
     </ScrollView>
   );
 };
