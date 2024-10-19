@@ -65,20 +65,6 @@ const DynamicCarouselComponent: FC<Props> = ({
 
           onSnapToItem={(index) => setIndex(index)}
         />
-        <Pagination
-          dotsLength={list.length}
-          activeDotIndex={index}
-          dotStyle={{
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            marginHorizontal: 8,
-            backgroundColor: "black"
-          }}
-          inactiveDotOpacity={0.4}
-          inactiveDotScale={0.6}
-          tappableDots={true}
-        />
       </View>
     </View>
   );

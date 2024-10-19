@@ -136,7 +136,7 @@ if(success){
             <View >
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'call-outline'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
+                  <Ionicons name={'call-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     // name="email"
                     placeholder="Phone Number"
@@ -145,7 +145,7 @@ if(success){
                     onBlur={handleBlur('phoneNumber')}
                     value={values.phoneNumber}
                     keyboardType="number-pad"
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                   />
                 </View>
                 {errors.phoneNumber && touched.phoneNumber &&
@@ -181,6 +181,8 @@ if(success){
              
                   :
                   <ActionButton onPress={() => sendOTP(values.phoneNumber)}
+                  backgroundColor={Colors.BLACK_COLR}
+                  color={Colors.PURE_WHITE}
                   title="GET OTP" />
                 }
               
@@ -188,14 +190,14 @@ if(success){
 
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Feather name={'user'} size={20} color={Colors.PURE_WHITE} style={styles.iconStyle} />
+                  <Feather name={'user'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     placeholder="Name"
                     style={styles.textInput}
                     onChangeText={handleChange('name')}
                     onBlur={handleBlur('name')}
                     value={values.name}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                   />
                 </View>
                 {errors.name && touched.name &&
@@ -204,7 +206,7 @@ if(success){
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     // name="password"
                     placeholder="Password"
@@ -213,7 +215,7 @@ if(success){
                     onBlur={handleBlur('password')}
                     value={values.password}
                     secureTextEntry={showPassword}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                   />
                 </View>
                 {errors.password && touched.password &&
@@ -222,7 +224,7 @@ if(success){
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     // name="email"
                     placeholder="Confirm Paasword"
@@ -232,7 +234,7 @@ if(success){
                     value={values.confirmPassword}
                     keyboardType="email-address"
                     secureTextEntry={showPassword}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                   />
                 </View>
                 {errors.confirmPassword && touched.confirmPassword &&
@@ -245,20 +247,22 @@ if(success){
             } */}
             <View style={{ marginHorizontal: 10 }}>
               <ActionButton onPress={handleSubmit}
+               backgroundColor={Colors.BLACK_COLR}
+               color={Colors.PURE_WHITE}
                 title="Open an Account" /></View>
 
           </>
         )}
       </Formik>
       <View style={styles.signUpContainer}>
-        <Text style={{ color: Colors.PURE_WHITE, fontSize: 14 }}>Already have an account?</Text>
-        <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() => 
+        <Text style={{ color: Colors.BLACK_COLR, fontSize: 14 }}>Already have an account?</Text>
+        <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() => 
                 props.navigation.navigate('SignIn')
 }>Login</Text>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: Colors.PURE_WHITE, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
-        <Text style={{ color: Colors.PURE_WHITE, fontSize: 12 }}>confirm you have read our <Text style={{ color: Colors.PURE_WHITE, marginHorizontal: 5, textDecorationLine: "underline", }}> Privacy Policy.</Text></Text>
+        <Text style={{ color: Colors.BLACK_COLR, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
+        <Text style={{ color: Colors.BLACK_COLR, fontSize: 12 }}>confirm you have read our <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", }}> Privacy Policy.</Text></Text>
       </View>
     </View>
   )
@@ -270,7 +274,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     elevation: 10,
-    backgroundColor: Colors.BLACK_COLR,
+    backgroundColor: Colors.PURE_WHITE,
   },
   logoContainer: {
     alignItems: 'center',
@@ -287,7 +291,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     // padding: 5,
-    borderColor: Colors.SKELETON_COLOR_2
+    borderRadius:10,
+    borderColor: Colors.BLACK_COLR
   },
   iconStyle: {
     marginLeft: 10,
@@ -295,7 +300,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 45,
     width: '70%',
-    color: Colors.PURE_WHITE,
+    color: Colors.BLACK_COLR,
     marginLeft: 10
   },
   errorMsgText: {

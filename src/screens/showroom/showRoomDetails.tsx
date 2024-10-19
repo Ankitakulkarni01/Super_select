@@ -259,7 +259,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.PURE_WHITE,
         paddingVertical: 10,
-        borderWidth: 1
     },
     tabBar: {
         flexDirection: 'row',
@@ -277,7 +276,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     ShowroomImageGallery: {
-        flex: 1
+        flex: 1, 
+        padding:10
     },
     headingContainer: {
         margin: 10,

@@ -9,7 +9,7 @@ import { FC, useMemo } from "react";
 // import placeholderImg from "@/assets/img/placeholder.png";
 // import { IoCarSportOutline } from "react-icons/io5";
 // import { PiGauge, PiGasPump } from "react-icons/pi";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { Car } from "../../interface/car";
 import ActionButton from "../../src/components/actionButton";
 import { currencyValueFormatter } from "../../src/utils/numberOperations";
@@ -21,13 +21,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { getYearFromFormattedDateString } from "../../src/utils/date-time";
+import CarKeyPointsItem from "../CarKeyPointsItem";
 // import soldOutImg from "../../src/assets/img/sold-out.png";
 
 const CarItem: FC<{ data: Car, props?: any }> = ({
   data,
   props
 }) => {
+
   //
+  console.log("data", data)
 
 
   const onOpenCarDetails = () => {
@@ -39,19 +42,19 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
   return (
     <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} activeOpacity={0.8}>
-      {/* <View  style={{height:270}}> */}
+      <View  style={{margin:15}}>
 
       <FastImage
-        style={{ width: '100%', height: 270 }}
+        style={{ width: '100%', height: 270,borderRadius:10}}
         source={{
           uri: data.previewImage,
 
         }}
         resizeMode={FastImage.resizeMode.stretch}
       />
-      {/* </View> */}
+      </View>
 
-      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300', marginTop: 10 }}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300'}}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
           data.price > 0
@@ -73,23 +76,24 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         )}
       </View>
 
-      <View style={styles.info}>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Ionicons name={'car-sport-outline'} size={20} color={Colors.BLACK_COLR} style={{ opacity: 0.5, marginBottom: 5 }} />
-          {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR, letterSpacing: 2, fontWeight: '300' }}>  {getYearFromFormattedDateString(data.manufacturingDate)} </Text>
-        </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Entypo name={'gauge'} size={20} color={Colors.BLACK_COLR} style={{ opacity: 0.5, marginBottom: 5 }} />
-          {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR, letterSpacing: 2, fontWeight: '300' }}>  {data.driven}km </Text>
-        </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <FontAwesome5 name={'gas-pump'} size={20} color={Colors.BLACK_COLR} style={{ opacity: 0.5, marginBottom: 5 }} />
-          {/* {" "} */}
-          <Text style={{ color: Colors.BLACK_COLR, letterSpacing: 2, fontWeight: '300' }}>  {data.fuelType}</Text>
-        </View>
-      </View>
+      <ScrollView style={styles.info} horizontal={true}>
+          <CarKeyPointsItem
+            name="Engine"
+            value={data?.engine}
+            suffix="CC"
+          />
+          <CarKeyPointsItem
+            name="Driven"
+            value={data?.driven}
+            suffix="km"
+          />
+          <CarKeyPointsItem
+            name="year"
+            value={getYearFromFormattedDateString(data?.manufacturingDate)}
+          />
+          <CarKeyPointsItem name="Fuel" value={data?.fuelType} />
+          <CarKeyPointsItem name="Type" value={data?.type} />
+        </ScrollView>
 
       {data.status !== "soldOut" && data?.special === 1 && (
           <View
@@ -135,7 +139,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PURE_WHITE,
     borderColor: Colors.SOFT_COLOR,
     overflow: 'hidden',
-    paddingBottom: 10
+    paddingBottom: 10,
+    margin:10,
+    borderRadius:10
   },
   price: {
     backgroundColor: Colors.PURE_WHITE,
@@ -145,13 +151,9 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     margin: 10,
-    paddingTop: 15,
-    marginTop: 15,
-    borderColor: Colors.SOFT_COLOR,
-    borderTopWidth: 1
+    paddingTop: 5,
+    marginTop: 5,
   },
   special: {
 

@@ -18,11 +18,9 @@ const CarKeyPointsItem: FC<{
 
   return (
     <View style={styles.carKeyContainer}>
-      <View style={styles.carKeyContainer}>
         <Icon name={name} />
         <Text style={styles.heading}>{name} </Text>
         <Text style={styles.subheading}> {prefix} {value} {suffix}</Text>
-      </View>
     </View>
   );
 };
@@ -33,12 +31,13 @@ export default CarKeyPointsItem;
 const styles = StyleSheet.create({
   carKeyContainer:{
     height:100,
-    width:100,
-    backgroundColor: Colors.SHADOW_COLOR, 
+
+    borderWidth:1,
     alignItems:'center',
     justifyContent:'center',
     borderRadius:10,
     margin:10,
+    padding:15
   },
   heading:{
     color: Colors.BLACK_COLR,

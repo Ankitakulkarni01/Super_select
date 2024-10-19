@@ -15,8 +15,16 @@ const SuperSelectDrawer = (props) => {
     <View style={{ marginTop: 25, marginHorizontal: 15, justifyContent: 'space-between', flex: 1, marginBottom: 10 }}>
       <View style={{ flex: 1 }}>
         <View style={styles.buttonContainer}>
-          <User height={100} width={40} />
-          <Text style={styles.titleText}>Hello, User</Text>
+          <User height={50} width={40} />
+          <Text numberOfLines={1} style={styles.titleText}>Hello, Ankita</Text>
+        </View>
+        <View style={{ flexDirection:'row'}}>
+        <TouchableOpacity style={[styles.buttonContainer,{flex:1, backgroundColor:Colors.BLACK_COLR, justifyContent:'center'}]} onPress={() => props.navigation.navigate('SignIn')}>
+          <Text style={[styles.titleText,{color: Colors.PURE_WHITE}]}>Login</Text>
+        </TouchableOpacity>
+         <TouchableOpacity style={[styles.buttonContainer,{flex:1, justifyContent:'center', marginLeft:10}]} onPress={() => props.navigation.navigate('SignUp')}>
+          <Text style={styles.titleText}>Sign Up</Text>
+        </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Inventory')}>
           <Text style={styles.titleText}>Buy Car</Text>
@@ -57,24 +65,25 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     alignItems: 'center',
+    // justifyContent:'center',
     flexDirection: 'row',
-    marginTop: 10,
+    marginVertical: 10,
     borderRadius:25,
-    paddingTop: 5,
-    paddingBottom: 5,
-    shadowColor: Colors.SHADOW_COLOR,
-    shadowOpacity: 1.5,
-    elevation: 8,
-    shadowRadius: 20 ,
-    shadowOffset : { width: 1, height: 13},
-    color: '#FFFFFF'
+    padding: 10,
+    // paddingBottom: 5,
+    shadowColor: '#171717',
+    backgroundColor:Colors.PURE_WHITE,
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation:20
   },
   iconContainer: {
     backgroundColor: Colors.SHADOW_COLOR,
     marginHorizontal: 15,
     borderRadius: 15
   },
-  titleText: { fontSize: 20, color: Colors.BLACK_COLR, fontWeight: '400', marginLeft: 10 }
+  titleText: { fontSize: 20, color: Colors.BLACK_COLR, fontWeight: '400', paddingHorizontal: 10 }
 });
 
 export default SuperSelectDrawer

@@ -40,12 +40,7 @@ const ContactScreen = () => {
         text={"Contact"}
       />
 
-      <View style={{ marginBottom: 15 }}>
-        <Text style={{ color: Colors.BLACK_COLR, marginVertical: 10, fontFamily: 'Oxanium-Bold', fontSize: 30 }}>CONTACT</Text>
-
-      </View>
-
-      <View style={{ marginBottom: 15 }}>
+      <View style={{ margin: 15 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', }}>
           <Big_call height={50} width={40} />
           <View style={{ marginLeft: 15 }}>

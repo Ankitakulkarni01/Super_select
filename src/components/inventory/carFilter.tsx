@@ -1,11 +1,11 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import style from "./InventoryPageComp.module.scss";
+
 
 import clsx from "clsx";
-import { MenuItem, Select, SelectChangeEvent, Slider } from "@mui/material";
 import { arrayRange } from "../../utils/arrayRange";
 import { currencyValueFormatter } from "../../utils/numberOperations";
-import { View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Slider } from "@miblanchard/react-native-slider";
 
 
 //
@@ -39,13 +39,13 @@ const CarFilter: FC<{
   // Router Query
   useEffect(() => {
     const allObj = {
-      makeId: router.query?.makeId,
-      type: router.query?.type,
-      location: router.query?.location,
-      driven: router.query?.driven,
-      year: router.query?.year,
-      status: router.query?.status,
-      priceRange: router.query?.priceRange,
+      makeId: props.query?.makeId,
+      type: props.query?.type,
+      location: props.query?.location,
+      driven: props.query?.driven,
+      year: props.query?.year,
+      status: props.query?.status,
+      priceRange: props.query?.priceRange,
     } as CarCurrentFilterType;
 
     Object.keys(allObj).forEach((key) => {
@@ -54,20 +54,20 @@ const CarFilter: FC<{
 
     setCurrentFilters(allObj);
     setCurrent(allObj);
-  }, [router, setCurrentFilters]);
+  }, [props, setCurrentFilters]);
   //
 
   // Handle Current Filters
   const handleCurrentFilters = useCallback(
     (values: CarCurrentFilterType) => {
-      router.push({ pathname: router.pathname, query: values }, undefined, {
+      props.push({ pathname: props.pathname, query: values }, undefined, {
         shallow: true,
       });
 
       setCurrentFilters(values);
     },
 
-    [router, setCurrentFilters]
+    [props, setCurrentFilters]
   );
   //
 
@@ -112,9 +112,9 @@ const CarFilter: FC<{
   //
 
   return (
-    <View style={style.CarFilter}>
-      <View style={style.heading}>
-        <h5>Filters</h5>
+    <View style={styles.CarFilter}>
+      <View style={styles.heading}>
+        <Text>Filters</Text>
 
         {/* {currentHasValues && (
           <button style={style.small_outline_btn} onClick={reset}>
@@ -236,7 +236,7 @@ const CustomMUISelect: FC<{
 
   // On Change
   const onChange = useCallback(
-    (event: SelectChangeEvent<string>) => {
+    (event: any) => {
       setValue(event.target.value);
 
       let obj = {};
@@ -261,16 +261,16 @@ const CustomMUISelect: FC<{
   //
 
   return (
-    <View style={style.item}>
-      <View style={style.title}>{title}</View>
+    <View style={styles.item}>
+      <View style={styles.title}>{title}</View>
 
       {value ? (
-        <View style={style.clear_btn} onClick={onClear}>
-          <IoClose />
-        </View>
+        <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
+          <Text>X</Text>
+        </TouchableOpacity>
       ) : null}
 
-      <Select
+      {/* <Select
         value={value}
         onChange={onChange}
         displayEmpty
@@ -296,7 +296,7 @@ const CustomMUISelect: FC<{
             {opt?.label ?? opt.value}
           </MenuItem>
         ))}
-      </Select>
+      </Select> */}
     </View>
   );
 };
@@ -359,7 +359,7 @@ const CustomMUIRangeSlider: FC<{
 
   // On Change
   const onChange = useCallback(
-    (_, v: [number, number]) => {
+    ( v: [number, number]) => {
       setValue(v);
     },
     [setValue]
@@ -381,14 +381,14 @@ const CustomMUIRangeSlider: FC<{
   //
 
   return (
-    <View style={clsx(style.item, style.price)}>
-      <View style={style.title}>{title}</View>
-      <View style={style.sub_title}>{visibleValue}</View>
+    <View style={ styles.price}>
+      <View style={styles.title}>{title}</View>
+      <View style={styles.sub_title}>{visibleValue}</View>
 
       <Slider
         value={value}
-        onChange={onChange}
-        onChangeCommitted={onChangeCommitted}
+        onValueChange={onChange}
+        // on={onChangeCommitted}
         min={MIN_VALUATION}
         max={MAX_VALUATION}
         step={5000}
@@ -407,14 +407,14 @@ export const CarFilterSkeleton: FC<{ count?: number }> = ({ count }) => {
   const data = useMemo(() => Array.from(Array(count ?? 1).keys()), [count]);
 
   return (
-    <View style={style.CarFilterSkeleton_Wrapper}>
-      <View style={style.heading}>Filters</View>
+    <View style={styles.CarFilterSkeleton_Wrapper}>
+      <View style={styles.heading}>Filters</View>
 
       {data.map((_, i) => (
-        <View style={style.CarFilterSkeleton} key={i}>
-          <View style={style.wrap}>
-            <View style={style.title} />
-            <View style={style.select} />
+        <View style={styles.CarFilterSkeleton} key={i}>
+          <View style={styles.wrap}>
+            <View style={styles.title} />
+            <View style={styles.select} />
           </View>
         </View>
       ))}
@@ -485,3 +485,39 @@ const getYearList = () => {
   return arrayRange(startYear, currentYear, 1, "string");
 };
 //
+
+const styles =  StyleSheet.create({
+  CarFilter:{
+
+  },
+  heading:{
+
+  },
+  item:{
+
+  },
+  title:{
+
+  },
+  clear_btn:{
+
+  },
+  price:{
+
+  },
+  sub_title:{
+
+  },
+  CarFilterSkeleton_Wrapper:{
+
+  },
+  CarFilterSkeleton:{
+
+  },
+  wrap:{
+
+  },
+  select:{
+    
+  }
+})

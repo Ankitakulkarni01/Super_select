@@ -424,7 +424,7 @@ const GeneralForm: FC<GeneralFormType> = ({
                   {!hideErrorText && hasError &&
                     <Text style={styles.errorMsgText}>{errors[d.name]}</Text>
                   }
-                  <>
+                  {/* <>
                     {fileInputs?.map((d, i) => {
                       const hasError =
                         errors[d.name] && touched[d.name] ? true : false;
@@ -437,7 +437,7 @@ const GeneralForm: FC<GeneralFormType> = ({
                         </View>
                       );
                     })}
-                  </>
+                  </> */}
                 </>
               );
             })}

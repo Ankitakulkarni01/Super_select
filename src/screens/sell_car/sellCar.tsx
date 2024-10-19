@@ -3,9 +3,12 @@ import clsx from "clsx";
 import ScheduleIcon from "../../assets/svg/schedule.svg";
 import CarInspectionIcon from "../../assets/svg/car-inspection.svg";
 import SellCarIcon from "../../assets/svg/sell-car.svg";
+import Appointmet_car from '../../assets/svg/book Appointment.svg'
+import Car_inspection from '../../assets/svg/Car_inspection.svg'
+import Sell_car from '../../assets/svg/sell_car_icon.svg'
 
 import { type SellCarDataType } from "../../utils/formAPIs/sellCar";
-import { Alert, Linking, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GeneralForm from "../../../components/GeneralForm/generalForm";
 import { Colors } from "../../utils/color";
 import { Image } from "react-native";
@@ -13,6 +16,7 @@ import ActionButton from "../../components/actionButton";
 import siteInfo from "../../utils/data/siteDetails";
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Button } from "react-native";
+import CoolHeading from "../../components/CoolHeading";
 
 //
 //
@@ -98,6 +102,10 @@ export default function SellPage() {
   return (
     <>
       <ScrollView style={styles.SellPage}>
+      <CoolHeading
+        title={"Sell Car"}
+        text={"Fair Price"}
+      />
         <View style={styles.fold1}>
           <View style={styles.part1}>
             <View style={styles.part2}>
@@ -107,22 +115,37 @@ export default function SellPage() {
                 style={{ height: 300, width: '100%' }}
               />
               <View style={styles.title}>
-                <Text style={styles.heading}>Sell Your Luxury Car in</Text>
-                <Text style={styles.heading}>Just 3 Easy Steps</Text>
+                <Text style={styles.heading}>3 Steps to Sell Your Luxury Car</Text>
+                {/* <Text style={styles.heading}>Just 3 Easy Steps</Text> */}
               </View>
 
             </View>
             <View style={styles.kp_group} >
-              <KeyPointsItem icon={<ScheduleIcon height={50} width={50} color={Colors.BLACK_COLR} />} title="Book Appointment" />
-              <KeyPointsItem
-                icon={<CarInspectionIcon height={50} width={50} color={Colors.BLACK_COLR} />}
+            <KeyPointsItem
+                icon={<Car_inspection height={50} width={50} color={Colors.BLACK_COLR} />}
                 title="Car Inspection & Valuation"
               />
-              <KeyPointsItem icon={<SellCarIcon height={50} width={50} color={Colors.BLACK_COLR} />} title="Sell Your Call" />
+              <KeyPointsItem icon={<Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Book Appointment" />
+           
+              <KeyPointsItem icon={<Sell_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Sell Your Call" />
             </View>
           </View>
 
 
+        </View>
+
+        <View style={{padding:5, flexDirection:'row', flex:1}}>
+        <ActionButton
+            onPress={() => onWhatappChat(siteInfo.showrooms.pune.phone)}
+            title="Chat On Whatsapp " backgroundColor={'#2DB742'} color={Colors.PURE_WHITE}
+          />
+          <TouchableOpacity style={{flex:0.3, justifyContent:'center'}}  onPress={() => onCall(siteInfo.showrooms.pune.phone)}>
+          <Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />
+        </TouchableOpacity>
+               {/* <ActionButton
+            onPress={() => onCall(siteInfo.showrooms.pune.phone)}
+            backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+          /> */}
         </View>
 
         <View style={styles.wrapper}>
@@ -170,9 +193,11 @@ export default function SellPage() {
           </View>
 
           <View style={styles.custom_form}>
-            <Text style={styles.subTitle}>
+            <View style={{justifyContent:'center',alignItems:'center', padding:15}}>
+            <Text style={styles.titleText}>
               Want to speak to our team, about your car?
             </Text>
+            </View>
             <GeneralForm
               formName="sellForm"
               inputs={[
@@ -217,16 +242,6 @@ export default function SellPage() {
         </>
       )}
       <Button title="Choose Photo" onPress={handleChoosePhoto} />
-        <View style={styles.btn_group}>
-          <ActionButton
-            onPress={() => onCall(siteInfo.showrooms.pune.phone)}
-            title={`Call Now: ${siteInfo.showrooms.pune.phone}`} backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
-          />
-          <ActionButton
-            onPress={() => onWhatappChat(siteInfo.showrooms.pune.phone)}
-            title="Chat On Whatsapp " backgroundColor={'green'} color={Colors.PURE_WHITE}
-          />
-        </View>
       </ScrollView >
     </>
   );
@@ -270,12 +285,21 @@ const TopPointsItem: FC<{ icon: ReactNode; title: string }> = ({
 const styles = StyleSheet.create({
   SellPage: {
     // padding: 10,
-    marginBottom: 15
+    marginBottom: 15,
+    backgroundColor:Colors.PURE_WHITE
   },
   subTitle: {
     color: Colors.BLACK_COLR,
-    fontSize: 16,
-    padding: 10,
+    fontSize: 18,
+    padding: 5,
+    fontFamily: 'Oxanium-Medium',
+    textAlign: 'center',
+    display:'flex'
+  },
+  titleText:{
+    color: Colors.BLACK_COLR,
+    fontSize: 20,
+    // padding: 10,
     fontFamily: 'Oxanium-Medium',
     textAlign: 'center',
     display:'flex'
@@ -283,8 +307,9 @@ const styles = StyleSheet.create({
   heading: {
     color: Colors.BLACK_COLR,
     marginVertical: 5,
-    fontSize: 22,
+    fontSize: 28,
     fontFamily: 'Oxanium-Medium',
+    textAlign:'center'
   },
   fold1: {
 
@@ -312,10 +337,11 @@ const styles = StyleSheet.create({
 
   },
   top_points: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    backgroundColor:Colors.PURE_WHITE
   },
   custom_form: {
-
+    backgroundColor: Colors.PURE_WHITE, padding:10
   },
   kp_item: {
 
@@ -332,10 +358,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   tp_item: {
-    backgroundColor: Colors.PURE_WHITE,
-    padding: 10,
+    backgroundColor:Colors.PURE_WHITE,
+    paddingVertical: 20,
+    width:150,
+    paddingHorizontal:10,
     alignItems: 'center',
     margin: 10,
-    borderRadius: 10
+    borderRadius: 10,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation:20
   }
 });

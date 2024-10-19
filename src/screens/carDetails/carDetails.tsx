@@ -70,7 +70,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
       setwishlist(carDataRes?.data?.wishListId !== null)
 
       console.log("wishlist", carDataRes?.data?.wishListId !== null)
-      
+
 
       const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
       const previewIndex = both?.findIndex((x) => x === carDataRes?.data?.previewImage);
@@ -99,22 +99,22 @@ const CarDetailsScreen = ({ navigation, route }) => {
   }, [carDataRes]);
   //
 
-      const postWishlist = async () =>{
-        if(carDataRes?.data?.wishListId !== null){
-          const {success, message, data} = await removeWishlistAPI(carDataRes?.data?.wishListId)
-          if(success){
-              setwishlist(false)
-          }
-        }else{
-        const values = {
-            "carId": carDataRes?.data.id
-        }
-        const {success, message, data} = await postWishlistAPI(values)
-        if(success){
-            setwishlist(true)
-        }
-        }
+  const postWishlist = async () => {
+    if (carDataRes?.data?.wishListId !== null) {
+      const { success, message, data } = await removeWishlistAPI(carDataRes?.data?.wishListId)
+      if (success) {
+        setwishlist(false)
+      }
+    } else {
+      const values = {
+        "carId": carDataRes?.data.id
+      }
+      const { success, message, data } = await postWishlistAPI(values)
+      if (success) {
+        setwishlist(true)
+      }
     }
+  }
 
 
   //
@@ -178,7 +178,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
   const soldOut = route.params.carData.status === "soldOut";
 
 
-  const carSoldOut = carData.status === "soldOut";
+  const carSoldOut = carData?.status === "soldOut";
   const carIsCallForPrice = carData?.callForPrice === 1;
 
 
@@ -216,12 +216,12 @@ const CarDetailsScreen = ({ navigation, route }) => {
   }, [soldOut]);
   //
 
-  const onEmailCalculator = () =>{
-    navigation.navigate('Calculator', {valuation: carData.price })
+  const onEmailCalculator = () => {
+    navigation.navigate('Calculator', { valuation: carData.price })
     // {
-      //   !carSoldOut && !carIsCallForPrice
-      //     ? "?valuation=" + carData.price
-      //     : ""
+    //   !carSoldOut && !carIsCallForPrice
+    //     ? "?valuation=" + carData.price
+    //     : ""
   }
 
   const makeSomeRequest = () => {
@@ -235,9 +235,9 @@ const CarDetailsScreen = ({ navigation, route }) => {
     <View style={{ flex: 1, padding: 10 }}>
       <ScrollView>
         <View style={styles.brief_n_option}>
-          <Text style={styles.heading}>{carData.name}</Text>
+          <Text style={styles.heading}>{carData?.name}</Text>
           <Text style={styles.subHeading}>
-            Model: <Text style={{ fontWeight: '300' }}>{carData.model}</Text>
+            Model: <Text style={{ fontWeight: '300' }}>{carData?.model}</Text>
           </Text>
 
           {/* <View>
@@ -266,7 +266,18 @@ const CarDetailsScreen = ({ navigation, route }) => {
             />
           }
 
+          <View style={{
+            zIndex: 5,
+            width: 50,
+            height: 50,
+            borderWidth: 1,
+            position: 'absolute',
+            bottom: 0,
+            overflow: 'hidden'
+          }}><Text style={{ color: 'black' }}>15's photos</Text></View>
+
         </View>
+
         <ScrollView style={styles.key_points} horizontal={true}>
           <CarKeyPointsItem
             name="Engine"
@@ -293,10 +304,10 @@ const CarDetailsScreen = ({ navigation, route }) => {
                 {!carSoldOut ? (
                   !carIsCallForPrice ? (
                     <>
-                      <Text style={styles.price}>{currencyValueFormatter(carData.price)}</Text>
+                      <Text style={styles.price}>{currencyValueFormatter(carData?.price)}</Text>
                       <Text style={carData?.tcs > 0 ? { opacity: 1, color: Colors.BLACK_COLR } : { color: Colors.BLACK_COLR }}>
                         {carData?.tcs > 0
-                          ? carData.tcs + "% TCS"
+                          ? carData?.tcs + "% TCS"
                           : "including fees & taxes"}
                       </Text>
                     </>
@@ -343,31 +354,38 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
                 </>
               )}
-              <ActionButton
-                onPress={onEmailCalculator}
-                title="EMI Calculator " backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
-              />
+
             </View>
           </View>
         </View>
-
-        <TabViewExample data={carData} featuresArray={featuresArray} />
-
+        {/* {
+          carData !== null &&
+          <TabViewExample data={carData} featuresArray={featuresArray} />
+        } */}
       
       </ScrollView>
-      <View style={{ flexShrink: 1, flexDirection:'row' }}>
-        <SwipeableButton onSwipe={makeSomeRequest} isLoading={isLoading} />
-        <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={postWishlist}>
+      <ActionButton
+        onPress={onEmailCalculator}
+        title="EMI Calculator " backgroundColor={Colors.PURE_WHITE} color={Colors.BLACK_COLR}
+      />
+      <ActionButton
+        onPress={onEmailCalculator}
+
+        title="Reserve" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+      />
+      <View style={{ flexDirection: 'row' }}>
+
+        <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50, flex: 0 }} onPress={postWishlist}>
           {
             wishlist
-            ?
-            <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-        
-            :
-            <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-        
+              ?
+              <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+              :
+              <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
           }
-        </TouchableOpacity> 
+        </TouchableOpacity>
       </View>
 
     </View>
@@ -405,13 +423,13 @@ const styles = StyleSheet.create({
 
   },
   main_area_part2: {
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: Colors.BORDER_COLOR,
-    padding:10
+    padding: 10
   },
-  priceContainer:{
-    flex:1,
-    marginVertical:10
+  priceContainer: {
+    flex: 1,
+    marginVertical: 10
   },
   price: {
     color: Colors.BLACK_COLR,
@@ -429,19 +447,19 @@ const styles = StyleSheet.create({
   mobile_footer_cta: {
 
   },
-  email_text:{
+  email_text: {
     color: Colors.BLACK_COLR,
     fontSize: 18
   },
-  payment_header_text:{
+  payment_header_text: {
     color: Colors.BLACK_COLR,
     fontSize: 18
   },
-  payment_down_text:{
+  payment_down_text: {
     color: Colors.BLACK_COLR,
     fontSize: 18
   },
-  month_text:{
+  month_text: {
     color: Colors.BLACK_COLR,
     fontSize: 18
   }

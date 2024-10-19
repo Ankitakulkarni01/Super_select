@@ -10,6 +10,7 @@ import GeneralForm from '../../../components/GeneralForm/generalForm';
 import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
 import InsuranceHeroSvg from "D:/Projects/Super_select/assets/svg/insurance-hero-one.svg";
+import CoolHeading from '../../components/CoolHeading';
 
 
 
@@ -29,10 +30,11 @@ const InsuranceScreen = () => {
   return (
     <ScrollView style={{ backgroundColor: Colors.PURE_WHITE, padding: 15 }}>
 
-      <View style={{ marginBottom: 15 }}>
-        <Text style={{ color: Colors.BLACK_COLR, marginVertical: 10, fontFamily: 'Oxanium-Bold', fontSize: 30 }}>Insurance</Text>
+<CoolHeading
+        title={"Insurance"}
+        text={"Necessity"}
+      />
 
-      </View>
       {/* <Text style={styles.sub_heading}>
         Looking for the perfect insurance solution for your car? Look no
         further! We've got you covered with our comprehensive range of

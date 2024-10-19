@@ -27,7 +27,7 @@ const SplashScreen = (props) => {
 
     const loading = async () => {
         setTimeout(() =>  props.navigation.dispatch(
-            StackActions.replace('Home')
+            StackActions.replace('Inventory')
         ), 3000);
            
     }

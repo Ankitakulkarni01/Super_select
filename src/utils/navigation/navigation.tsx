@@ -94,9 +94,7 @@ const HomeStack = () => {
 <Stack.Screen
                 name="SellCar"
                 component={SellPage}
-                options={{
-                    headerShown: false
-                }}
+                options={{ header: props => <Header props={props} /> }}
 
             />
 
@@ -104,53 +102,40 @@ const HomeStack = () => {
       <Stack.Screen
         name="Contact"
         component={ContactScreen}
-        options={{
-          headerShown: false
-        }}
-
+        options={{ header: props => <Header props={props} /> }}
       />
 
       <Stack.Screen
         name="CarService"
         component={CarServiceScreen}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
 
       />
 
       <Stack.Screen
         name="Insurance"
         component={InsuranceScreen}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
 
       />
       <Stack.Screen
         name="Registration"
         component={RegistrationScreen}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
 
       />
 
       <Stack.Screen
         name="Inventory"
         component={InventoryPage}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
       />
 
 
       <Stack.Screen
         name="Calculator"
         component={Calculatorscreen}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
       />
 
       <Stack.Screen
@@ -170,9 +155,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="ShowRoom"
         component={ShowRoomScreen}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
 
       />
     

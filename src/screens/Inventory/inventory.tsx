@@ -79,31 +79,12 @@ const InventoryPage = (props: any) => {
     <View>
       <ScrollView >
         <View style={{ marginBottom: 10, padding: 10 }}>
-          <Text style={{ color: Colors.BLACK_COLR, marginVertical: 15, fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>Inventory</Text>
-          <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-            <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 15, alignItems: 'center', justifyContent: 'center', marginRight: 15, borderColor: Colors.BLACK_COLR }}>
-              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, letterSpacing: 2 }} >Exclude Sold Out</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                thumbColor={Colors.BLACK_COLR}
-                ios_backgroundColor="#3e3e3e"
-                // onValueChange={toggleSwitch}
-                disabled={false}
-                value={false}
-              />
-
-            </View>
-
-            <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, padding: 10, justifyContent: 'space-between', borderColor: Colors.BLACK_COLR }}>
-              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, letterSpacing: 2 }} >Filters</Text>
-              <Ionicons name={'filter-outline'} size={20} color={Colors.BLACK_COLR} />
+     <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'flex-end',  }}>
+            <View style={{ flexDirection: 'row',  borderRadius: 15, justifyContent: 'flex-end', alignItems:'flex-end', }}>
+              <Text style={{ color: Colors.PURE_WHITE, marginRight: 10, letterSpacing: 2, padding:10, backgroundColor: Colors.BLACK_COLR , borderRadius:15}} >Filters</Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, width: 100, padding: 10, margin: 5, borderColor: Colors.BLACK_COLR }}>
-            <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, letterSpacing: 2 }} >Sort</Text>
-            <Ionicons name={'chevron-down-outline'} size={20} color={Colors.BLACK_COLR} />
 
-          </View>
         </View>
         {
           isLoading
