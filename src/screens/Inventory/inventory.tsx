@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 
 
-import { FlatList, Platform, ScrollView, View } from "react-native";
+import { FlatList, Modal, Platform, ScrollView, View } from "react-native";
 import { getCarList } from "../../utils/carAPIs/carList";
 import { CarList } from "../../../interface/car";
-import { CarFilterOptionsType, CarFiltersType } from "../../../components/inventoryPageComp";
+import CarFilter, { CarCurrentFilterType, CarFilterOptionsType } from "../../components/inventory/carFilter";
 import CarItem from "../../../components/CarItem/CarItem";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Text } from "react-native";
@@ -18,7 +18,11 @@ const InventoryPage = (props: any) => {
 
 
   const [carData, setCarData] = useState<CarList>([]);
-  const [currentFilters, setCurrentFilters] = useState<CarFiltersType>({});
+  const [currentFilters, setCurrentFilters] = useState<CarCurrentFilterType>({});
+  const [filterOptions, setFilterOptions] = useState<CarFilterOptionsType>();
+  const [openMobileFilter, setOpenMobileFilter] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false)
 
 
   const [removeSoldOuts, setRemoveSoldOuts] = useState(false);
@@ -30,6 +34,7 @@ const InventoryPage = (props: any) => {
     else return currentFilters;
   }, [currentFilters, sortValue, setCurrentFilters]);
   //
+
 
 
 
@@ -51,6 +56,18 @@ const InventoryPage = (props: any) => {
   );
   //
 
+  console.log(carListRES);
+  
+  
+  useEffect(() => {
+    try {
+      const f = (carListRES?.pages[0] as any).data?.filters;
+      console.log("filter Data",(carListRES?.pages[0] as any).data?.filters);
+      
+      if (f) setFilterOptions(f);
+    } catch (err) {}
+  }, [carListRES, setFilterOptions]);
+
   // Process Data
   const [totalCarDataLength, setTotalCarDataLength] = useState(0);
 
@@ -68,7 +85,7 @@ const InventoryPage = (props: any) => {
       if (removeSoldOuts) {
         carDataCopy = carDataCopy.filter((x) => x.status !== "soldOut");
       }
-
+  
       setCarData(carDataCopy);
     } catch (err) {
       setCarData([]);
@@ -77,11 +94,26 @@ const InventoryPage = (props: any) => {
 
   return (
     <View>
+      <Modal
+          visible={modalVisible}>
+            <CarFilter
+               filterOptions={filterOptions}
+               props={props}
+               setCurrentFilters={setCurrentFilters}
+               onReset={() => {
+                console.log("reset", modalVisible);
+                setModalVisible(false)
+                setOpenMobileFilter(false)
+               }}
+            />
+          </Modal>
       <ScrollView >
         <View style={{ marginBottom: 10, padding: 10 }}>
      <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'flex-end',  }}>
             <View style={{ flexDirection: 'row',  borderRadius: 15, justifyContent: 'flex-end', alignItems:'flex-end', }}>
-              <Text style={{ color: Colors.PURE_WHITE, marginRight: 10, letterSpacing: 2, padding:10, backgroundColor: Colors.BLACK_COLR , borderRadius:15}} >Filters</Text>
+              <Text style={{ color: Colors.PURE_WHITE, marginRight: 10, letterSpacing: 2, padding:10, backgroundColor: Colors.BLACK_COLR , borderRadius:15}} onPress={() =>{
+                setModalVisible(true)
+              }}>Filters</Text>
             </View>
           </View>
 

@@ -29,9 +29,6 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
   props
 }) => {
 
-  //
-  console.log("data", data)
-
 
   const onOpenCarDetails = () => {
     props.navigation.navigate('CarDetails', {
@@ -42,7 +39,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
   return (
     <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} activeOpacity={0.8}>
-      <View  style={{margin:15}}>
+      <View style={{ margin: 15 }}>
 
       <FastImage
         style={{ width: '100%', height: 270,borderRadius:10}}
@@ -54,7 +51,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
       />
       </View>
 
-      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300'}}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
           data.price > 0
@@ -70,7 +67,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
           <Image
             source={require("../../src/assets/img/sold-out.png")}
             resizeMode={'contain'}
-            style={{ height: 40, width: 100, padding: 10 }}
+            style={{ height: 40, width: 100, padding: 5}}
             alt="SOLD OUT"
           />
         )}
@@ -101,7 +98,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
               [styles.tags]
             }
           >
-          <Text style={{color: Colors.BLACK_COLR}}>  {data.status === "booked"
+          <Text style={{color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed', }}>  {data.status === "booked"
               ? "BOOKED"
               : data?.special === 1
               ? "SPECIAL"
@@ -110,22 +107,6 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
           </View>
         )}
 
-      {/* {data.status !== "soldOut" && (
-        <View
-        // style={ data.status === "booked" && styles.booked,
-        //   data?.special === 1 && styles.special,
-        //   alt="Preview"
-        // }
-        >
-          <Text style={{color:'red'}}>
-            {data.status === "booked"
-              ? "BOOKED"
-              : data?.special === 1
-                ? "SPECIAL"
-                : ""}
-          </Text>
-        </View>
-      )} */}
     </TouchableOpacity>
   );
 };
@@ -140,14 +121,14 @@ const styles = StyleSheet.create({
     borderColor: Colors.SOFT_COLOR,
     overflow: 'hidden',
     paddingBottom: 10,
-    margin:10,
-    borderRadius:10
+    margin: 10,
+    borderRadius: 10
   },
   price: {
     backgroundColor: Colors.PURE_WHITE,
     textAlign: "left",
     borderRadius: 5,
-    margin: 13,
+    margin: 10,
   },
   info: {
     flexDirection: 'row',
@@ -162,12 +143,13 @@ const styles = StyleSheet.create({
 
   },
   tags: {
+  zIndex: 10,
     margin: 0,
     padding: 10,
     position: 'absolute',
     top: 0,
     right: 0,
-    backgroundColor:'yellow',  
+    backgroundColor: 'yellow',
   }
 })
 

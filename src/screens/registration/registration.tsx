@@ -17,11 +17,23 @@ import RNFetchBlob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import { Platform } from 'react-native';
 import Share from 'react-native-share';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const RegistrationScreen = (props: any) => {
 
   const [pdfData, setpdfData] = useState([])
+
+  const [username, setName] = useState("");
+
+useEffect(() => {
+    getName()
+  }, [])
+
+  const getName = async () => {
+    const name = await AsyncStorage.getItem('name');
+    setName(name)
+  }
 
   useEffect(() => {
     getPDFList()
@@ -155,11 +167,18 @@ const downloadFile = (fileUrl) => {
 
   return (
     <ScrollView style={styles.fullScreen} >
-      <Text style={{ color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>hello Aniket</Text>
+      <Text style={{ color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>hello {username}</Text>
       <Text style={{ color: Colors.BLACK_COLR,marginVertical: 15, fontSize: 18, textTransform: 'uppercase' }}>Here are your purchase details</Text>
       {
         pdfData.map((d, i) => (
-          <View style={{borderWidth: 1, flex:1, paddingVertical:5, borderColor: Colors.BLACK_COLR}}>
+          <View style={{ flex:1, margin:5,
+            shadowColor: '#171717',
+            backgroundColor:Colors.PURE_WHITE,
+            shadowOffset: {width: -2, height: 4},
+            shadowOpacity: 0.2,
+            shadowRadius: 3,
+            elevation:20
+         }}>
             <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300', marginTop: 10 }}>{d.name}</Text>
             <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Oxanium-Medium', fontSize: 18, letterSpacing: 2, padding: 15 }}>{formatDate(d.purchaseDate)}</Text>
             <View style={{ flex: 1, flexDirection: 'row' }}>

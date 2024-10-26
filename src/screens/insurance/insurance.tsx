@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -11,17 +11,27 @@ import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
 import InsuranceHeroSvg from "D:/Projects/Super_select/assets/svg/insurance-hero-one.svg";
 import CoolHeading from '../../components/CoolHeading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 
 
 const InsuranceScreen = () => {
+  const [username, setName] = useState("");
+
+useEffect(() => {
+    getName()
+  }, [])
+
+  const getName = async () => {
+    const name = await AsyncStorage.getItem('name');
+    setName(name)
+  }
 
   // On Form Submit
-  const onFormSubmit = useCallback(async (data: InsuranceDataType) => {
+  const onFormSubmit = useCallback(async (data: InsuranceDataType) => {    
     const { doInsurance } = await import("../../utils/formAPIs/insurance");
-
     const res = await doInsurance(data);
     return res;
   }, []);
@@ -55,8 +65,8 @@ const InsuranceScreen = () => {
       <GeneralForm
         formName="insuranceForm"
         inputs={[
-          { name: "Name *", type: "text", required: true },
-          { name: "Email *", type: "email", required: true },
+          { name: "Name", type: "text", required: true, defaultValue: username , placeholder: "Name*"},
+          { name: "Email", type: "email", required: true , placeholder: "Email*"},
           {
             name: "Phone",
             type: "tel",

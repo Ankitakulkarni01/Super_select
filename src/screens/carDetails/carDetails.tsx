@@ -23,6 +23,7 @@ import { currencyValueFormatter } from '../../utils/numberOperations';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishlist';
+import Gallery from '../../../components/Gallery/gallery';
 
 
 const CarDetailsScreen = ({ navigation, route }) => {
@@ -46,6 +47,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
   // //
 
   const [wishlist, setwishlist] = useState(false)
+  const [showGallery, setshowGallery] = useState(false)
 
 
 
@@ -224,6 +226,16 @@ const CarDetailsScreen = ({ navigation, route }) => {
     //     : ""
   }
 
+    // On Full View Media Click
+    const onFullViewMediaClick = useCallback(
+      (value: number) => {
+      console.log("values", value);
+      
+      },
+      []
+    );
+    //
+
   const makeSomeRequest = () => {
     // setIsLoading(true);
     // setTimeout(() => {
@@ -232,13 +244,29 @@ const CarDetailsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
+    <View style={{ flex: 1, padding: 10 , backgroundColor: Colors.PURE_WHITE}}>
       <ScrollView>
         <View style={styles.brief_n_option}>
+          <View style={{flex:1}}>
           <Text style={styles.heading}>{carData?.name}</Text>
           <Text style={styles.subHeading}>
             Model: <Text style={{ fontWeight: '300' }}>{carData?.model}</Text>
           </Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+
+<TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50 }} onPress={postWishlist}>
+  {
+    wishlist
+      ?
+      <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+      :
+      <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+  }
+</TouchableOpacity>
+</View>
 
           {/* <View>
                 <button
@@ -265,16 +293,48 @@ const CarDetailsScreen = ({ navigation, route }) => {
               list={allImages}
             />
           }
+          <>
+{
+  showGallery &&  <Gallery
+  carName={carData?.name}
+  onOpenFullView={(v) => onFullViewMediaClick(v)}
+  all={allImages}
+  exterior={carData?.exteriorImages}
+  interior={carData?.interiorImages}
+  />
+}
 
-          <View style={{
-            zIndex: 5,
-            width: 50,
-            height: 50,
-            borderWidth: 1,
+       </> 
+
+          <TouchableOpacity 
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            zIndex: 100,
+            width: 100,
+            height: 80,
             position: 'absolute',
-            bottom: 0,
-            overflow: 'hidden'
-          }}><Text style={{ color: 'black' }}>15's photos</Text></View>
+            left:30,
+            padding:5,
+            bottom: -30,
+            overflow: 'hidden',
+            alignItems:'center',
+            justifyContent:'center',
+            borderRadius:10,
+            marginBottom:10,
+            shadowColor: '#171717',
+            shadowOffset: {width: -2, height: 4},
+            shadowOpacity: 0.2,
+            shadowRadius: 3,
+            elevation:20
+          }}
+          onPress={() => {
+            setshowGallery(true)
+            console.log("show Gallery")
+          }
+          }
+          >
+            <Text style={{ color: 'black', fontWeight: 'bold', fontSize:18 }}>15's photos</Text>
+            </TouchableOpacity>
 
         </View>
 
@@ -358,35 +418,23 @@ const CarDetailsScreen = ({ navigation, route }) => {
             </View>
           </View>
         </View>
-        {/* {
+        {
           carData !== null &&
           <TabViewExample data={carData} featuresArray={featuresArray} />
-        } */}
+        }
       
       </ScrollView>
       <ActionButton
         onPress={onEmailCalculator}
         title="EMI Calculator " backgroundColor={Colors.PURE_WHITE} color={Colors.BLACK_COLR}
+        border={1}
       />
       <ActionButton
         onPress={onEmailCalculator}
 
         title="Reserve" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
       />
-      <View style={{ flexDirection: 'row' }}>
-
-        <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50, flex: 0 }} onPress={postWishlist}>
-          {
-            wishlist
-              ?
-              <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-
-              :
-              <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-
-          }
-        </TouchableOpacity>
-      </View>
+    
 
     </View>
   );
@@ -397,13 +445,15 @@ const styles = StyleSheet.create({
     // flexDirection:'row',
     // alignItems:'center', 
     // justifyContent:'space-between'
+    paddingVertical:20
   },
   root: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   brief_n_option: {
-    paddingVertical: 10
+    paddingVertical: 10,
+    flexDirection:'row'
   },
   heading: {
     color: Colors.BLACK_COLR,

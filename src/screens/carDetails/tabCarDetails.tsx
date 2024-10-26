@@ -5,6 +5,7 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { Colors } from '../../utils/color';
 import { Car } from '../cars/carsDetail';
 import { DescriptionItem } from '../../../components/DescriptionItem/DescriptionItem';
+import HeaderNavigationMenu from '../../utils/navigation/HeaderNavigationMenu';
 
 
 
@@ -14,60 +15,60 @@ const FirstRoute: React.FC<{ data: Car }> = ({
   return (
     <View style={styles.container} >
       <View style={styles.Description}>
-        <DescriptionItem name="Variant" value={data.variant} />
-        <DescriptionItem name="Transmission" value={data.transmission} />
-        <DescriptionItem name="Fuel" value={data.fuelType} />
+        <DescriptionItem name="Variant" value={data?.variant} />
+        <DescriptionItem name="Transmission" value={data?.transmission} />
+        <DescriptionItem name="Fuel" value={data?.fuelType} />
         <DescriptionItem
           name="Seating Capacity"
-          value={data.seatingCapacity}
+          value={data?.seatingCapacity}
         />
-        <DescriptionItem name="Engine" value={data.engine} suffix="CC" />
-        <DescriptionItem name="Exterior Color" value={data.exteriorColor} />
-        <DescriptionItem name="Interior Color" value={data.interiorColor} />
-        <DescriptionItem name="Interior Type" value={data.interiorType} />
-        <DescriptionItem name="Type" value={data.type} />
-        <DescriptionItem name="Driven" value={data.driven} suffix="km" />
+        <DescriptionItem name="Engine" value={data?.engine} suffix="CC" />
+        <DescriptionItem name="Exterior Color" value={data?.exteriorColor} />
+        <DescriptionItem name="Interior Color" value={data?.interiorColor} />
+        <DescriptionItem name="Interior Type" value={data?.interiorType} />
+        <DescriptionItem name="Type" value={data?.type} />
+        <DescriptionItem name="Driven" value={data?.driven} suffix="km" />
         <DescriptionItem
           name="Top Speed"
-          value={data.topSpeed}
+          value={data?.topSpeed}
           suffix="km/h"
         />
-        <DescriptionItem name="Power" value={data.power} suffix="bhp" />
-        <DescriptionItem name="Engine Type" value={data.engineType} />
-        <DescriptionItem name="Drivetrain" value={data.drivetrain} />
-        <DescriptionItem name="Torque" value={data.torque} suffix="Nm" />
+        <DescriptionItem name="Power" value={data?.power} suffix="bhp" />
+        <DescriptionItem name="Engine Type" value={data?.engineType} />
+        <DescriptionItem name="Drivetrain" value={data?.drivetrain} />
+        <DescriptionItem name="Torque" value={data?.torque} suffix="Nm" />
         <DescriptionItem
           name="Ground Clearance"
-          value={data.groundClearance}
+          value={data?.groundClearance}
           suffix="mm"
         />
 
-        <DescriptionItem name="Ownership" value={data.ownership} />
+        <DescriptionItem name="Ownership" value={data?.ownership} />
         <DescriptionItem
           name="Registration"
-          value={data.registrationDate}
+          value={data?.registrationDate}
         />
         <DescriptionItem
           name="Registration RTO"
-          value={data.registrationRTO}
+          value={data?.registrationRTO}
         />
-        <DescriptionItem name="Insurance" value={data.insuranceTillDate} />
+        <DescriptionItem name="Insurance" value={data?.insuranceTillDate} />
         <DescriptionItem
           name="Manufacturing"
-          value={data.manufacturingDate}
+          value={data?.manufacturingDate}
         />
         <DescriptionItem
           name="Extended Warranty"
-          value={data.extendedWarrantyYear}
+          value={data?.extendedWarrantyYear}
         />
         <DescriptionItem
           name="Service Pack Duration"
-          value={data.servicePackDuration}
+          value={data?.servicePackDuration}
           suffix="y"
         />
         <DescriptionItem
           name="Service Pack KM"
-          value={data.servicePackKm}
+          value={data?.servicePackKm}
           suffix="km"
         />
       </View>
@@ -95,8 +96,8 @@ const SecondRoute: React.FC<{ featuresArray: Array<string> }> = ({
 
 
 const routes = [
-  { key: 'first', title: 'Description' },
-  { key: 'second', title: 'Features' },
+  { key: 'first', value: 'Description' },
+  { key: 'second', value: 'Features' },
 ];
 
 const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
@@ -104,73 +105,28 @@ const CarDetailsTab: React.FC<{ data: Car; featuresArray: Array<string> }> = ({
   featuresArray,
 }) => {
 
-  const renderScene = ({ route }) => {
-    switch (route.key) {
-      case 'first':
-        return <FirstRoute data={data} />;
-      case 'second':
-        return <SecondRoute featuresArray={featuresArray} />;
-      default:
-        return null;
-    }
-  };
-  const layout = useWindowDimensions();
-  const [index, setIndex] = React.useState(0);
+  const [headerMenuValue, setHeaderMenu] = React.useState(routes[0].value)
 
-  const renderTabBar = (props) => {
-    
-    const inputRange = props.navigationState.routes.map((x, i) => i);
+
+  console.log("headerMenuValue",headerMenuValue);
+  
 
     return (
       <View style={styles.tabBar}>
-        {props.navigationState.routes.map((route, i) => {
-          const backgroundColor =  props.position.interpolate({
-            inputRange,
-            outputRange: inputRange.map((inputIndex) =>{
-    
-              
-              return  inputIndex === i ? 'black' : 'white'
-            }
-             
-            ),
-          });
-          
-
-
-          const opacity = props.position.interpolate({
-            inputRange,
-            outputRange: inputRange.map((inputIndex) =>{
-
-              return  inputIndex === i ? 1 : 0.7
-            }
-             
-            ),
-          });
-
-          return (
-            <TouchableOpacity
-              style={[styles.tabItem]}
-              onPress={() => setIndex(i)}>
-              <Animated.Text style={{ opacity, color:Colors.PURE_WHITE}}>{route.title}</Animated.Text>
-            </TouchableOpacity>
-          );
-        })}
+       <HeaderNavigationMenu menu={routes} activeValue={headerMenuValue} setActiveValue={(value: string) => {
+        setHeaderMenu(value)
+        }} />
+        <View style={{ flex:1}}>
+        {
+          headerMenuValue === "Description" && <FirstRoute data={data}/>
+        }
+        {
+          headerMenuValue === "Features" && <SecondRoute featuresArray={featuresArray}/>
+        }
+        </View>
       </View>
     );
-  };
 
-  return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      renderTabBar={renderTabBar}
-      onIndexChange={setIndex}
-      style={{
-        backgroundColor: Colors.BLACK_COLR,
-        borderRadius:10
-    }}
-    />
-  );
 }
 
 const styles = StyleSheet.create({
@@ -181,10 +137,10 @@ const styles = StyleSheet.create({
     // borderWidth:1
   },
   tabBar: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     // flex:1,
-    borderWidth:1,
-    borderColor:'red'
+    // borderWidth:1,
+    // borderColor:'red'
     // paddingTop: StatusBar.currentHeight,
   },
   tabItem: {

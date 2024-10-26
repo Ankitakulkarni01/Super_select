@@ -44,13 +44,13 @@ const loginValidationSchema = yup.object().shape({
 
 const CELL_COUNT = 4;
 
-const SignUpScreen = (props : any) => {
+const SignUpScreen = (props: any) => {
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [emails, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setshowPassword] = useState(true)
- 
+
   const [showOTP, setshowOTP] = useState(false)
   const [isComapny, setisComapny] = useState(false)
   const [value, setValue] = useState('');
@@ -59,36 +59,34 @@ const SignUpScreen = (props : any) => {
 
 
 
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
 
 
- const signUpForUser = async(values) =>{
-  const passingValue = {
-   "name": values.name,
-	"number": values.phoneNumber,
-	"password": values.password,
-	"otp": values.Otp,
-	"fcmToken": await createFirebaseToken(),
-	"deviceType": 1
-}
+  const signUpForUser = async (values) => {
+    const passingValue = {
+      "name": values.name,
+      "number": values.phoneNumber,
+      "password": values.password,
+      "otp": values.Otp,
+      "fcmToken": await createFirebaseToken(),
+      "deviceType": 1
+    }
+    const { success, message, data } = await Signup(passingValue)
+    if (success) {
+      console.log("signup", message)
+      props.navigation.navigate('SignIn')
+    } else {
+      console.log(message);
+      setError(message)
 
-console.log(passingValue)
-const {success, message, data} = await Signup(passingValue)
-console.log(message, success)
-if(success){
-    console.log("signup", message)
-}else{
-    console.log(message);
-    setError(message)
-    
-}
- }
+    }
+  }
 
-  
+
 
   const sendOTP = async (phoneNumber: string) => {
     const { success, message, data } = await doSendOTP({ number: phoneNumber });
@@ -152,40 +150,40 @@ if(success){
                   <Text style={styles.errorMsgText}>{errors.phoneNumber}</Text>
                 }
               </View>
-              <View style={{  marginHorizontal: 10, marginVertical: 10 }}>
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
                 {
                   showOTP
-                  ?
-                  <>
-                  <Text style={styles.title}>OTP</Text>
-                  <CodeField
-                  ref={ref}
-                  {...prop}
-                  value={values.Otp}
-                  onChangeText={handleChange('Otp')}
-                  cellCount={CELL_COUNT}
-                  autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
-                  rootStyle={styles.codeFieldRoot}
-                  keyboardType="number-pad"
-                  textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
-                    <Text
-                      key={index}
-                      style={[styles.cell, isFocused && styles.focusCell]}
-                      onLayout={getCellOnLayoutHandler(index)}>
-                      {symbol || (isFocused ? <Cursor /> : null)}
-                    </Text>
-                  )}
-                />
-                     </>
-             
-                  :
-                  <ActionButton onPress={() => sendOTP(values.phoneNumber)}
-                  backgroundColor={Colors.BLACK_COLR}
-                  color={Colors.PURE_WHITE}
-                  title="GET OTP" />
+                    ?
+                    <>
+                      <Text style={styles.title}>OTP</Text>
+                      <CodeField
+                        ref={ref}
+                        {...prop}
+                        value={values.Otp}
+                        onChangeText={handleChange('Otp')}
+                        cellCount={CELL_COUNT}
+                        autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
+                        rootStyle={styles.codeFieldRoot}
+                        keyboardType="number-pad"
+                        textContentType="oneTimeCode"
+                        renderCell={({ index, symbol, isFocused }) => (
+                          <Text
+                            key={index}
+                            style={[styles.cell, isFocused && styles.focusCell]}
+                            onLayout={getCellOnLayoutHandler(index)}>
+                            {symbol || (isFocused ? <Cursor /> : null)}
+                          </Text>
+                        )}
+                      />
+                    </>
+
+                    :
+                    <ActionButton onPress={() => sendOTP(values.phoneNumber)}
+                      backgroundColor={Colors.BLACK_COLR}
+                      color={Colors.PURE_WHITE}
+                      title="GET OTP" />
                 }
-              
+
               </View>
 
               <View style={styles.textinputParentContainer}>
@@ -247,8 +245,8 @@ if(success){
             } */}
             <View style={{ marginHorizontal: 10 }}>
               <ActionButton onPress={handleSubmit}
-               backgroundColor={Colors.BLACK_COLR}
-               color={Colors.PURE_WHITE}
+                backgroundColor={Colors.BLACK_COLR}
+                color={Colors.PURE_WHITE}
                 title="Open an Account" /></View>
 
           </>
@@ -256,9 +254,9 @@ if(success){
       </Formik>
       <View style={styles.signUpContainer}>
         <Text style={{ color: Colors.BLACK_COLR, fontSize: 14 }}>Already have an account?</Text>
-        <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() => 
-                props.navigation.navigate('SignIn')
-}>Login</Text>
+        <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() =>
+          props.navigation.navigate('SignIn')
+        }>Login</Text>
       </View>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{ color: Colors.BLACK_COLR, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
@@ -291,7 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     // padding: 5,
-    borderRadius:10,
+    borderRadius: 10,
     borderColor: Colors.BLACK_COLR
   },
   iconStyle: {
@@ -404,23 +402,23 @@ const styles = StyleSheet.create({
   },
   codeFieldRoot: { marginTop: 20 },
   cell: {
-      width: 60,
-      height: 40,
-      lineHeight: 40,
-      fontSize: 24,
-      borderWidth: 1,
-      marginHorizontal: 5,
-      borderColor: Colors.BORDER_COLOR,
-      textAlign: 'center',
-      color: Colors.PURE_WHITE
+    width: 60,
+    height: 40,
+    lineHeight: 40,
+    fontSize: 24,
+    borderWidth: 1,
+    marginHorizontal: 5,
+    borderColor: Colors.BORDER_COLOR,
+    textAlign: 'center',
+    color: Colors.BLACK_COLR
   },
   focusCell: {
-      borderColor: Colors.BORDER_COLOR,
-      color: Colors.PURE_WHITE
+    borderColor: Colors.BORDER_COLOR,
+    color: Colors.BLACK_COLR
   },
-  title:{
+  title: {
     fontSize: 18,
-    color: Colors.PURE_WHITE
+    color: Colors.BLACK_COLR
   }
 })
 

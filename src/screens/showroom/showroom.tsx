@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Platform,
   Linking,
+  ScrollView,
 } from 'react-native'
 
 import { Button } from 'react-native';
@@ -40,13 +41,11 @@ const ShowRoomScreen = (props: any) => {
       <CoolHeading
         title={"Showroom"}
       />
-
+<ScrollView >
       <ShowRoomDetailsTab/>
-      <ActionButton
+     
+</ScrollView>
 
-onPress={() => _goToYosemite()}
-title="Open To map" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
-/>
     </View>
   );
 }

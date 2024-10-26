@@ -14,7 +14,7 @@ import { Colors } from "../../utils/color";
 import { Image } from "react-native";
 import ActionButton from "../../components/actionButton";
 import siteInfo from "../../utils/data/siteDetails";
-import { launchImageLibrary } from 'react-native-image-picker';
+import ImageCropPicker from 'react-native-image-crop-picker';
 import { Button } from "react-native";
 import CoolHeading from "../../components/CoolHeading";
 
@@ -23,6 +23,7 @@ import CoolHeading from "../../components/CoolHeading";
 
 export default function SellPage() {
   const [filesAreUploading, setFilesAreUploading] = useState(false);
+  const [images, setImages] = useState<any[] | null>(null);
 
   // On Form Submit
   const onFormSubmit = useCallback(
@@ -90,22 +91,37 @@ export default function SellPage() {
   const [photo, setPhoto] = useState(null);
 
   const handleChoosePhoto = () => {
-    launchImageLibrary({ noData: true }, (response) => {
-      console.log(response);
-      if (response) {
-        setPhoto(response);
-      }
-    });
+    ImageCropPicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      mediaType: 'photo'
+    })
+      .then((result) => {
+        console.log('received base64 image');
+
+        console.log("images", result)
+
+        setImages([
+          ...images,
+          {
+            uri: result.path,
+            width: result.width,
+            height: result.height,
+          }
+        ]);
+      })
+      .catch((e) => console.log(e));
   };
 
 
   return (
     <>
       <ScrollView style={styles.SellPage}>
-      <CoolHeading
-        title={"Sell Car"}
-        text={"Fair Price"}
-      />
+        <CoolHeading
+          title={"Sell Car"}
+          text={"Fair Price"}
+        />
         <View style={styles.fold1}>
           <View style={styles.part1}>
             <View style={styles.part2}>
@@ -121,12 +137,12 @@ export default function SellPage() {
 
             </View>
             <View style={styles.kp_group} >
-            <KeyPointsItem
+              <KeyPointsItem
                 icon={<Car_inspection height={50} width={50} color={Colors.BLACK_COLR} />}
                 title="Car Inspection & Valuation"
               />
               <KeyPointsItem icon={<Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Book Appointment" />
-           
+
               <KeyPointsItem icon={<Sell_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Sell Your Call" />
             </View>
           </View>
@@ -134,15 +150,15 @@ export default function SellPage() {
 
         </View>
 
-        <View style={{padding:5, flexDirection:'row', flex:1}}>
-        <ActionButton
+        <View style={{ padding: 5, flexDirection: 'row', flex: 1 }}>
+          <ActionButton
             onPress={() => onWhatappChat(siteInfo.showrooms.pune.phone)}
             title="Chat On Whatsapp " backgroundColor={'#2DB742'} color={Colors.PURE_WHITE}
           />
-          <TouchableOpacity style={{flex:0.3, justifyContent:'center'}}  onPress={() => onCall(siteInfo.showrooms.pune.phone)}>
-          <Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />
-        </TouchableOpacity>
-               {/* <ActionButton
+          <TouchableOpacity style={{ flex: 0.3, justifyContent: 'center' }} onPress={() => onCall(siteInfo.showrooms.pune.phone)}>
+            <Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />
+          </TouchableOpacity>
+          {/* <ActionButton
             onPress={() => onCall(siteInfo.showrooms.pune.phone)}
             backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
           /> */}
@@ -193,10 +209,10 @@ export default function SellPage() {
           </View>
 
           <View style={styles.custom_form}>
-            <View style={{justifyContent:'center',alignItems:'center', padding:15}}>
-            <Text style={styles.titleText}>
-              Want to speak to our team, about your car?
-            </Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center', padding: 15 }}>
+              <Text style={styles.titleText}>
+                Want to speak to our team, about your car?
+              </Text>
             </View>
             <GeneralForm
               formName="sellForm"
@@ -231,17 +247,27 @@ export default function SellPage() {
             />
           </View>
         </View>
-        {photo && (
-        <>
-          <Image
-            source={{ uri: photo.uri }}
-            style={{ width: 300, height: 300 }}
-          />
-          <Button title="Upload Photo" onPress={() => console.log("Hill")
-          } />
-        </>
-      )}
-      <Button title="Choose Photo" onPress={handleChoosePhoto} />
+
+        {images?.length !== 0 &&
+          <ScrollView style={{flexDirection:'row'}} horizontal={true}>
+            {
+              images?.map((photo) => {
+                console.log("phots", photo)
+                return(
+                <View style={{margin:10}}>
+                  <Image
+                    source={{ uri: photo.uri }}
+                    style={{ width: 100, height: 100 }}
+                    resizeMode={"contain"}
+                  />
+                
+                </View>
+                )
+              })
+            }
+          </ScrollView>
+        }
+        <Button title="Choose Photo" onPress={handleChoosePhoto} />
       </ScrollView >
     </>
   );
@@ -286,7 +312,7 @@ const styles = StyleSheet.create({
   SellPage: {
     // padding: 10,
     marginBottom: 15,
-    backgroundColor:Colors.PURE_WHITE
+    backgroundColor: Colors.PURE_WHITE
   },
   subTitle: {
     color: Colors.BLACK_COLR,
@@ -294,22 +320,22 @@ const styles = StyleSheet.create({
     padding: 5,
     fontFamily: 'Oxanium-Medium',
     textAlign: 'center',
-    display:'flex'
+    display: 'flex'
   },
-  titleText:{
+  titleText: {
     color: Colors.BLACK_COLR,
     fontSize: 20,
     // padding: 10,
     fontFamily: 'Oxanium-Medium',
     textAlign: 'center',
-    display:'flex'
+    display: 'flex'
   },
   heading: {
     color: Colors.BLACK_COLR,
     marginVertical: 5,
     fontSize: 28,
     fontFamily: 'Oxanium-Medium',
-    textAlign:'center'
+    textAlign: 'center'
   },
   fold1: {
 
@@ -325,7 +351,7 @@ const styles = StyleSheet.create({
   },
   kp_group: {
     flexDirection: 'row',
-    flexWrap:'wrap',
+    flexWrap: 'wrap',
   },
   btn_group: {
     padding: 10
@@ -338,10 +364,10 @@ const styles = StyleSheet.create({
   },
   top_points: {
     flexDirection: 'row',
-    backgroundColor:Colors.PURE_WHITE
+    backgroundColor: Colors.PURE_WHITE
   },
   custom_form: {
-    backgroundColor: Colors.PURE_WHITE, padding:10
+    backgroundColor: Colors.PURE_WHITE, padding: 10
   },
   kp_item: {
 
@@ -358,17 +384,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   tp_item: {
-    backgroundColor:Colors.PURE_WHITE,
+    backgroundColor: Colors.PURE_WHITE,
     paddingVertical: 20,
-    width:150,
-    paddingHorizontal:10,
+    width: 150,
+    paddingHorizontal: 10,
     alignItems: 'center',
     margin: 10,
     borderRadius: 10,
     shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    elevation:20
+    elevation: 20
   }
 });

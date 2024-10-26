@@ -32,7 +32,7 @@ const WishListScreen = (props: any) => {
 
   return (
    <View style={{flex:1}}>
-      <View style={{ padding: 10 }}>
+      <View style={{ paddingHorizontal: 20, paddingVertical:10}}>
         <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>Wishlist
         </Text>
       </View>
@@ -40,7 +40,7 @@ const WishListScreen = (props: any) => {
         carData.length === 0 
         ?
         <View style={{justifyContent:'center',alignItems:'center', flex:1}}>
-        <Text style={{color:Colors.BLACK_COLR}}>No car in wishlist</Text>
+        <Text style={{color:Colors.BLACK_COLR, fontFamily: 'Oxanium-Bold',fontSize: 17}}>No car in wishlist</Text>
         </View>
         :
         <ScrollView style={styles.container}>

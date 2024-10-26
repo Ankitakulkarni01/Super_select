@@ -17,14 +17,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import HomeStack from './src/utils/navigation/navigation';
 import RemoteNotification from './src/components/RemoteNotification';
+import { Colors } from './src/utils/color';
 
 
 
-const App = (props:any) => {
+const App = (props: any) => {
 
   const queryClient = new QueryClient()
 
-  
+
 
 
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ const App = (props:any) => {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));  
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
@@ -67,7 +68,7 @@ const App = (props:any) => {
   const requestUserPermission = async () => {
     const user_id = await AsyncStorage.getItem('fcmToken');
     console.log("fcm  ", user_id);
-    
+
 
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -76,11 +77,11 @@ const App = (props:any) => {
     if (enabled) {
       checkToken();
       messaging().setBackgroundMessageHandler(async remoteMessage => {
-      
+
         console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
         console.log('notifycallback')
 
-       
+
       });
     }
   };
@@ -103,15 +104,15 @@ const App = (props:any) => {
 
           if (remoteMessage) {
             console.log(remoteMessage)
-            
+
 
 
             console.log('remoteMessage.data.type')
 
-           
+
             console.log('notifycallback')
 
-          
+
           }
         });
     }
@@ -120,20 +121,19 @@ const App = (props:any) => {
   if (loading) {
     return null;
   }
- 
- 
+
+
   return (
-  <QueryClientProvider client={queryClient}>
-         <SafeAreaView style={{ flex: 1 }}>
-      
-           <PaperProvider>
-             <NavigationContainer>
-              <RemoteNotification/>
-             <StatusBar animated={true} backgroundColor="#5856D6" />
-               <HomeStack />
-             </NavigationContainer>
-            </PaperProvider>
-           </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.PURE_WHITE }}>
+        <PaperProvider>
+          <NavigationContainer>
+            <RemoteNotification />
+            <StatusBar animated={true} backgroundColor="#5856D6" />
+            <HomeStack />
+          </NavigationContainer>
+        </PaperProvider>
+      </SafeAreaView>
     </QueryClientProvider>
 
   );

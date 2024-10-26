@@ -1,11 +1,14 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 
 import clsx from "clsx";
 import { arrayRange } from "../../utils/arrayRange";
 import { currencyValueFormatter } from "../../utils/numberOperations";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import RBSheet from 'react-native-raw-bottom-sheet';
 import { Slider } from "@miblanchard/react-native-slider";
+import { Colors } from "../../utils/color";
+import ActionButton from "../actionButton";
 
 
 //
@@ -32,30 +35,31 @@ const CarFilter: FC<{
   setCurrentFilters: (value: CarCurrentFilterType) => void;
   onReset?: () => void;
   props: any
-}> = ({ filterOptions, setCurrentFilters, onReset = () => {},props }) => {
+}> = ({ filterOptions, setCurrentFilters, onReset = () => { }, props }) => {
+  
 
   const [current, setCurrent] = useState<CarCurrentFilterType>({});
 
-  // Router Query
-  useEffect(() => {
-    const allObj = {
-      makeId: props.query?.makeId,
-      type: props.query?.type,
-      location: props.query?.location,
-      driven: props.query?.driven,
-      year: props.query?.year,
-      status: props.query?.status,
-      priceRange: props.query?.priceRange,
-    } as CarCurrentFilterType;
+  // // Router Query
+  // useEffect(() => {
+  //   const allObj = {
+  //     makeId: props.query?.makeId,
+  //     type: props.query?.type,
+  //     location: props.query?.location,
+  //     driven: props.query?.driven,
+  //     year: props.query?.year,
+  //     status: props.query?.status,
+  //     priceRange: props.query?.priceRange,
+  //   } as CarCurrentFilterType;
 
-    Object.keys(allObj).forEach((key) => {
-      if (!allObj[key]) delete allObj[key];
-    });
+  //   Object.keys(allObj).forEach((key) => {
+  //     if (!allObj[key]) delete allObj[key];
+  //   });
 
-    setCurrentFilters(allObj);
-    setCurrent(allObj);
-  }, [props, setCurrentFilters]);
-  //
+  //   setCurrentFilters(allObj);
+  //   setCurrent(allObj);
+  // }, [props, setCurrentFilters]);
+  // //
 
   // Handle Current Filters
   const handleCurrentFilters = useCallback(
@@ -114,88 +118,103 @@ const CarFilter: FC<{
   return (
     <View style={styles.CarFilter}>
       <View style={styles.heading}>
-        <Text>Filters</Text>
-
         {/* {currentHasValues && (
           <button style={style.small_outline_btn} onClick={reset}>
             Reset
           </button>
         )} */}
       </View>
+      <ScrollView>
 
-      <CustomMUISelect
-        name="makeId"
-        title="Make"
-        placeholder="All Make"
-        options={filterOptions?.make?.map((d) => ({
-          value: d.id?.toString(),
-          label: d.name,
-        }))}
-        handleChange={batchHandleChanges}
-        defaultValue={current?.makeId}
-      />
+        <CustomMUISelect
+          name="makeId"
+          title="Make"
+          placeholder="All Make"
+          options={filterOptions?.make?.map((d) => ({
+            value: d.id?.toString(),
+            label: d.name,
+          }))}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.makeId}
+        />
 
-      <CustomMUISelect
-        name="type"
-        title="Type"
-        placeholder="All Type"
-        options={filterOptions?.type?.map((d) => ({ value: d, label: d }))}
-        handleChange={batchHandleChanges}
-        defaultValue={current?.type}
-      />
+        <CustomMUISelect
+          name="type"
+          title="Type"
+          placeholder="All Type"
+          options={filterOptions?.type?.map((d) => ({ value: d, label: d }))}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.type}
+        />
 
-      <CustomMUISelect
-        name="location"
-        title="Location"
-        placeholder="All Location"
-        options={[
-          { value: "1", label: "Pune" },
-          { value: "2", label: "Hyderabad" },
-        ]}
-        handleChange={batchHandleChanges}
-        defaultValue={current?.location}
-      />
+        <CustomMUISelect
+          name="location"
+          title="Location"
+          placeholder="All Location"
+          options={[
+            { value: "1", label: "Pune" },
+            { value: "2", label: "Hyderabad" },
+          ]}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.location}
+        />
 
-      <CustomMUISelect
-        name="driven"
-        title="Driven"
-        placeholder="Any Driven"
-        options={getDrivenList()}
-        handleChange={batchHandleChanges}
-        defaultValue={current?.driven}
-      />
+        <CustomMUISelect
+          name="driven"
+          title="Driven"
+          placeholder="Any Driven"
+          options={getDrivenList()}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.driven}
+        />
 
-      <CustomMUISelect
-        name="year"
-        title="Year"
-        placeholder="Any Year"
-        options={getYearList().map((d) => ({ value: d, label: d }))}
-        handleChange={batchHandleChanges}
-        defaultValue={current?.year}
-      />
+        <CustomMUISelect
+          name="year"
+          title="Year"
+          placeholder="Any Year"
+          options={getYearList().map((d) => ({ value: d, label: d }))}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.year}
+        />
 
-      <CustomMUISelect
-        name="status"
-        title="Availability"
-        placeholder="All"
-        options={[
-          {
-            value: "available",
-            label: "Available",
-          },
-          { value: "booked", label: "Booked" },
-          { value: "soldOut", label: "Sold" },
-        ]}
-        handleChange={batchHandleChanges}
-        defaultValue={current?.status}
-      />
+        <CustomMUISelect
+          name="status"
+          title="Availability"
+          placeholder="All"
+          options={[
+            {
+              value: "available",
+              label: "Available",
+            },
+            { value: "booked", label: "Booked" },
+            { value: "soldOut", label: "Sold" },
+          ]}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.status}
+        />
 
-      <CustomMUIRangeSlider
-        name="priceRange"
-        title="Price Range"
-        handleChange={batchHandleChanges}
-        defaultValue={current?.priceRange}
-      />
+        <CustomMUIRangeSlider
+          name="priceRange"
+          title="Price Range"
+          handleChange={batchHandleChanges}
+          defaultValue={current?.priceRange}
+        />
+      </ScrollView>
+      <View style={{ flexShrink: 0 }}>
+        <ActionButton
+          onPress={() => console.log("Apply")}
+          title="Apply" backgroundColor={Colors.BLACK_COLR}
+          color={Colors.PURE_WHITE}
+          border={1}
+        />
+        <ActionButton
+          onPress={() => onReset()}
+
+          title="Cancel" backgroundColor={Colors.PURE_WHITE}
+          color={Colors.BLACK_COLR}
+          border={1}
+        />
+      </View>
     </View>
   );
 };
@@ -221,85 +240,104 @@ const CustomMUISelect: FC<{
   title,
   options,
   placeholder,
-  handleChange = () => {},
+  handleChange = () => { },
   defaultValue,
 }) => {
-  const [value, setValue] = useState("");
+    const [value, setValue] = useState("");
+    const refScrollable = useRef();
+    console.log(options)
 
-  // Auto
-  useEffect(() => {
-    setValue(defaultValue ?? "");
-  }, [defaultValue, setValue]);
-  //
+    // Auto
+    useEffect(() => {
+      setValue(defaultValue ?? "");
+    }, [defaultValue, setValue]);
+    //
 
-  //
+    //
 
-  // On Change
-  const onChange = useCallback(
-    (event: any) => {
-      setValue(event.target.value);
+    // On Change
+    const onChange = useCallback(
+      (value: string) => {
+        console.log("value", value);
+        
+        setValue(value);
+
+        let obj = {};
+        obj[name] = value;
+        // handleChange(obj);
+      },
+      [name, setValue]
+    );
+    //
+
+    // On Clear
+    const onClear = useCallback(() => {
+      setValue("");
 
       let obj = {};
-      obj[name] = event.target.value;
+      obj[name] = "";
       handleChange(obj);
-    },
-    [name, setValue, handleChange]
-  );
-  //
+    }, [name, setValue, handleChange]);
+    //
 
-  // On Clear
-  const onClear = useCallback(() => {
-    setValue("");
+    //
+    //
 
-    let obj = {};
-    obj[name] = "";
-    handleChange(obj);
-  }, [name, setValue, handleChange]);
-  //
+    return (
+      <View style={styles.item}>
+        <Text style={styles.title} onPress={() => refScrollable?.current.open()}>{title}</Text>
 
-  //
-  //
+        {value ? (
+          <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
+            <Text style={{ color: Colors.BLACK_COLR }}>X</Text>
+          </TouchableOpacity>
+        ) : null}
 
-  return (
-    <View style={styles.item}>
-      <View style={styles.title}>{title}</View>
+        <RBSheet
+          ref={refScrollable}
+          height={500}
+          draggable
+          customModalProps={{
+            animationType: 'slide',
+            statusBarTranslucent: true,
+          }}
+          customStyles={{
+            container: {
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+            },
+            draggableIcon: {
+              width: 80,
+            },
+          }}>
+          <View style={{ padding: 10 , flex:1}}>
+            <ScrollView>
+              <Text style={[styles.title, { marginBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.SHADOW_COLOR, paddingBottom: 10 }]} >{title}</Text>
+              <Text style={[styles.title, { paddingBottom: 10 }]}>{placeholder} {title}</Text>
 
-      {value ? (
-        <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
-          <Text>X</Text>
-        </TouchableOpacity>
-      ) : null}
-
-      {/* <Select
-        value={value}
-        onChange={onChange}
-        displayEmpty
-        inputProps={{ "aria-label": title }}
-        MenuProps={{
-          style: { maxHeight: 325 },
-          disableScrollLock: true,
-        }}
-        size="small"
-        fullWidth
-      >
-        <MenuItem value="">{placeholder}</MenuItem>
-
-        {options?.map((opt, k) => (
-          <MenuItem
-            style={{
-              whiteSpace: "unset",
-              wordBreak: "break-word",
-            }}
-            value={opt.value}
-            key={k}
-          >
-            {opt?.label ?? opt.value}
-          </MenuItem>
-        ))}
-      </Select> */}
-    </View>
-  );
-};
+              {options?.map((opt, k) => (
+                <Text style={[styles.title, { paddingBottom: 5 }]} key={k} onPress={() => onChange(opt?.value)}>
+                  {opt?.label ?? opt.value}
+                </Text>
+              ))}
+            
+            </ScrollView>
+            <ActionButton
+                onPress={() => refScrollable?.current.close()}
+                title="Apply "
+                backgroundColor={Colors.PURE_WHITE}
+                color={Colors.BLACK_COLR}
+                border={1}
+              />
+              <ActionButton
+                onPress={() => refScrollable?.current.close()}
+                title="Cancel" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+              />
+          </View>
+        </RBSheet>
+      </View>
+    );
+  };
 //
 
 //
@@ -359,16 +397,20 @@ const CustomMUIRangeSlider: FC<{
 
   // On Change
   const onChange = useCallback(
-    ( v: [number, number]) => {
+    (v: [number, number]) => {
+      console.log("slider value", v)
       setValue(v);
+      let obj = {};
+      obj[name] = `${v[0]}-${v[1]}`;
+      handleChange(obj);
     },
-    [setValue]
+    [setValue, name, handleChange]
   );
   //
 
   // On Change Committed
   const onChangeCommitted = useCallback(
-    (_, v: [number, number]) => {
+    (v: [number, number]) => {
       let obj = {};
       obj[name] = `${v[0]}-${v[1]}`;
       handleChange(obj);
@@ -381,17 +423,18 @@ const CustomMUIRangeSlider: FC<{
   //
 
   return (
-    <View style={ styles.price}>
-      <View style={styles.title}>{title}</View>
-      <View style={styles.sub_title}>{visibleValue}</View>
-
+    <View style={styles.price}>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.sub_title}>{visibleValue}</Text>
       <Slider
+      onValueChange={onChange}
         value={value}
-        onValueChange={onChange}
-        // on={onChangeCommitted}
-        min={MIN_VALUATION}
-        max={MAX_VALUATION}
-        step={5000}
+        animateTransitions
+        minimumTrackTintColor={Colors.BLACK_COLR}
+        maximumTrackTintColor="#000000"
+        maximumValue={MAX_VALUATION}
+        minimumValue={MIN_VALUATION}
+        step={2}
       />
     </View>
   );
@@ -408,7 +451,7 @@ export const CarFilterSkeleton: FC<{ count?: number }> = ({ count }) => {
 
   return (
     <View style={styles.CarFilterSkeleton_Wrapper}>
-      <View style={styles.heading}>Filters</View>
+      <Text style={styles.heading}>Filters</Text>
 
       {data.map((_, i) => (
         <View style={styles.CarFilterSkeleton} key={i}>
@@ -486,38 +529,55 @@ const getYearList = () => {
 };
 //
 
-const styles =  StyleSheet.create({
-  CarFilter:{
+const styles = StyleSheet.create({
+  CarFilter: {
+    padding: 10
+  },
+  heading: {
+    color: Colors.BLACK_COLR
+  },
+  item: {
+    height: 50,
+    justifyContent: 'center',
+    padding: 10,
+    margin: 5,
+    shadowColor: '#171717',
+    borderRadius: 10,
+    backgroundColor: Colors.PURE_WHITE,
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 20
+  },
+  title: {
+    color: Colors.BLACK_COLR,
+    fontSize: 16,
+
+    fontFamily: 'Oxanium-Medium'
+  },
+  clear_btn: {
 
   },
-  heading:{
+  price: {
+    marginTop: 20,
+    paddingHorizontal: 10
+  },
+  sub_title: {
+    paddingTop: 10,
+    color: Colors.BLACK_COLR,
+    fontSize: 14,
+    fontFamily: 'Oxanium-Medium'
+  },
+  CarFilterSkeleton_Wrapper: {
 
   },
-  item:{
+  CarFilterSkeleton: {
 
   },
-  title:{
+  wrap: {
 
   },
-  clear_btn:{
+  select: {
 
-  },
-  price:{
-
-  },
-  sub_title:{
-
-  },
-  CarFilterSkeleton_Wrapper:{
-
-  },
-  CarFilterSkeleton:{
-
-  },
-  wrap:{
-
-  },
-  select:{
-    
   }
 })

@@ -7,9 +7,9 @@ import {
 } from 'react-native';
 import { Colors } from '../utils/color';
 
-const ActionButton: FC<{ title: string, onPress: () => void, icons?: any, backgroundColor?: string, color?: string , height?: string}> = ({ backgroundColor, title, icons, onPress , color, height}) => {
+const ActionButton: FC<{ title: string, onPress: () => void, icons?: any, backgroundColor?: string, color?: string , height?: string, border? : number}> = ({ backgroundColor, title, icons, onPress , color, height, border}) => {
     return (
-        <TouchableOpacity onPress={onPress} style={[Styles.buttonContainer, { backgroundColor: backgroundColor ? backgroundColor : Colors.PURE_WHITE }]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={onPress} style={[Styles.buttonContainer, { backgroundColor: backgroundColor ? backgroundColor : Colors.PURE_WHITE , borderWidth: border ? border : 0}]} activeOpacity={0.8}>
             <Text style={[Styles.titleText,{color: color ? color : Colors.BLACK_COLR}]}>{title}</Text>
             {
                 icons && icons

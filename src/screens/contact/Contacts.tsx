@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -16,12 +16,24 @@ import Big_mail from "D:/Projects/Super_select/assets/svg/big_mail.svg";
 import Big_time from "D:/Projects/Super_select/assets/svg/big_time.svg";
 import { ContactDataType } from '../../utils/formAPIs/contact';
 import CoolHeading from '../../components/CoolHeading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 
 
 const ContactScreen = () => {
+
+  const [username, setName] = useState("");
+
+useEffect(() => {
+    getName()
+  }, [])
+
+  const getName = async () => {
+    const name = await AsyncStorage.getItem('name');
+    setName(name)
+  }
 
   // On Form Submit
   const onFormSubmit = useCallback(async (data: ContactDataType) => {
@@ -78,7 +90,7 @@ const ContactScreen = () => {
       <GeneralForm
         formName="contactForm"
         inputs={[
-          { name: "Name", type: "text", required: true },
+          { name: "Name", type: "text", required: true , defaultValue: username},
           { name: "Email", type: "email", required: true },
           { name: "Subject", type: "text", required: true },
           {

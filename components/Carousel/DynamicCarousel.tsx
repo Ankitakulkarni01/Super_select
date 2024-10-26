@@ -33,11 +33,12 @@ const DynamicCarouselComponent: FC<Props> = ({
 
   const renderItem = ({ item }: { item: any }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity >
         <FastImage
           style={{
-            width: SLIDER_WIDTH,
+            width: SLIDER_WIDTH + 20,
             height: 300,
+            borderRadius:20
           }}
           source={{
             uri: item,

@@ -55,11 +55,12 @@ const SignInScreen = (props: any) => {
 
         const { success, message, data } = await login(values)
         if (success) {
+            console.log(data)
             props.navigation.dispatch(
                 StackActions.replace('Splash')
             );
             await AsyncStorage.setItem("access_token", data.token)
-            // await AsyncStorage.setItem("userId", data.userId)
+            await AsyncStorage.setItem("name", data.name)
         } else {
             console.log(message);
             setError(message)

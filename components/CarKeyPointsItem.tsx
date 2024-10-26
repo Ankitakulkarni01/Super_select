@@ -31,13 +31,13 @@ export default CarKeyPointsItem;
 const styles = StyleSheet.create({
   carKeyContainer:{
     height:100,
-
     borderWidth:1,
+    borderColor: Colors.SKELETON_COLOR_2,
     alignItems:'center',
     justifyContent:'center',
     borderRadius:10,
     margin:10,
-    padding:15
+    padding:20
   },
   heading:{
     color: Colors.BLACK_COLR,
@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
   },
   subheading:{
     color: Colors.BLACK_COLR,
-    fontSize: 17
+    fontSize: 14,
+    fontWeight:'700'
   }
 })
 
@@ -63,35 +64,35 @@ const Icon: FC<{ name: string }> = ({ name }) => {
       return  <Image
       source={require("../src/assets/img/icons/PiEngineLight.png")}
       resizeMode={'contain'}
-      style={{ height: 40, width: 100, padding: 10 }}
+      style={{ height: 30, width: 100, padding: 10 }}
     />
 
     case "driven":
       return    <Image
       source={require("../src/assets/img/icons/PiGaugeLight.png")}
       resizeMode={'contain'}
-      style={{ height: 40, width: 100, padding: 10 }}
+      style={{ height: 30, width: 100, padding: 10 }}
     />;
 
     case "transmission":
       return    <Image
       source={require("../src/assets/img/icons/PiLineSegmentsLight.png")}
       resizeMode={'contain'}
-      style={{ height: 40, width: 100, padding: 10 }}
+      style={{ height: 30, width: 100, padding: 10 }}
     />     ;
 
     case "fuel":
       return    <Image
       source={require("../src/assets/img/icons/PiGasPumpLight.png")}
       resizeMode={'contain'}
-      style={{ height: 40, width: 100, padding: 10 }}
+      style={{ height: 30, width: 100, padding: 10 }}
     />;
 
     case "type":
       return    <Image
       source={require("../src/assets/img/icons/PiCarLight.png")}
       resizeMode={'contain'}
-      style={{ height: 40, width: 100, padding: 10 }}
+      style={{ height: 30, width: 100, padding: 10 }}
     />;
 
     default:

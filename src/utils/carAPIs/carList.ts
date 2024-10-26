@@ -15,6 +15,7 @@ export const getCarList = async (
   page: number = 1,
   filters: { [key: string]: string | number } = {}
 ) => {
+
   try {
     const query = queryObjectToString({
       page: page,
@@ -22,12 +23,16 @@ export const getCarList = async (
       ...filters,
     });
 
+    console.log("query",query)
+
     const res = await fetchExtended({
       url: `${API_BASE_PATH}/car-list?${query}${
         getFilter ? "&getFilter=true" : ""
       }`,
       method: "GET",
     });
+
+    console.log(res)
 
     getFilter = false;
 

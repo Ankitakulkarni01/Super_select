@@ -9,6 +9,8 @@ import { Image } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import HeaderNavigationMenu from "../../utils/navigation/HeaderNavigationMenu";
+import ActionButton from "../../components/actionButton";
 
 
 const showroomImages = {
@@ -127,13 +129,18 @@ const FirstRoute = () => {
             <ShowroomImageGallery images={showroomImages.pune} />
             {/* </View> */}
 
-            <TouchableOpacity style={{ margin: 10 }} onPress={openMap}>
+            <View style={{ margin: 10 }} onPress={openMap}>
                 <Image
                     source={require("../../assets//showroom/Pune_location.png")}
                     resizeMode={'stretch'}
                     style={{ width: '100%' }}
                 />
-            </TouchableOpacity>
+            </View>
+            <ActionButton
+
+onPress={() => openMap()}
+title="Open To map" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+/>
         </View>
     )
 
@@ -167,13 +174,18 @@ const SecondRoute = () => {
             />
 
             <ShowroomImageGallery images={showroomImages.hyderabad} />
-            <TouchableOpacity style={{ margin: 10 }} onPress={openMap}>
+            <View style={{ margin: 10 }} >
                 <Image
                     source={require("../../assets//showroom/Hydrabad_location.png")}
                     resizeMode={'stretch'}
                     style={{ height: 300, width: '100%' }}
                 />
-            </TouchableOpacity>
+            </View>
+            <ActionButton
+
+onPress={() => openMap()}
+title="Open To map" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+/>
         </View>
     )
 
@@ -181,74 +193,32 @@ const SecondRoute = () => {
 
 
 const routes = [
-    { key: 'first', title: 'Pune' },
-    { key: 'second', title: 'Hydrabad' },
+    { key: 'first', value: 'Pune' },
+    { key: 'second', value: 'Hydrabad' },
 ];
 
 const ShowRoomDetailsTab = () => {
 
-    const renderScene = ({ route }) => {
-        switch (route.key) {
-            case 'first':
-                return <FirstRoute />;
-            case 'second':
-                return <SecondRoute />;
-            default:
-                return null;
-        }
-    };
-    const layout = useWindowDimensions();
-    const [index, setIndex] = useState(0);
+    const [headerMenuValue, setHeaderMenu] = useState(null)
 
-    const renderTabBar = (props) => {
-        console.log(props.position.interpolate)
 
-        const inputRange = props.navigationState.routes.map((x, i) => i);
-
-        return (
-            <View style={styles.tabBar}>
-                {props.navigationState.routes.map((route, i) => {
-
-                    const opacity = props.position.interpolate({
-                        inputRange,
-                        outputRange: inputRange.map((inputIndex) => {
-                            console.log(inputIndex);
-
-                            return inputIndex === i ? 1 : 0.7
-                        }
-
-                        ),
-                    });
-
-                    return (
-                        <TouchableOpacity
-                            style={[styles.tabItem]}
-                            onPress={() => setIndex(i)}>
-                            <Animated.Text style={{ color: Colors.PURE_WHITE, opacity }}>{route.title}</Animated.Text>
-                        </TouchableOpacity>
-                    );
-                })}
-            </View>
-        );
-    };
+    console.log("headerMenuValue",headerMenuValue);
 
     return (
-        <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            renderTabBar={renderTabBar}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width, }}
-
-            style={{
-                display: 'flex',
-                flex: 1,
-                backgroundColor: Colors.BLACK_COLR,
-
-
-            }}
-        />
-    );
+        <View style={styles.tabBar}>
+         <HeaderNavigationMenu menu={routes} activeValue={headerMenuValue} setActiveValue={(value: string) => {
+          setHeaderMenu(value)
+          }} />
+          <View style={{ flex:1}}>
+          {
+            headerMenuValue === "Pune" && <FirstRoute/>
+          }
+          {
+            headerMenuValue === "Hydrabad" && <SecondRoute/>
+          }
+          </View>
+        </View>
+      );
 }
 
 
@@ -256,13 +226,13 @@ const ShowRoomDetailsTab = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: Colors.PURE_WHITE,
-        paddingVertical: 10,
+    paddingVertical:10,
+    borderWidth:1,
     },
     tabBar: {
-        flexDirection: 'row',
-        paddingTop: StatusBar.currentHeight,
+        // paddingTop: StatusBar.currentHeight,
     },
     ShowroomDetailsItem: {
         marginHorizontal: 10,
