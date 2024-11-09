@@ -3,6 +3,7 @@ import { FC } from "react";
 import { Text, View } from "react-native";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Car from '../assets/svg/car.svg'
 
 import { Colors } from "../src/utils/color";
 import { StyleSheet } from "react-native";
@@ -19,7 +20,7 @@ const CarKeyPointsItem: FC<{
   return (
     <View style={styles.carKeyContainer}>
         <Icon name={name} />
-        <Text style={styles.heading}>{name} </Text>
+        <Text style={styles.heading}>{name}</Text>
         <Text style={styles.subheading}> {prefix} {value} {suffix}</Text>
     </View>
   );
@@ -42,12 +43,15 @@ const styles = StyleSheet.create({
   heading:{
     color: Colors.BLACK_COLR,
     fontWeight:'300',
+    fontSize: 15,
+        textAlign:'center'
     // marginVertical:5
   },
   subheading:{
     color: Colors.BLACK_COLR,
-    fontSize: 14,
-    fontWeight:'700'
+    fontSize: 15,
+    fontWeight:'700',
+    textAlign:'center'
   }
 })
 
@@ -74,6 +78,13 @@ const Icon: FC<{ name: string }> = ({ name }) => {
       style={{ height: 30, width: 100, padding: 10 }}
     />;
 
+    case "year":
+      return    <Image
+      source={require("../src/assets/img/CarIcon.png")}
+      resizeMode={'contain'}
+      style={{ height: 40, width: 100, padding: 10 }}
+    />     ;
+
     case "transmission":
       return    <Image
       source={require("../src/assets/img/icons/PiLineSegmentsLight.png")}
@@ -90,9 +101,9 @@ const Icon: FC<{ name: string }> = ({ name }) => {
 
     case "type":
       return    <Image
-      source={require("../src/assets/img/icons/PiCarLight.png")}
+      source={require("../src/assets/img/CarIcon.png")}
       resizeMode={'contain'}
-      style={{ height: 30, width: 100, padding: 10 }}
+      style={{ height: 40, width: 100, padding: 10 }}
     />;
 
     default:

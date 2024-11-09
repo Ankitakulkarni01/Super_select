@@ -12,7 +12,7 @@ import { Colors } from "../../src/utils/color";
 import FastImage from "react-native-fast-image";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 
-export const SLIDER_WIDTH = Dimensions.get('window').width + 80
+export const SLIDER_WIDTH = Dimensions.get('window').width 
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 //
@@ -33,72 +33,60 @@ const CarouselComponent: FC<Props> = ({
   const [index, setIndex] = useState(0)
   const isCarousel = useRef(null)
 
-  const renderItem = ({item}: {item: any}) => {
+  const renderItem = ({ item }: { item: any }) => {
     return (
       <TouchableOpacity activeOpacity={0.8}>
-    <Image
-            source={item}
-            resizeMode={'stretch'}
-            style={styles.image}
-          />
-  </TouchableOpacity>
+         <FastImage
+          style={{
+            width: SLIDER_WIDTH ,
+            height: 300,
+          }}
+          source={item}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+      </TouchableOpacity>
     );
   };
 
   return (
     <View style={{ flexDirection: 'row', flex: 1 }}>
-      {/* {list?.map((d, i) => (
-        <View
-          key={i}
-          style={{ borderWidth: 1 }}
-        >
-          <FastImage
-            style={{ width: 200, height: 200 }}
-            source={{
-              uri: 'https://unsplash.it/400/400?image=1',
-              
-              headers: { Authorization: 'someAuthToken' },
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.contain}
+      <View style={{alignItems:'center', justifyContent:'center'}}>
+         <Carousel
+          layout={"default"}
+          data={list}
+          ref={isCarousel}
+          renderItem={renderItem}
+          sliderWidth={SLIDER_WIDTH}
+          itemWidth={SLIDER_WIDTH}
+          inactiveSlideShift={0}
+          useScrollView={true}
+
+          onSnapToItem={(index) => setIndex(index)}
+        />
+   <Pagination
+          dotsLength={list.length}
+          activeDotIndex={index}
+          carouselRef={isCarousel}
+          containerStyle={{
+            position:'absolute',
+            left:50,
+            bottom:0, 
+            alignItems:'center', 
+            justifyContent:'center'
+          }}
+          dotStyle={{
+           width: 15,
+           height: 15,
+           borderRadius: 5,
+           paddingBottom: 0,
+           backgroundColor: 'rgba(0, 0, 0, 0.92)'
+          }}
+          inactiveDotStyle={{ backgroundColor: Colors.PURE_WHITE }}
+          inactiveDotOpacity={0.8}
+          inactiveDotScale={0.6}
+          tappableDots={true}
           />
-
-        </View>
-      ))} */}
-
-<View >
-                <Carousel
-                  layout={"default"}
-                  data={list}
-                  ref={isCarousel}
-                  renderItem={renderItem}
-                  sliderWidth={SLIDER_WIDTH}
-                  itemWidth={SLIDER_WIDTH}
-                  inactiveSlideShift={0}
-                  useScrollView={true}
-                  
-                  onSnapToItem={(index) => setIndex(index)}
-           // onSnapToItem = { index => this.setState({activeIndex:index}) }
-                   />
-                   {
-                    displayPaginOrNot && 
-                    <Pagination
-                    dotsLength={list.length}
-                    activeDotIndex={index}
-                    dotStyle={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: 5,
-                        marginHorizontal: 8,
-                        backgroundColor: "black"
-                    }}
-                    inactiveDotOpacity={0.4}
-                    inactiveDotScale={0.6}
-                    tappableDots={true}
-                  />
-                   }
-                    
-            </View>
+      </View>
     </View>
   );
 };
@@ -122,7 +110,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: SLIDER_WIDTH,
-    height: '100%',
+    height: 300,
   },
   buttonContainer: {
     alignItems: 'center',

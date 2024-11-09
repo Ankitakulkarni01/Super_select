@@ -6,13 +6,14 @@ import {
   trackWindowScroll,
 } from "react-lazy-load-image-component";
 import clsx from "clsx";
-import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Colors } from "../../src/utils/color";
 import FastImage from "react-native-fast-image";
 import Carousel, { Pagination } from "react-native-snap-carousel";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export const SLIDER_WIDTH = Dimensions.get('window').width + 80
+export const SLIDER_WIDTH = Dimensions.get('window').width
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 //
@@ -33,17 +34,17 @@ const DynamicCarouselComponent: FC<Props> = ({
 
   const renderItem = ({ item }: { item: any }) => {
     return (
-      <TouchableOpacity >
+      <TouchableOpacity activeOpacity={0.8}>
         <FastImage
           style={{
-            width: SLIDER_WIDTH + 20,
+            width: SLIDER_WIDTH ,
             height: 300,
             borderRadius:20
           }}
           source={{
             uri: item,
           }}
-          resizeMode={FastImage.resizeMode.stretch}
+          resizeMode={FastImage.resizeMode.contain}
         />
       </TouchableOpacity>
     );
@@ -52,8 +53,8 @@ const DynamicCarouselComponent: FC<Props> = ({
 
   return (
     <View style={{ flexDirection: 'row', flex: 1 }}>
-
       <View >
+        
         <Carousel
           layout={"default"}
           data={list}
@@ -63,7 +64,6 @@ const DynamicCarouselComponent: FC<Props> = ({
           itemWidth={SLIDER_WIDTH}
           inactiveSlideShift={0}
           useScrollView={true}
-
           onSnapToItem={(index) => setIndex(index)}
         />
       </View>

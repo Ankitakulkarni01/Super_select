@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -24,6 +26,8 @@ import { currencyValueFormatter } from '../../utils/numberOperations';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishlist';
 import Gallery from '../../../components/Gallery/gallery';
+import { Modal } from 'react-native';
+import ReserveNow from './ReserveModal';
 
 
 const CarDetailsScreen = ({ navigation, route }) => {
@@ -48,6 +52,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
   const [wishlist, setwishlist] = useState(false)
   const [showGallery, setshowGallery] = useState(false)
+  const [loading, setLoding] = useState(false)
 
 
 
@@ -205,16 +210,14 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
   // const [isLoading, setIsLoading] = useState(false);
 
+
+  const [reserveModal, setReserveModal] = useState(false)
+
   // On Reserve Btn Click
   const onReserveBtnClick = useCallback(() => {
     if (soldOut) return;
 
-    // let newQuery = router.query;
-    // newQuery[RESERVE_NOW_POPUP_NAME] = "true";
-
-    // router.push({ pathname: router.pathname, query: newQuery }, undefined, {
-    //   shallow: true,
-    // });
+    setReserveModal(true)
   }, [soldOut]);
   //
 
@@ -226,15 +229,15 @@ const CarDetailsScreen = ({ navigation, route }) => {
     //     : ""
   }
 
-    // On Full View Media Click
-    const onFullViewMediaClick = useCallback(
-      (value: number) => {
+  // On Full View Media Click
+  const onFullViewMediaClick = useCallback(
+    (value: number) => {
       console.log("values", value);
-      
-      },
-      []
-    );
-    //
+
+    },
+    []
+  );
+  //
 
   const makeSomeRequest = () => {
     // setIsLoading(true);
@@ -244,48 +247,21 @@ const CarDetailsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, padding: 10 , backgroundColor: Colors.PURE_WHITE}}>
+    <View style={{ flex: 1, padding: 10, backgroundColor: Colors.PURE_WHITE }}>
+      {
+        isLoading &&
+        <>
+          {
+            Platform.OS === "ios" ? (
+              <ActivityIndicator size="small" color="purple" />
+            ) : (
+              <ActivityIndicator size={50} color="green" />
+            )
+          }
+        </>
+      }
       <ScrollView>
-        <View style={styles.brief_n_option}>
-          <View style={{flex:1}}>
-          <Text style={styles.heading}>{carData?.name}</Text>
-          <Text style={styles.subHeading}>
-            Model: <Text style={{ fontWeight: '300' }}>{carData?.model}</Text>
-          </Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
 
-<TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50 }} onPress={postWishlist}>
-  {
-    wishlist
-      ?
-      <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-
-      :
-      <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
-
-  }
-</TouchableOpacity>
-</View>
-
-          {/* <View>
-                <button
-                  style={styles.small_outline_btn}
-                  disabled={soldOut}
-                  onClick={onTestDriveClick}
-                >
-                  Test Drive
-                </button>
-
-                <button
-                  style={styles.icon_btn}
-                  title="Share"
-                  onClick={shareHandler}
-                >
-                  <IoShareSocialOutline />
-                </button>
-              </View> */}
-        </View>
         <View>
           {
             allImages &&
@@ -294,68 +270,93 @@ const CarDetailsScreen = ({ navigation, route }) => {
             />
           }
           <>
-{
-  showGallery &&  <Gallery
-  carName={carData?.name}
-  onOpenFullView={(v) => onFullViewMediaClick(v)}
-  all={allImages}
-  exterior={carData?.exteriorImages}
-  interior={carData?.interiorImages}
-  />
-}
+            {
+              showGallery &&
+              <Modal
+                visible={showGallery}
+                onRequestClose={() => setshowGallery(false)}>
+                <Gallery
+                  carName={carData?.name}
+                  onOpenFullView={(v) => onFullViewMediaClick(v)}
+                  all={allImages}
+                  exterior={carData?.exteriorImages}
+                  interior={carData?.interiorImages}
+                />
+              </Modal>
+            }
 
-       </> 
+          </>
 
-          <TouchableOpacity 
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            zIndex: 100,
-            width: 100,
-            height: 80,
-            position: 'absolute',
-            left:30,
-            padding:5,
-            bottom: -30,
-            overflow: 'hidden',
-            alignItems:'center',
-            justifyContent:'center',
-            borderRadius:10,
-            marginBottom:10,
-            shadowColor: '#171717',
-            shadowOffset: {width: -2, height: 4},
-            shadowOpacity: 0.2,
-            shadowRadius: 3,
-            elevation:20
-          }}
-          onPress={() => {
-            setshowGallery(true)
-            console.log("show Gallery")
-          }
-          }
+          <>
+            {
+              reserveModal &&
+              <Modal
+                visible={reserveModal}
+                onRequestClose={() => setReserveModal(false)}>
+                  <ReserveNow carData={carData}/>
+               
+              </Modal>
+            }
+
+          </>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              zIndex: 100,
+              width: 100,
+              height: 80,
+              position: 'absolute',
+              left: 30,
+              padding: 5,
+              bottom: -30,
+              overflow: 'hidden',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 10,
+              marginBottom: 10,
+              shadowColor: '#171717',
+              shadowOffset: { width: -2, height: 4 },
+              shadowOpacity: 0.2,
+              shadowRadius: 3,
+              elevation: 20
+            }}
+            onPress={() => {
+              setshowGallery(true)
+              console.log("show Gallery")
+            }
+            }
           >
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize:18 }}>15's photos</Text>
-            </TouchableOpacity>
+            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>15's photos</Text>
+          </TouchableOpacity>
 
         </View>
 
-        <ScrollView style={styles.key_points} horizontal={true}>
-          <CarKeyPointsItem
-            name="Engine"
-            value={carData?.engine}
-            suffix="CC"
-          />
-          <CarKeyPointsItem
-            name="Driven"
-            value={carData?.driven}
-            suffix="km"
-          />
-          <CarKeyPointsItem
-            name="Transmission"
-            value={carData?.transmission}
-          />
-          <CarKeyPointsItem name="Fuel" value={carData?.fuelType} />
-          <CarKeyPointsItem name="Type" value={carData?.type} />
-        </ScrollView>
+
+
+        <View style={styles.brief_n_option}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.heading}>{carData?.name}</Text>
+            <Text style={styles.subHeading}>
+              Model: <Text style={{ fontWeight: '300' }}>{carData?.model}</Text>
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+
+            <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50 }} onPress={postWishlist}>
+              {
+                wishlist
+                  ?
+                  <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+                  :
+                  <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+              }
+            </TouchableOpacity>
+          </View>
+
+        </View>
 
         <View style={styles.main_area_part2}>
           <View>
@@ -365,11 +366,11 @@ const CarDetailsScreen = ({ navigation, route }) => {
                   !carIsCallForPrice ? (
                     <>
                       <Text style={styles.price}>{currencyValueFormatter(carData?.price)}</Text>
-                      <Text style={carData?.tcs > 0 ? { opacity: 1, color: Colors.BLACK_COLR } : { color: Colors.BLACK_COLR }}>
+                      {/* <Text style={carData?.tcs > 0 ? { opacity: 1, color: Colors.BLACK_COLR } : { color: Colors.BLACK_COLR }}>
                         {carData?.tcs > 0
                           ? carData?.tcs + "% TCS"
                           : "including fees & taxes"}
-                      </Text>
+                      </Text> */}
                     </>
                   ) : (
                     <>
@@ -390,14 +391,33 @@ const CarDetailsScreen = ({ navigation, route }) => {
                   <Image
                     source={require('../../assets/img/sold-out.png')}
                     resizeMode={'contain'}
-                    style={{ height: 30, width: 30 }}
+                    style={{ height: 50, width: 100, padding: 5}}
                   />
                 )}
               </View>
             </View>
           </View>
 
-          <View id="emi" style={styles.payment}>
+          <ScrollView style={styles.key_points} horizontal={true}>
+            <CarKeyPointsItem
+              name="Engine"
+              value={carData?.engine}
+              suffix="CC"
+            />
+            <CarKeyPointsItem
+              name="Driven"
+              value={carData?.driven}
+              suffix="km"
+            />
+            <CarKeyPointsItem
+              name="Transmission"
+              value={carData?.transmission}
+            />
+            <CarKeyPointsItem name="Fuel" value={carData?.fuelType} />
+            <CarKeyPointsItem name="Type" value={carData?.type} />
+          </ScrollView>
+
+          {/* <View id="emi" style={styles.payment}>
             <Text style={styles.payment_header_text}>Estimated EMI*</Text>
             <View style={styles.emi_details}>
               {!carSoldOut && !carIsCallForPrice && (
@@ -416,25 +436,28 @@ const CarDetailsScreen = ({ navigation, route }) => {
               )}
 
             </View>
-          </View>
+          </View> */}
         </View>
         {
           carData !== null &&
           <TabViewExample data={carData} featuresArray={featuresArray} />
         }
-      
+
       </ScrollView>
+      {!carSoldOut &&
       <ActionButton
         onPress={onEmailCalculator}
         title="EMI Calculator " backgroundColor={Colors.PURE_WHITE} color={Colors.BLACK_COLR}
         border={1}
       />
+}
+       {!carSoldOut &&
       <ActionButton
-        onPress={onEmailCalculator}
+        onPress={onReserveBtnClick}
 
         title="Reserve" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
       />
-    
+}
 
     </View>
   );
@@ -445,7 +468,7 @@ const styles = StyleSheet.create({
     // flexDirection:'row',
     // alignItems:'center', 
     // justifyContent:'space-between'
-    paddingVertical:20
+    paddingVertical: 20
   },
   root: {
     justifyContent: 'center',
@@ -453,7 +476,7 @@ const styles = StyleSheet.create({
   },
   brief_n_option: {
     paddingVertical: 10,
-    flexDirection:'row'
+    flexDirection: 'row'
   },
   heading: {
     color: Colors.BLACK_COLR,
@@ -479,7 +502,7 @@ const styles = StyleSheet.create({
   },
   priceContainer: {
     flex: 1,
-    marginVertical: 10
+    // marginVertical: 
   },
   price: {
     color: Colors.BLACK_COLR,

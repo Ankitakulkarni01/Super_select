@@ -21,31 +21,17 @@ const openYosemiteZoomedOut = createOpenLink({ ...yosemite, zoom: 30 });
 
 
 
-const ShowRoomScreen = (props: any) => {
-
-
-  const _goToYosemite = () => {
-   const lat = 37.865101
-   const lng = -119.538330
-   var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
-   var url = scheme + `${lat},${lng}&z=15&t=m&hl=en&gl=PH&mapclient=embed&cid=9200704521453643295`;
-    
-        
-    Linking.openURL(url);
-  }
-
-  //
+const ShowRoomScreen = () => {
 
   return (
     <View style={styles.fullScreen} >
-      <CoolHeading
-        title={"Showroom"}
-      />
-<ScrollView >
-      <ShowRoomDetailsTab/>
-     
-</ScrollView>
 
+      <ScrollView >
+        <CoolHeading
+          title={"Showroom"}
+        />
+        <ShowRoomDetailsTab />
+      </ScrollView>
     </View>
   );
 }
@@ -57,7 +43,7 @@ const styles = StyleSheet.create({
 
   fullScreen: {
     flex: 1,
-    // backgroundColor: "black"
+    backgroundColor: Colors.PURE_WHITE
   }
 });
 

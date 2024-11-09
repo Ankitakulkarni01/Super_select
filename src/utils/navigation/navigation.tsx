@@ -147,9 +147,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="Wishlist"
         component={WishListScreen}
-        options={{
-          headerShown: false
-        }}
+        options={{ header: props => <Header props={props} /> }}
       />
 
       <Stack.Screen

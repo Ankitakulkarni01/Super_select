@@ -34,40 +34,17 @@ const CarFilter: FC<{
   filterOptions: CarFilterOptionsType;
   setCurrentFilters: (value: CarCurrentFilterType) => void;
   onReset?: () => void;
-  props: any
-}> = ({ filterOptions, setCurrentFilters, onReset = () => { }, props }) => {
+  props: any;
+  onClose: () => void;
+}> = ({ filterOptions, setCurrentFilters, onReset = () => { }, props, onClose }) => {
   
 
   const [current, setCurrent] = useState<CarCurrentFilterType>({});
 
-  // // Router Query
-  // useEffect(() => {
-  //   const allObj = {
-  //     makeId: props.query?.makeId,
-  //     type: props.query?.type,
-  //     location: props.query?.location,
-  //     driven: props.query?.driven,
-  //     year: props.query?.year,
-  //     status: props.query?.status,
-  //     priceRange: props.query?.priceRange,
-  //   } as CarCurrentFilterType;
-
-  //   Object.keys(allObj).forEach((key) => {
-  //     if (!allObj[key]) delete allObj[key];
-  //   });
-
-  //   setCurrentFilters(allObj);
-  //   setCurrent(allObj);
-  // }, [props, setCurrentFilters]);
-  // //
-
   // Handle Current Filters
   const handleCurrentFilters = useCallback(
     (values: CarCurrentFilterType) => {
-      props.push({ pathname: props.pathname, query: values }, undefined, {
-        shallow: true,
-      });
-
+   console.log("apply", values)
       setCurrentFilters(values);
     },
 
@@ -89,6 +66,7 @@ const CarFilter: FC<{
 
       setCurrent(allObj);
       handleCurrentFilters(allObj);
+      setCurrentFilters(value);
     },
     [current, setCurrent, handleCurrentFilters]
   );
@@ -118,11 +96,17 @@ const CarFilter: FC<{
   return (
     <View style={styles.CarFilter}>
       <View style={styles.heading}>
-        {/* {currentHasValues && (
-          <button style={style.small_outline_btn} onClick={reset}>
-            Reset
-          </button>
-        )} */}
+<Text style={{ color: Colors.BLACK_COLR,
+    fontSize: 28,
+    flex:1,
+marginLeft:10,
+    fontFamily: 'Oxanium-Medium'}}>Filter</Text>
+      <ActionButton
+          onPress={() => onClose()}
+          title="X" backgroundColor={Colors.PURE_WHITE}
+          color={Colors.BLACK_COLR}
+          border={1}
+        />
       </View>
       <ScrollView>
 
@@ -208,7 +192,7 @@ const CarFilter: FC<{
           border={1}
         />
         <ActionButton
-          onPress={() => onReset()}
+          onPress={() => reset()}
 
           title="Cancel" backgroundColor={Colors.PURE_WHITE}
           color={Colors.BLACK_COLR}
@@ -245,7 +229,6 @@ const CustomMUISelect: FC<{
 }) => {
     const [value, setValue] = useState("");
     const refScrollable = useRef();
-    console.log(options)
 
     // Auto
     useEffect(() => {
@@ -264,7 +247,7 @@ const CustomMUISelect: FC<{
 
         let obj = {};
         obj[name] = value;
-        // handleChange(obj);
+        handleChange(obj);
       },
       [name, setValue]
     );
@@ -285,13 +268,15 @@ const CustomMUISelect: FC<{
 
     return (
       <View style={styles.item}>
+        <View style={{flexDirection:'row'}}>
         <Text style={styles.title} onPress={() => refScrollable?.current.open()}>{title}</Text>
 
-        {value ? (
+        {value !== "" ? (
           <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
-            <Text style={{ color: Colors.BLACK_COLR }}>X</Text>
+            <Text style={{ color: Colors.BLACK_COLR }}>{value}</Text>
           </TouchableOpacity>
         ) : null}
+        </View>
 
         <RBSheet
           ref={refScrollable}
@@ -534,7 +519,10 @@ const styles = StyleSheet.create({
     padding: 10
   },
   heading: {
-    color: Colors.BLACK_COLR
+    color: Colors.BLACK_COLR,
+    flexDirection:'row', 
+    alignItems:'center', 
+    // justifyContent:'center'
   },
   item: {
     height: 50,
@@ -550,13 +538,15 @@ const styles = StyleSheet.create({
     elevation: 20
   },
   title: {
+    flex:1,
     color: Colors.BLACK_COLR,
     fontSize: 16,
 
     fontFamily: 'Oxanium-Medium'
   },
   clear_btn: {
-
+    justifyContent:'flex-end',
+    alignItems:'flex-end'
   },
   price: {
     marginTop: 20,
@@ -569,15 +559,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Oxanium-Medium'
   },
   CarFilterSkeleton_Wrapper: {
-
+    height:100
   },
   CarFilterSkeleton: {
-
+    height:100
   },
   wrap: {
-
+    height:100
   },
   select: {
-
+    height:100
   }
 })

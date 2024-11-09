@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Drawer } from 'react-native-drawer-layout';
 import { Colors } from '../src/utils/color';
 
@@ -65,10 +65,28 @@ const SuperSelectDrawer = (props) => {
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
           <Text style={styles.titleText}>Insurance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: !login ? Colors.BLACK_COLR : Colors.PURE_WHITE }]} onPress={() => props.navigation.navigate('Calculator')}>
-          <Text style={[styles.titleText, { color: login ? Colors.BLACK_COLR : Colors.PURE_WHITE, textAlign: login ? 'center' : 'left' }]}>Emi Calculator</Text>
+        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: login ? Colors.BLACK_COLR : Colors.PURE_WHITE }]} onPress={() => props.navigation.navigate('Calculator')}>
+          <Text style={[styles.titleText, { color: login ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign: login ? 'center' : 'left' }]}>Emi Calculator</Text>
         </TouchableOpacity>
+      
       </View>
+      <View style={{flexDirection:'row'}}>
+      <TouchableOpacity style={{
+marginHorizontal:5
+      }} onPress={() => Linking.openURL('https://www.superselect.in/about')}>
+          <Text style={[styles.titleText,{fontSize:14}]}>About Us</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{
+marginHorizontal:5
+}} onPress={() => Linking.openURL('https://www.superselect.in/privacy')}>
+    <Text style={[styles.titleText,{fontSize:14}]}>Privacy</Text>
+  </TouchableOpacity>
+  <TouchableOpacity style={{
+marginHorizontal:5
+}} onPress={() => Linking.openURL('https://www.superselect.in/terms')}>
+    <Text style={[styles.titleText,{fontSize:14}]}>Term</Text>
+  </TouchableOpacity>
+  </View>
     </View>
   );
 }

@@ -17,10 +17,8 @@ import { StyleSheet } from "react-native";
 import { Colors } from "../../src/utils/color";
 import { Text } from "react-native";
 import FastImage from "react-native-fast-image";
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { getYearFromFormattedDateString } from "../../src/utils/date-time";
+import SpecialTag from '../../assets/svg/specialTag.svg';
 import CarKeyPointsItem from "../CarKeyPointsItem";
 // import soldOutImg from "../../src/assets/img/sold-out.png";
 
@@ -98,12 +96,20 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
               [styles.tags]
             }
           >
-          <Text style={{color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed', }}>  {data.status === "booked"
-              ? "BOOKED"
-              : data?.special === 1
-              ? "SPECIAL"
-              : ""}
+             {data.status === "booked" ?
+          <Text style={{color: Colors.BLACK_COLR,  fontFamily: 'Oxanium-Medium', }}> 
+               "BOOKED"
+
             </Text>
+            :
+            <SpecialTag height={40} width={40} color="yellow"/>
+          //   <Image
+          //   source={require("../../assets/img/crown.png")}
+          //   resizeMode={'contain'}
+          //   style={{ height: 40, width: 40, margin:10}}
+          //   alt="SOLD OUT"
+          // />
+             }
           </View>
         )}
 
@@ -147,9 +153,9 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 10,
     position: 'absolute',
-    top: 0,
-    right: 0,
-    backgroundColor: 'yellow',
+    top: 10,
+    right: 10,
+    // backgroundColor: 'yellow',
   }
 })
 
