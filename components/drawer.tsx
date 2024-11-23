@@ -20,7 +20,8 @@ const SuperSelectDrawer = (props) => {
   const getName = async () => {
     const name = await AsyncStorage.getItem('name');
     const access_token = await AsyncStorage.getItem("access_token")
-    setLogin(access_token === null)
+    console.log("acess",access_token)
+    setLogin(access_token !== null)
     setName(name)
   }
 
@@ -33,7 +34,7 @@ const SuperSelectDrawer = (props) => {
           <Text numberOfLines={1} style={styles.titleText}>Hello, {username}</Text>
         </View>
         {
-          login &&
+          !login &&
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={[styles.buttonContainer, { flex: 1, backgroundColor: Colors.BLACK_COLR, justifyContent: 'center' }]} onPress={() => props.navigation.navigate('SignIn')}>
               <Text style={[styles.titleText, { color: Colors.PURE_WHITE }]}>Login</Text>
@@ -65,8 +66,8 @@ const SuperSelectDrawer = (props) => {
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
           <Text style={styles.titleText}>Insurance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: login ? Colors.BLACK_COLR : Colors.PURE_WHITE }]} onPress={() => props.navigation.navigate('Calculator')}>
-          <Text style={[styles.titleText, { color: login ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign: login ? 'center' : 'left' }]}>Emi Calculator</Text>
+        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: !login ? Colors.BLACK_COLR : Colors.PURE_WHITE }]} onPress={() => props.navigation.navigate('Calculator')}>
+          <Text style={[styles.titleText, { color: !login ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign: login ? 'center' : 'left' }]}>Emi Calculator</Text>
         </TouchableOpacity>
       
       </View>

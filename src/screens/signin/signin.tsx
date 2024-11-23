@@ -25,7 +25,8 @@ import { doSendOTP } from '../../utils/extraAPIs/sendOTP';
 
 const loginValidationSchema = yup.object().shape({
     phoneNumber: yup
-        .string(),
+        .string()
+        .required('Phone Number is required'),
     password: yup
         .string()
         .required('Password is required'),
@@ -42,11 +43,6 @@ const SignInScreen = (props: any) => {
     const bagRef = useRef(null);
 
     const logins = async (phoneNumber: string, password: string) => {
-        // const values = {
-        //     "number": "9876544422",
-        //     "password": "Test@123",
-        //     "fcmToken": await createFirebaseToken()
-        // }
         const values = {
             "number": phoneNumber,
             "password": password,
@@ -69,6 +65,7 @@ const SignInScreen = (props: any) => {
 
     const sendOTP = async (phoneNumber: string) => {
         console.log("forgot")
+        if(phoneNumber !== ""){
         const { success, message, data } = await doSendOTP({ number: phoneNumber, type: 'forgot-password' });
 
         if (success) {
@@ -78,6 +75,9 @@ const SignInScreen = (props: any) => {
             console.log(message);
             setError("No account found with this number")
         }
+    }else{
+        setError("Please Enter Phone Number")
+    }
     }
 
     //
@@ -94,27 +94,19 @@ const SignInScreen = (props: any) => {
                     />
                 </View>
                 <Text style={styles.errorText}>{error}</Text>
-                {/* <div className={styles.server_error}>{error}</div> */}
 
                 <View style={styles.forgotPassword}>
-                    {/* <View style={styles.server_error}>{error}</View> */}
-                    {/* <TouchableOpacity
-            style={styles.change_email}
-            onPress={() => setShowResetPassword(false)}
-          >
-            <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
-          </TouchableOpacity> */}
-
 
 
                     <View style={styles.textinputContainer}>
-                        <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
+                        <Ionicons name={'call-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                         <TextInput
                             // name="email"
                             placeholder="Phone Number"
                             style={styles.textInput}
                             onChangeText={(text) => setphoneNumber(text)}
-                            keyboardType="email-address"
+                               keyboardType="number-pad"
+                            placeholderTextColor={Colors.BLACK_COLR}
                         />
 
                     </View>
@@ -182,6 +174,7 @@ const SignInScreen = (props: any) => {
                                     <Text style={styles.errorMsgText}>{errors.phoneNumber}</Text>
                                 }
                             </View>
+                          
                             <View style={styles.textinputParentContainer}>
                                 <View style={styles.textinputContainer}>
                                     <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
@@ -259,7 +252,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: Colors.BORDER_COLOR
+        borderRadius:10,
+        borderColor: Colors.BLACK_COLR
     },
     iconStyle: {
         marginHorizontal: 5,
@@ -270,8 +264,9 @@ const styles = StyleSheet.create({
         color: Colors.BLACK_COLR
     },
     errorMsgText: {
-        fontSize: 18,
-        color: 'red'
+        fontSize: 14,
+    color: 'red',
+    paddingBottom: 10
     },
     errorText: {
         fontSize: 16,
@@ -319,7 +314,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 25,
         elevation: 10,
-        backgroundColor: Colors.BLACK_COLR,
+        backgroundColor: Colors.PURE_WHITE,
     },
     processButton: {
         width: '100%',
@@ -331,7 +326,7 @@ const styles = StyleSheet.create({
         // marginHorizontal: 10
     },
     processText: {
-        color: Colors.BLACK_COLR,
+        color: Colors.PURE_WHITE,
         fontSize: 17
     },
     forgotPassword: {

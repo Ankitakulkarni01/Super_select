@@ -51,6 +51,8 @@ const loginValidationSchema = yup.object().shape({
 const CELL_COUNT = 4;
 
 const ForgotPasswordScreen = (props: any) => {
+
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [complete, setComplete] = useState(false);
@@ -145,7 +147,7 @@ const ForgotPasswordScreen = (props: any) => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'call-outline'} size={20} color={Colors.BORDER_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'call-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     placeholder="Phone Number"
                     style={styles.textInput}
@@ -155,7 +157,7 @@ const ForgotPasswordScreen = (props: any) => {
                     keyboardType="email-address"
                     editable={false}
                     selectTextOnFocus={false}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                   />
                 </View>
                 {errors.phoneNumber && touched.phoneNumber &&
@@ -164,14 +166,14 @@ const ForgotPasswordScreen = (props: any) => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     placeholder="Password"
                     style={styles.textInput}
                     onChangeText={handleChange('password')}
                     onBlur={handleBlur('password')}
                     value={values.password}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                     secureTextEntry
                   />
                 </View>
@@ -181,7 +183,7 @@ const ForgotPasswordScreen = (props: any) => {
               </View>
               <View style={styles.textinputParentContainer}>
                 <View style={styles.textinputContainer}>
-                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.LIGTH_COLOR} style={styles.iconStyle} />
+                  <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                   <TextInput
                     // name="password"
                     placeholder="Confirm Password"
@@ -189,7 +191,7 @@ const ForgotPasswordScreen = (props: any) => {
                     onChangeText={handleChange('confirmPassword')}
                     onBlur={handleBlur('confirmPassword')}
                     value={values.confirmPassword}
-                    placeholderTextColor={Colors.LIGTH_COLOR}
+                    placeholderTextColor={Colors.BLACK_COLR}
                     secureTextEntry
                   />
                 </View>
@@ -200,6 +202,8 @@ const ForgotPasswordScreen = (props: any) => {
               <View>
                 <ActionButton
                   onPress={handleSubmit}
+                  backgroundColor={Colors.BLACK_COLR}
+                  color={Colors.PURE_WHITE}
                   title={loading ? 'Process' : "Reset Password"}
                 />
               </View>
@@ -224,7 +228,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 25,
     elevation: 10,
-    backgroundColor: Colors.BLACK_COLR,
+    // backgroundColor: Colors.PURE_WHITE,
   },
   forget_password: {
     justifyContent: 'center',
@@ -245,7 +249,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     // padding: 5,
-    borderColor: Colors.SKELETON_COLOR_2
+    borderColor: Colors.BLACK_COLR
   },
   iconStyle: {
     marginLeft: 10,
@@ -253,12 +257,13 @@ const styles = StyleSheet.create({
   textInput: {
     height: 45,
     width: '70%',
-    color: Colors.PURE_WHITE,
+    color: Colors.BLACK_COLR,
     marginLeft: 10
   },
   errorMsgText: {
-    fontSize: 10,
-    color: 'red'
+    fontSize: 14,
+    color: 'red',
+    paddingBottom: 10
   },
   signInContainer: {
     flexDirection: "row",
@@ -316,7 +321,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   signUpText: {
-    color: Colors.PURE_WHITE,
+    color: Colors.BLACK_COLR,
     fontSize: 17
   },
   cancelButton: {
@@ -346,9 +351,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 25,
     elevation: 10,
-    backgroundColor: 'white',
+    backgroundColor: Colors.BLACK_COLR,
   },
-  codeFieldRoot: { marginTop: 20 },
+  codeFieldRoot: { marginTop: 20, color:Colors.BLACK_COLR },
   cell: {
     width: 60,
     height: 40,
@@ -356,17 +361,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     borderWidth: 1,
     marginHorizontal: 5,
-    borderColor: Colors.BORDER_COLOR,
+    borderColor: Colors.BLACK_COLR,
     textAlign: 'center',
-    color: Colors.PURE_WHITE
+    color: Colors.BLACK_COLR
   },
   focusCell: {
-    borderColor: Colors.BORDER_COLOR,
-    color: Colors.PURE_WHITE
+    borderColor: Colors.BLACK_COLR,
+    color: Colors.BLACK_COLR
   },
   title: {
     fontSize: 18,
-    color: Colors.PURE_WHITE
+    color: Colors.BLACK_COLR
   }
 })
 

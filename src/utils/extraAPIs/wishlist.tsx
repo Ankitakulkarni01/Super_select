@@ -24,6 +24,7 @@ export const postWishlistAPI = async (data:WishlistDataType) => {
       method: "POST",
       payload: data,
     });
+  console.log("res", res);
   
     return res;
   };

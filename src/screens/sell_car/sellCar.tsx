@@ -220,15 +220,21 @@ export default function SellPage() {
                 {
                   name: "makeModel",
                   type: "text",
-                  placeholder: "Car Make & Model*",
+                  placeholder: "Car Make & Model",
                   required: true,
                 },
-                { name: "Name *", type: "text", required: true },
-                { name: "Email *", type: "email", required: true },
+                { name: "name", type: "text", required: true },
+                { name: "email", type: "email", required: true },
                 {
                   name: "phone",
                   type: "tel",
-                  placeholder: "Phone no *",
+                  placeholder: "Phone no",
+                  required: true,
+                },
+                {
+                  name: "phone",
+                  type: "image",
+                  placeholder: "Phone no",
                   required: true,
                 },
               ]}

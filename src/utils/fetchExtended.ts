@@ -48,8 +48,14 @@ const fetchExtended = async (fetchdata: {
     return { success, message, data };
   } catch (err) {
     const res = await err.response.data;
-    console.log("errpr",res)
-
+    console.log("errpr",err.response.status)
+if(err.response.status === 401){
+  console.log("errpr",err.response.status)
+  await AsyncStorage.removeItem("access_token")
+            await AsyncStorage.removeItem("name")
+            await AsyncStorage.removeItem('firebase_token');
+            
+}
     return {
       success: false,
       message: "Something went wrong, please try again.",

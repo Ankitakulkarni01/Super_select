@@ -24,6 +24,8 @@ const ReserveNow: FC<{
 
   const [value, setValue] = useState('');
 
+  console.log("open", open);
+
   
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({

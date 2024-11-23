@@ -29,69 +29,11 @@ import {
   launchImageLibrary
 } from 'react-native-image-picker';
 
-export type FileInputType = "image"; // | "video"
-
-interface File extends Blob {
-  /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/File/lastModified) */
-  readonly lastModified: number;
-  /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/File/name) */
-  readonly name: string;
-  /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/File/webkitRelativePath) */
-  readonly webkitRelativePath: string;
-}
-
-type FormValueType = {
-  [key: string]: string | number | Array<File> | Array<string>;
-};
-
-interface GeneralFormType {
-  formName: string;
-  inputs: Array<{
-    name: string;
-    type: "text" | "number" | "email" | "tel" | "select" | "date" | "radio";
-    required?: boolean;
-    placeholder?: string;
-    defaultValue?: string | number;
-    isTextField?: boolean;
-    selectOptions?: Array<{
-      value: string;
-      text?: string;
-    }>;
-    radioGroupDirection?: "row" | "column";
-    flex?: 1 | 2;
-    prefix?: string;
-    suffix?: string;
-    isCurrency?: boolean;
-  }>;
-
-  fileInputs?: Array<{
-    name: string;
-    type: FileInputType;
-    count: number;
-    required?: boolean;
-    placeholder?: string;
-    defaultValue?: Array<File>;
-  }>;
-
-  hideErrorText?: boolean;
-  submitButtonText?: string;
-  filesAreUploading?: boolean;
-  withAcknowledgment?: boolean;
-  acknowledgmentTitle?: string;
-  onSubmit: (values: FormValueType) => Promise<void | ApiResponseType>;
-}
 
 
 
-const GeneralForm: FC<GeneralFormType> = ({
-  formName,
-  inputs,
-  fileInputs = [],
-  hideErrorText,
-  submitButtonText = "Submit Request",
-  filesAreUploading,
-  withAcknowledgment,
-  acknowledgmentTitle = "Request Submitted",
+
+const SellCarForm: FC<SellCarFormType> = ({
   onSubmit,
 }) => {
   const [filePath, setFilePath] = useState({});
@@ -424,7 +366,7 @@ const GeneralForm: FC<GeneralFormType> = ({
                   {!hideErrorText && hasError &&
                     <Text style={styles.errorMsgText}>{errors[d.name]}</Text>
                   }
-                  <>
+                  {/* <>
                     {fileInputs?.map((d, i) => {
                       const hasError =
                         errors[d.name] && touched[d.name] ? true : false;
@@ -437,7 +379,7 @@ const GeneralForm: FC<GeneralFormType> = ({
                         </View>
                       );
                     })}
-                  </>
+                  </> */}
                 </>
               );
             })}
@@ -472,4 +414,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default GeneralForm;
+export default SellCarForm;

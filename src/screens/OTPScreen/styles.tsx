@@ -59,8 +59,9 @@ export default StyleSheet.create({
         backgroundColor: Colors.BLACK_COLR
     },
     errorMsgText: {
-        fontSize: 10,
-        color: 'red'
+        fontSize: 14,
+        color: 'red',
+        paddingBottom: 10
     },
     errorText: {
         fontSize: 10,

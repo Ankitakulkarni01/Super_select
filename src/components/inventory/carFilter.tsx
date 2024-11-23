@@ -435,18 +435,19 @@ export const CarFilterSkeleton: FC<{ count?: number }> = ({ count }) => {
   const data = useMemo(() => Array.from(Array(count ?? 1).keys()), [count]);
 
   return (
-    <View style={styles.CarFilterSkeleton_Wrapper}>
-      <Text style={styles.heading}>Filters</Text>
+    <ScrollView>
 
       {data.map((_, i) => (
-        <View style={styles.CarFilterSkeleton} key={i}>
-          <View style={styles.wrap}>
-            <View style={styles.title} />
-            <View style={styles.select} />
-          </View>
+        <View style={styles.CarItemListSkeleton} key={i}>
+        <View style={styles.wrap}>
+          <View style={styles.img} />
+          <View style={[styles.points,{marginRight:60}]} />
+          <View style={[styles.points,{marginRight:100}]} />
+          <View style={[styles.points,{marginTop:25, height:50}]} />
         </View>
+      </View>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 //
@@ -559,13 +560,38 @@ const styles = StyleSheet.create({
     fontFamily: 'Oxanium-Medium'
   },
   CarFilterSkeleton_Wrapper: {
-    height:100
+    backgroundColor: '#F6F6F6', 
+        borderRadius: 13, 
+        padding: 16, 
+        marginBottom: 16, 
+        marginTop: 50, 
   },
-  CarFilterSkeleton: {
-    height:100
+
+  CarItemListSkeleton: {
+    // backgroundColor: '#ccc', 
+    borderRadius: 4, 
+    marginBottom: 20, 
+    height:350,
+    // borderWidth:1,
+
+borderColor: '#ccc', 
+marginHorizontal:10
+  },
+  img:{
+    backgroundColor: '#ccc', 
+    height:200,
+    borderRadius: 4, 
+    marginBottom: 8, 
+  },
+  points:{
+    backgroundColor: '#ccc', 
+    borderRadius: 4, 
+    height:20,
+    marginBottom: 8, 
   },
   wrap: {
-    height:100
+    borderRadius: 4, 
+    marginBottom: 8, 
   },
   select: {
     height:100

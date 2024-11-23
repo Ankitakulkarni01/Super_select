@@ -58,7 +58,7 @@ const InventoryPage = (props: any) => {
   );
   //
 
-  console.log(carListRES, filterWithSort);
+  console.log(carListRES, filterWithSort, isLoading);
 
 
   useEffect(() => {
@@ -96,10 +96,10 @@ const InventoryPage = (props: any) => {
 
   return (
     <View style={{flex:1}}>
-      {/* {
-        isLoading &&
+      {
+        isLoading && 
         <CarFilterSkeleton count={7} />
-      } */}
+      }
       <Modal
         visible={modalVisible}>
         <CarFilter
