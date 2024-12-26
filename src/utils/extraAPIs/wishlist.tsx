@@ -13,7 +13,7 @@ export const getWishlistAPI = async () => {
     url: `${API_BASE_PATH}/wishlist-get`,
     method: "GET",
   });
-
+  console.log("res", res.data);
   return res;
 };
 

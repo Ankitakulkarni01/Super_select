@@ -107,8 +107,9 @@ const styles = StyleSheet.create({
    
   },
   navItemText: {
-    fontSize: 16,
-    color: 'black'
+    fontSize: 18,
+    color: 'black',
+    textTransform:'uppercase'
   },
 });
 

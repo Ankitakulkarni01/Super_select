@@ -78,6 +78,7 @@ const CarFilter: FC<{
     handleCurrentFilters({});
 
     onReset();
+    onClose()
   }, [setCurrent, handleCurrentFilters, onReset]);
   //
 
@@ -102,8 +103,8 @@ const CarFilter: FC<{
 marginLeft:10,
     fontFamily: 'Oxanium-Medium'}}>Filter</Text>
       <ActionButton
-          onPress={() => onClose()}
-          title="X" backgroundColor={Colors.PURE_WHITE}
+        onPress={() => reset()}
+          title="Reset" backgroundColor={Colors.PURE_WHITE}
           color={Colors.BLACK_COLR}
           border={1}
         />
@@ -186,16 +187,9 @@ marginLeft:10,
       </ScrollView>
       <View style={{ flexShrink: 0 }}>
         <ActionButton
-          onPress={() => console.log("Apply")}
+          onPress={() => onClose()}
           title="Apply" backgroundColor={Colors.BLACK_COLR}
           color={Colors.PURE_WHITE}
-          border={1}
-        />
-        <ActionButton
-          onPress={() => reset()}
-
-          title="Cancel" backgroundColor={Colors.PURE_WHITE}
-          color={Colors.BLACK_COLR}
           border={1}
         />
       </View>
@@ -316,7 +310,7 @@ const CustomMUISelect: FC<{
               />
               <ActionButton
                 onPress={() => refScrollable?.current.close()}
-                title="Cancel" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+                title="Reset" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
               />
           </View>
         </RBSheet>

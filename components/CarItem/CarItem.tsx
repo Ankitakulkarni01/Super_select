@@ -30,7 +30,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
   const onOpenCarDetails = () => {
     props.navigation.navigate('CarDetails', {
-      carData: data,
+      carId: data.id,
     })
   }
 
@@ -40,7 +40,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
       <View style={{ margin: 15 }}>
 
       <FastImage
-        style={{ width: '100%', height: 270,borderRadius:10}}
+        style={{ width: '100%', height: 250,borderRadius:10}}
         source={{
           uri: data.previewImage,
 
@@ -57,7 +57,6 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
             <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Oxanium-Medium', fontSize: 18, letterSpacing: 2 }}>{currencyValueFormatter(data.price)} </Text>
             :
             <ActionButton
-
               onPress={() => console.log("conat=")}
               title="Contact For Price" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
             />
@@ -134,13 +133,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PURE_WHITE,
     textAlign: "left",
     borderRadius: 5,
-    margin: 10,
+    paddingHorizontal: 20,
   },
   info: {
     flexDirection: 'row',
-    margin: 10,
-    paddingTop: 5,
-    marginTop: 5,
+    marginHorizontal: 10,
   },
   special: {
 

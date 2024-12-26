@@ -32,6 +32,7 @@ export default CarKeyPointsItem;
 const styles = StyleSheet.create({
   carKeyContainer:{
     height:100,
+    width:120,
     borderWidth:1,
     borderColor: Colors.SKELETON_COLOR_2,
     alignItems:'center',

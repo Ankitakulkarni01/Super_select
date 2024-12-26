@@ -58,7 +58,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
   const { isLoading, data: carDataRes } = useQuery({
     queryKey: [],
-    queryFn: () => getCarDetails(route.params.carData.id),
+    queryFn: () => getCarDetails(route.params.carId),
   });
   //
 
@@ -182,7 +182,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
 
   // //
 
-  const soldOut = route.params.carData.status === "soldOut";
+  const soldOut = carData?.status === "soldOut";
 
 
   const carSoldOut = carData?.status === "soldOut";
@@ -293,7 +293,9 @@ const CarDetailsScreen = ({ navigation, route }) => {
               <Modal
                 visible={reserveModal}
                 onRequestClose={() => setReserveModal(false)}>
-                  <ReserveNow carData={carData}/>
+                  <ReserveNow carData={carData}
+                  onClose={() => setReserveModal(false)}
+                  />
                
               </Modal>
             }

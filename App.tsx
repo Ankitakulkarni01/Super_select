@@ -8,10 +8,12 @@ import {
 
 import messaging from '@react-native-firebase/messaging';
 import {
+  Platform,
   SafeAreaView, StatusBar, Text,
 } from 'react-native';
+import notifee, { EventType } from '@notifee/react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { CommonActions, NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
@@ -34,7 +36,41 @@ const App = (props: any) => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      const {data} = remoteMessage
+
+      console.log("data?.carId",data?.carId);
+      
+      if (data?.carId) {
+        CommonActions.navigate('CarDetails', {
+          carId: data?.carId,
+        })
+      }
+
     });
+
+    // Foreground event handler
+notifee.onForegroundEvent((message) => {
+  console.log('onForegroundEvent', JSON.stringify(remoteMessage));
+  switch (message?.type) {
+    case EventType.PRESS:
+      CommonActions.navigate('CarDetails', {
+        carId: message?.data?.carId,
+      })
+      break;
+    default:
+      break;
+  }
+});
+
+// Background event handler
+notifee.onBackgroundEvent(async (message) => {
+  console.log('onForegroundEventCLICKBACKGROUND✨', Platform.OS, message);
+
+// on kill mode redirection to specific page was not happeing so did this workaround
+CommonActions.navigate('CarDetails', {
+  carId: message?.data?.carId,
+})
+});
 
     return unsubscribe;
   }, []);
@@ -88,6 +124,7 @@ const App = (props: any) => {
 
   const checkToken = async () => {
     const fcmToken = await AsyncStorage.getItem('firebase_token');
+    console.log("firebase_token'", fcmToken)
     if (fcmToken) {
 
       messaging().onNotificationOpenedApp(async remoteMessage => {

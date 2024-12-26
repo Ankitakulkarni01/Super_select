@@ -166,10 +166,14 @@ const downloadFile = (fileUrl) => {
   //
 
   return (
-    <ScrollView style={styles.fullScreen} >
+    <View style={styles.fullScreen} >
       <Text style={{ color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>hello {username}</Text>
       <Text style={{ color: Colors.BLACK_COLR,marginVertical: 15, fontSize: 18, textTransform: 'uppercase' }}>Here are your purchase details</Text>
       {
+      pdfData.length !== 0 ?
+
+      <ScrollView style={styles.fullScreen} >
+        {
         pdfData.map((d, i) => (
           <View style={{ flex:1, margin:5,
             shadowColor: '#171717',
@@ -188,8 +192,14 @@ const downloadFile = (fileUrl) => {
             </View>
           </View>
         ))
+}
+</ScrollView>
+        :
+        <View style={{justifyContent:'center',alignItems:'center', flex:1}}>
+        <Text style={{color:Colors.BLACK_COLR, fontFamily: 'Oxanium-Regular',fontSize: 17}}>No purchases found</Text>
+        </View>
       }
-    </ScrollView>
+    </View>
   );
 }
 
@@ -199,8 +209,8 @@ const downloadFile = (fileUrl) => {
 const styles = StyleSheet.create({
 
   fullScreen: {
-    padding: 10
-    // backgro,undColor: "black"
+    padding: 10,
+    flex:1
   },
   pdf: {
     flex:1,

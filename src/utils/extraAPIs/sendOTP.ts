@@ -10,7 +10,7 @@ export type SendOTPDataType = {
 };
 
 export const doSendOTP = async (data: SendOTPDataType) => {
-  console.log(data)
+  console.log("otp",data)
   const res = await fetchExtended({
     url: `${API_BASE_PATH}/send-otp`,
     method: "POST",

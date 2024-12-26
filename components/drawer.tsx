@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Drawer } from 'react-native-drawer-layout';
 import { Colors } from '../src/utils/color';
 
@@ -28,7 +28,7 @@ const SuperSelectDrawer = (props) => {
 
   return (
     <View style={{ marginTop: 25, marginHorizontal: 15, justifyContent: 'space-between', flex: 1, marginBottom: 10 }}>
-      <View style={{ flex: 1 }}>
+      <ScrollView >
         <View style={styles.buttonContainer}>
           <User height={50} width={40} />
           <Text numberOfLines={1} style={styles.titleText}>Hello, {username}</Text>
@@ -70,7 +70,7 @@ const SuperSelectDrawer = (props) => {
           <Text style={[styles.titleText, { color: !login ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign: login ? 'center' : 'left' }]}>Emi Calculator</Text>
         </TouchableOpacity>
       
-      </View>
+      </ScrollView>
       <View style={{flexDirection:'row'}}>
       <TouchableOpacity style={{
 marginHorizontal:5
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     justifyContent: 'space-between',
     flex: 1,
+    // width:100,
     marginBottom: 10,
     flexDirection: 'row',
     backgroundColor: '#ecf0f1',
@@ -106,17 +107,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     // justifyContent:'center',
+    borderWidth:1,
     flexDirection: 'row',
     marginVertical: 10,
     borderRadius: 25,
     padding: 10,
-    // paddingBottom: 5,
-    shadowColor: '#171717',
+    borderColor: '#171717',
     backgroundColor: Colors.PURE_WHITE,
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 20
   },
   iconContainer: {
     backgroundColor: Colors.SHADOW_COLOR,

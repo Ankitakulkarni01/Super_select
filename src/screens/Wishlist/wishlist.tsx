@@ -23,10 +23,11 @@ const WishListScreen = (props: any) => {
   const getWishlist = async () => {
     setLoading(true)
     const { success, message, data } = await getWishlistAPI()
+    console.log("wishlist data", data);
     if (success) {
       setCarData(data)
       setLoading(false)
-      console.log("wishlist data", data);
+      
       
     }
     else{
@@ -59,6 +60,7 @@ const WishListScreen = (props: any) => {
           <CarItem
             data={d}
             props={props}
+            key={i}
           />
           
         ))}

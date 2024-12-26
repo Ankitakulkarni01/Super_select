@@ -17,7 +17,8 @@ const CELL_COUNT = 4;
 
 const ReserveNow: FC<{
   carData: Car;
-}> = ({ carData }) => {
+  onClose: () => void;
+}> = ({ carData, onClose }) => {
   const [username, setName] = useState("");
   const [open, setopen] = useState(true)
   const [otp, setOtp] = useState("")
@@ -57,8 +58,8 @@ const ReserveNow: FC<{
 
       
 
-        // const { doSendOTP } = await import("../../utils/formAPIs/sentOtp");
-        // await doSendOTP({ number: data.phone });
+        const { doSendOTP } = await import("../../utils/extraAPIs/sendOTP");
+        await doSendOTP({ number: data.phone });
 
         // const OtpAsyncPopup = (await import("@/components/OtpAsyncPopup"))
         //   .default;
@@ -123,7 +124,8 @@ const ReserveNow: FC<{
         <View style={styles.heading}>
           <Text style={styles.headingText}>Reserve Now</Text>
           <TouchableOpacity style={styles.close_btn} 
-          onPress={() => console.log("close")
+          onPress={() => 
+            onClose()
           }>
         <Text style={styles.carName}>X</Text>
       </TouchableOpacity>
@@ -172,15 +174,6 @@ const ReserveNow: FC<{
               required: true,
               flex: 2,
             },
-            // {
-            //   name: "requestPrice",
-            //   type: "number",
-            //   placeholder: "Request Price",
-            //   required: true,
-            //   flex: 2,
-            //   prefix: "₹",
-            //   isCurrency: true,
-            // },
           ]}
           onSubmit={onFormSubmit}
           submitButtonText="Get OTP"

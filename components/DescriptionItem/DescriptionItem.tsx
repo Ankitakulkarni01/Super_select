@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     },
     subheading:{
         color:Colors.BLACK_COLR,
-        fontSize:18
+        fontSize:18,
+        textAlign:'right'
     }
   });

@@ -34,9 +34,9 @@ const RemoteNotification = () => {
             onNotification: function (notification) {
                 const { data, id } = notification;
                 const { body , title} = data
-                let strTitle: string = JSON.stringify(title).split('"').join('');
-                let strBody: string = JSON.stringify(body).split('"').join('');
-                const key: string = JSON.stringify(id).split('"').join('');
+                let strTitle: string = JSON.stringify(title);
+                let strBody: string = JSON.stringify(body);
+                const key: string = JSON.stringify(id);
                 PushNotification.createChannel(
                 {
                     channelId: key, // (required & must be unique)
