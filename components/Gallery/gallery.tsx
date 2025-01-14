@@ -86,7 +86,7 @@ const Gallery: FC<Props> = ({
                   key={index}
                 >
                   <TouchableOpacity
-                    onPress={() => onOpenFullView(exteriorImagesLength + i)}
+                    onPress={() => onOpenFullView(exteriorImagesLength + index)}
                   >
                     <FastImage
                       style={{ width: '100%', height: 100, borderRadius: 10 }}
@@ -117,7 +117,7 @@ const Gallery: FC<Props> = ({
                   key={index}
                 >
                   <TouchableOpacity
-                    onPress={() => onOpenFullView(exteriorImagesLength + i)}
+                    onPress={() => onOpenFullView(exteriorImagesLength + index)}
                   >
                     <FastImage
                       style={{ width: '100%', height: 100, borderRadius: 10 }}
@@ -148,7 +148,7 @@ const Gallery: FC<Props> = ({
                   key={index}
                 >
                   <TouchableOpacity
-                    onPress={() => onOpenFullView(exteriorImagesLength + i)}
+                    onPress={() => onOpenFullView(exteriorImagesLength + index)}
                   >
                     <FastImage
                       style={{ width: '100%', height: 100, borderRadius: 10 }}
@@ -170,27 +170,6 @@ const Gallery: FC<Props> = ({
   );
 };
 
-const CustomTab = ({ data, i }) => {
-  return (
-    <View
-      style={styles.item}
-      key={i}
-    >
-      <TouchableOpacity
-      // onPress={() => onOpenFullView(exteriorImagesLength + i)}
-      >
-        <FastImage
-          style={{ width: '100%', height: 270, borderRadius: 10 }}
-          source={{
-            uri: data,
-
-          }}
-          resizeMode={FastImage.resizeMode.stretch}
-        />
-      </TouchableOpacity>
-    </View>
-  )
-}
 
 const styles = StyleSheet.create({
   Gallery: {

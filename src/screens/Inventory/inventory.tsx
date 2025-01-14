@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 
-import { FlatList, Modal, Platform, ScrollView, View } from "react-native";
+import { FlatList, Modal, Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { getCarList } from "../../utils/carAPIs/carList";
 import { CarList } from "../../../interface/car";
 import CarFilter, { CarCurrentFilterType, CarFilterOptionsType, CarFilterSkeleton } from "../../components/inventory/carFilter";
@@ -12,6 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from "../../utils/color";
 import { Switch } from "react-native";
 import { CarSortType } from "../../components/inventory/carFilter";
+import Filter from "../../assets/svg/Filter.svg";
 import { ActivityIndicator } from "react-native-paper";
 import UiTransparentLoader from "../../components/UiLoaderTransperant";
 
@@ -101,7 +102,12 @@ const InventoryPage = (props: any) => {
         <CarFilterSkeleton count={7} />
       }
       <Modal
-        visible={modalVisible}>
+        visible={modalVisible}
+        onRequestClose={() => {
+          console.log("close");
+          setModalVisible(false)
+        }}
+        >
         <CarFilter
           filterOptions={filterOptions}
           props={props}
@@ -126,12 +132,19 @@ const InventoryPage = (props: any) => {
         </View>
         :
         <ScrollView >
-        <View style={{ marginBottom: 10, padding: 10 }}>
+        <View style={{ marginBottom: 10, padding: 10, flexDirection:'row' }}>
+        <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center', marginRight: 15,height:50  }}>
+              <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, letterSpacing:2 }} >Exclude Sold Out</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                thumbColor={Colors.BLACK_COLR}
+                ></Switch>
+              </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end', }}>
             <View style={{ flexDirection: 'row', borderRadius: 15, justifyContent: 'flex-end', alignItems: 'flex-end', }}>
-              <Text style={{ color: Colors.PURE_WHITE, marginRight: 10, letterSpacing: 2, padding: 10, backgroundColor: Colors.BLACK_COLR, borderRadius: 15 }} onPress={() => {
+              <TouchableOpacity style={{ marginRight: 10,  padding: 10, backgroundColor: Colors.BLACK_COLR, borderRadius: 15 }} onPress={() => {
                 setModalVisible(true)
-              }}>Filters</Text>
+              }}><Filter height={50} width={50}/></TouchableOpacity>
             </View>
           </View>
 

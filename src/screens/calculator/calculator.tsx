@@ -9,6 +9,7 @@ import {
 import { Colors } from '../../utils/color';
 import { currencyValueFormatter } from '../../utils/numberOperations';
 import { ZebulonCondensed } from '../../utils/fonts';
+import { hasNumbersOnly } from '../../utils/regex';
 
 
 const DEFAULT_VALUE = 0.2;
@@ -31,12 +32,22 @@ const SliderContainer = (props: {
   // const [value, setValue] = React.useState(
   //   sliderValue ? sliderValue : DEFAULT_VALUE,
   // );
-  const onChangeInner = (text: string) => {
-    console.log("text");
-    const numberValue = parseFloat(text);
-    onChange(numberValue);
-    // setValue(numberValue)
-  }
+  const onChangeInner = useCallback(
+    async (text: String) => {
+      const value = text;
+
+      if (value.match(hasNumbersOnly)) {
+        const numberValue = parseFloat(text);
+
+        const blockAndReplaceNumberInputBeyondMax = (
+          await import("../../utils/domFixes")
+        ).blockAndReplaceNumberInputBeyondMax;
+
+        onChange(blockAndReplaceNumberInputBeyondMax(numberValue, max));
+      }
+    },
+    [onChange, max]
+  );
   let renderTrackMarkComponent: React.ReactNode;
 
   const onSliderChange = useCallback(

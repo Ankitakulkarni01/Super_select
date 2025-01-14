@@ -161,17 +161,19 @@ CommonActions.navigate('CarDetails', {
 
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.PURE_WHITE }}>
+    
+      <SafeAreaView style={{ flex: 1, }}>
+      <QueryClientProvider client={queryClient}>
         <PaperProvider>
           <NavigationContainer>
             <RemoteNotification />
-            <StatusBar animated={true} backgroundColor="#5856D6" />
+            <StatusBar animated={true} backgroundColor="#0000000" />
             <HomeStack />
           </NavigationContainer>
         </PaperProvider>
+        </QueryClientProvider>
       </SafeAreaView>
-    </QueryClientProvider>
+    
 
   );
 };

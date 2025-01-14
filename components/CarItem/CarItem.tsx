@@ -49,7 +49,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
       />
       </View>
 
-      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 20, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
           data.price > 0

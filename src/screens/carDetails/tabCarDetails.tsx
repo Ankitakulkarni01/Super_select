@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     color: Colors.BLACK_COLR,
     fontWeight: '600',
     fontSize: 18,
+    
     margin:10,
     paddingBottom: 15,
     borderBottomWidth:1,
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
   },
   subheading: {
     color: Colors.BLACK_COLR,
+    fontWeight: '600',
     fontSize: 18,
     textAlign:'right'
   }
