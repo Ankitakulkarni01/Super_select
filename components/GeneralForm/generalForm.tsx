@@ -29,6 +29,8 @@ import {
   launchImageLibrary
 } from 'react-native-image-picker';
 
+import PlusIcon from "../../src/assets/svg/plusIcon.svg";
+
 export type FileInputType = "image"; // | "video"
 
 interface File extends Blob {
@@ -48,7 +50,7 @@ interface GeneralFormType {
   formName: string;
   inputs: Array<{
     name: string;
-    type: "text" | "number" | "email" | "tel" | "select" | "date" | "radio";
+    type: "text" | "number" | "email" | "tel" | "select" | "date" | "radio" | "image";
     required?: boolean;
     placeholder?: string;
     defaultValue?: string | number;
@@ -185,6 +187,7 @@ const GeneralForm: FC<GeneralFormType> = ({
           break;
 
         case "select":
+          case "image" :
         case "radio":
           values[ele.name] = string().when("_", (_, schema) => {
             return ele.required
@@ -395,7 +398,15 @@ const GeneralForm: FC<GeneralFormType> = ({
                             }
                           />
                         );
-
+                        case 'image': {
+                            return (
+                              <View style={styles.custom_input_file} key={i}>
+                                <TouchableOpacity onPress={() => chooseFile('photo')} style={styles.btnSection}  >
+                                 <PlusIcon height={40} width={40}/>
+                                </TouchableOpacity>
+                              </View>
+                            );
+                        }
                       default:
                         return (
                           <TextInput
@@ -424,20 +435,6 @@ const GeneralForm: FC<GeneralFormType> = ({
                   {!hideErrorText && hasError &&
                     <Text style={styles.errorMsgText}>{errors[d.name]}</Text>
                   }
-                  <>
-                    {fileInputs?.map((d, i) => {
-                      const hasError =
-                        errors[d.name] && touched[d.name] ? true : false;
-
-                      return (
-                        <View style={styles.custom_input_file} key={i}>
-                          <TouchableOpacity onPress={() => chooseFile('photo')} style={styles.btnSection}  >
-                            <Text style={styles.btnText}>Choose File</Text>
-                          </TouchableOpacity>
-                        </View>
-                      );
-                    })}
-                  </>
                 </>
               );
             })}
@@ -458,8 +455,14 @@ const styles = StyleSheet.create({
 
   },
   btnSection: {
-    flex: 1,
-    borderWidth: 1
+    // flex: 1,
+    height:50,
+    width:50,
+    backgroundColor: Colors.LIGTH_COLOR,
+    alignItems:'center',
+    justifyContent:'center',
+    borderRadius:10,
+    marginTop:10
   },
   btnText: {
     color: Colors.BLACK_COLR

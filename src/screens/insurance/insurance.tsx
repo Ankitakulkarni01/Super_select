@@ -42,7 +42,7 @@ useEffect(() => {
 
 <CoolHeading
         title={"Insurance"}
-        text={"Necessity"}
+        // text={"Necessity"}
       />
 
       {/* <Text style={styles.sub_heading}>

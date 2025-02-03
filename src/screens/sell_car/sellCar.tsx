@@ -3,6 +3,7 @@ import clsx from "clsx";
 import ScheduleIcon from "../../assets/svg/schedule.svg";
 import CarInspectionIcon from "../../assets/svg/car-inspection.svg";
 import SellCarIcon from "../../assets/svg/sell-car.svg";
+import CallIcon from "../../assets/svg/phone-call.svg"
 import Appointmet_car from '../../assets/svg/book Appointment.svg'
 import Car_inspection from '../../assets/svg/Car_inspection.svg'
 import Sell_car from '../../assets/svg/sell_car_icon.svg'
@@ -155,8 +156,8 @@ export default function SellPage() {
             onPress={() => onWhatappChat(siteInfo.showrooms.pune.phone)}
             title="Chat On Whatsapp " backgroundColor={'#2DB742'} color={Colors.PURE_WHITE}
           />
-          <TouchableOpacity style={{ flex: 0.3, justifyContent: 'center' }} onPress={() => onCall(siteInfo.showrooms.pune.phone)}>
-            <Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />
+          <TouchableOpacity style={{  justifyContent: 'center' }} onPress={() => onCall(siteInfo.showrooms.pune.phone)}>
+            <CallIcon height={50} width={50} color={Colors.BLACK_COLR} />
           </TouchableOpacity>
           {/* <ActionButton
             onPress={() => onCall(siteInfo.showrooms.pune.phone)}
@@ -232,23 +233,14 @@ export default function SellPage() {
                   required: true,
                 },
                 {
-                  name: "phone",
+                  name: "image",
                   type: "image",
                   placeholder: "Phone no",
                   required: true,
                 },
               ]}
-              fileInputs={[
-                {
-                  name: "carPhotos",
-                  type: "image",
-                  count: 8,
-                  placeholder: "Add Car Photos",
-                  required: true,
-                },
-              ]}
               onSubmit={onFormSubmit}
-              filesAreUploading={filesAreUploading}
+              // filesAreUploading={filesAreUploading}
               withAcknowledgment
             />
           </View>
@@ -273,7 +265,6 @@ export default function SellPage() {
             }
           </ScrollView>
         }
-        <Button title="Choose Photo" onPress={handleChoosePhoto} />
       </ScrollView >
     </>
   );

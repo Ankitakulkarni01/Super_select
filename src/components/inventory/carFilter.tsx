@@ -295,7 +295,7 @@ const CustomMUISelect: FC<{
               <Text style={[styles.title, { paddingBottom: 10 }]}>{placeholder} {title}</Text>
 
               {options?.map((opt, k) => (
-                <Text style={[styles.title, { paddingBottom: 5 }]} key={k} onPress={() => onChange(opt?.value)}>
+                <Text style={[styles.title, { paddingBottom: 5, fontFamily: value == opt?.value ? 'Oxanium-Bold': 'Oxanium-Medium'  }]} key={k} onPress={() => onChange(opt?.value)}>
                   {opt?.label ?? opt.value}
                 </Text>
               ))}

@@ -2,6 +2,8 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import HeaderNavigationMenu from "../../src/utils/navigation/HeaderNavigationMenu";
+import { Colors } from "../../src/utils/color";
+import PreviewImage from "./PreviewImage";
 
 
 export const GALLERY_POPUP_NAME = "gallery";
@@ -12,7 +14,6 @@ interface Props {
   all: Array<string>;
   exterior: Array<string>;
   interior: Array<string>;
-  onOpenFullView: (value: number) => void;
 }
 
 //
@@ -22,7 +23,7 @@ const Gallery: FC<Props> = ({
   all,
   exterior,
   interior,
-  onOpenFullView,
+  
 }) => {
 
   console.log("galeery");
@@ -30,6 +31,13 @@ const Gallery: FC<Props> = ({
 
   const [open, setOpen] = useState(false);
   const [headerMenuValue, setHeaderMenu] = useState('All')
+  const [previewImageScreen, setPreviewImageScreen] = useState(false)
+  const [image, setImage] = useState("")
+
+  const onOpenFullView = (image : string) =>{
+  setImage(image)
+  setPreviewImageScreen(true)
+  }
 
   // Listen
   useEffect(() => {
@@ -67,7 +75,18 @@ const Gallery: FC<Props> = ({
         <Text>Close</Text>
       </TouchableOpacity>
 
-      <Text style={{ color: 'black', fontSize: 20 }} >Gallery</Text>
+      <PreviewImage
+      modalVisible={previewImageScreen}
+      closed={() => setPreviewImageScreen(!previewImageScreen)}
+      open={() => setPreviewImageScreen(!previewImageScreen)}
+      imageURI={image}
+      />
+
+      <Text style={{   color: Colors.BLACK_COLR,
+          fontFamily: 'Zebulon-Condensed',
+          fontSize: 22,
+          fontWeight: '300',
+          marginTop: 10 }} >Gallery</Text>
 
       <HeaderNavigationMenu menu={routes} activeValue={headerMenuValue} setActiveValue={(value: string) => {
         setHeaderMenu(value)
@@ -86,15 +105,15 @@ const Gallery: FC<Props> = ({
                   key={index}
                 >
                   <TouchableOpacity
-                    onPress={() => onOpenFullView(exteriorImagesLength + index)}
+                    onPress={() => onOpenFullView(item)}
                   >
                     <FastImage
-                      style={{ width: '100%', height: 100, borderRadius: 10 }}
+                      style={{ width: '100%',height:150,  borderRadius: 10 }}
                       source={{
                         uri: item,
 
                       }}
-                      resizeMode={FastImage.resizeMode.stretch}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   </TouchableOpacity>
                 </View>
@@ -117,15 +136,15 @@ const Gallery: FC<Props> = ({
                   key={index}
                 >
                   <TouchableOpacity
-                    onPress={() => onOpenFullView(exteriorImagesLength + index)}
+                    onPress={() => onOpenFullView(item)}
                   >
                     <FastImage
-                      style={{ width: '100%', height: 100, borderRadius: 10 }}
+                      style={{ width: '100%',height:150, borderRadius: 10 }}
                       source={{
                         uri: item,
 
                       }}
-                      resizeMode={FastImage.resizeMode.stretch}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   </TouchableOpacity>
                 </View>
@@ -148,15 +167,15 @@ const Gallery: FC<Props> = ({
                   key={index}
                 >
                   <TouchableOpacity
-                    onPress={() => onOpenFullView(exteriorImagesLength + index)}
+                    onPress={() => onOpenFullView(item)}
                   >
                     <FastImage
-                      style={{ width: '100%', height: 100, borderRadius: 10 }}
+                      style={{ width: '100%', height:150, borderRadius: 10 }}
                       source={{
                         uri: item,
 
                       }}
-                      resizeMode={FastImage.resizeMode.stretch}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   </TouchableOpacity>
                 </View>
@@ -190,7 +209,7 @@ const styles = StyleSheet.create({
   },
   item: {
     // height: 270,
-    width: 100,
+    flex:1,
     margin: 10
   },
   dashboard: {

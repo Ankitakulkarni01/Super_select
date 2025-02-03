@@ -329,7 +329,7 @@ const CarDetailsScreen = ({ navigation, route }) => {
             }
             }
           >
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>15's photos</Text>
+            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>{allImages?.length}'s photos</Text>
           </TouchableOpacity>
 
         </View>
