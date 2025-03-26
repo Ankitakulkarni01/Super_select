@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo} from 'react';
 import {
   View,
   Text,
@@ -90,7 +90,7 @@ const value = [
   }
 ]
 
-const CarDetailScreen = ({ navigation, route }) => {
+const  CarDetailScreen = ({ navigation, route }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [showFullSpecs, setShowFullSpecs] = useState(false); const [isFullScreen, setIsFullScreen] = useState(false);
   const [showCallButton, setShowCallButton] = useState(true);
@@ -278,35 +278,35 @@ const CarDetailScreen = ({ navigation, route }) => {
 
   };
 
-  const allImages = useMemo(() => {
-
-
-    if (carDataRes?.data.exteriorImages !== undefined) {
-      const dataImages = [...carDataRes?.data.exteriorImages]
-
-      setwishlist(carDataRes?.data?.wishListId !== null)
-
-      console.log("wishlist", carDataRes?.data?.wishListId !== null)
-
-
-      const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
-      const previewIndex = both?.findIndex((x) => x === carDataRes?.data?.previewImage);
-
-      if (previewIndex > 0) {
-        both.splice(previewIndex, 1);
-        both.unshift(carData.previewImage);
+   const allImages = useMemo(() => {
+  
+  
+      if (carDataRes?.data.exteriorImages !== undefined) {
+        const dataImages = [...carDataRes?.data.exteriorImages]
+  
+        setwishlist(carDataRes?.data?.wishListId !== null)
+  
+        console.log("wishlist", carDataRes?.data?.wishListId !== null)
+  
+  
+        const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
+        const previewIndex = both?.findIndex((x) => x === carDataRes?.data?.previewImage);
+  
+        if (previewIndex > 0) {
+          both.splice(previewIndex, 1);
+          both.unshift(carData.previewImage);
+        }
+  
+        return both;
       }
-
-      return both;
-    }
-
-  }, [carDataRes]);
+  
+    }, [carDataRes]);
 
   const specifications = [
     { icon: 'engine', label: 'Engine', value: carData?.engine },
     { icon: 'horse', label: 'Power', value: carData?.driven },
     { icon: 'tachometer-alt', label: 'Mileage', value: carData?.fuelType },
-    { icon: 'cogs', label: 'Transmission', value: carData?.type },
+    { icon: 'cogs', label: 'Transmission', value:carData?.type },
     { icon: 'car', label: 'Body Type', value: 'Sedan' },
     { icon: 'users', label: 'Seating', value: '5 Seater' },
   ];
@@ -347,7 +347,7 @@ const CarDetailScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* {renderHeader()} */}
+      {renderHeader()}
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Gallery */}
         <View style={styles.imageContainer}>
@@ -429,7 +429,7 @@ const CarDetailScreen = ({ navigation, route }) => {
           <View style={styles.priceContainer}>
             <Text style={styles.price}>{currencyValueFormatter(carData?.price)}</Text>
             {/* <Text style={styles.priceSubtext}>Ex-showroom Price in Delhi</Text> */}
-            <TouchableOpacity style={styles.emiButton}  onPress={onEmailCalculator}>
+            <TouchableOpacity style={styles.emiButton}>
               <Text style={styles.emiButtonText}>Calculate EMI</Text>
             </TouchableOpacity>
           </View>
@@ -442,7 +442,7 @@ const CarDetailScreen = ({ navigation, route }) => {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.specsScrollContainer}
             >
-
+              
               {specifications.map((spec, index) => (
                 <View key={index} style={styles.specCard}>
                   <View style={styles.specIconContainer}>
@@ -453,23 +453,70 @@ const CarDetailScreen = ({ navigation, route }) => {
                 </View>
               ))}
             </ScrollView>
-          </View>
+          </View>     
           <View style={styles.specificationsContainer}>
             <Text style={styles.sectionTitle}>Specifications and Features</Text>
             <View style={styles.specificationsList}>
-              {featuresArray.map((section, index) => {
-                console.log("section", section);
-
-                return (
-                  <View key={index} style={styles.specificationSection}>
-                    <View style={styles.specificationRow}>
-                      <Text style={styles.specificationLabel}>{section}</Text>                  
-                      </View>
-                  </View>
-                )
-              })}
+              {featuresArray.map((section, index) => (
+                <View key={index} style={styles.specificationSection}>
+                  <Text style={styles.specificationTitle}>{section.title}</Text>
+                  {section.items.map((item, itemIndex) => (
+                    <View key={itemIndex} style={styles.specificationRow}>
+                      <Text style={styles.specificationLabel}>{item.label}</Text>
+                      <Text style={styles.specificationValue}>{item.value}</Text>
+                    </View>
+                  ))}
+                </View>
+              ))}
             </View>
           </View>
+
+          {/* Similar Cars */}
+          <View style={styles.similarCarsContainer}>
+            <Text style={styles.sectionTitle}>Similar Cars</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.similarCarsScrollContainer}
+            >
+              {[
+                {
+                  name: 'BMW 5 Series',
+                  price: '₹64.50 Lakh',
+                  image: 'https://api.a0.dev/assets/image?text=luxury%20bmw%205%20series%20front%20view%20studio%20lighting&aspect=16:9&seed=10',
+                  specs: ['2998 cc', 'Automatic', '5 Seater']
+                },
+                {
+                  name: 'Audi A6',
+                  price: '₹59.20 Lakh',
+                  image: 'https://api.a0.dev/assets/image?text=luxury%20audi%20a6%20front%20view%20studio%20lighting&aspect=16:9&seed=11',
+                  specs: ['1984 cc', 'Automatic', '5 Seater']
+                },
+                {
+                  name: 'Lexus ES',
+                  price: '₹56.65 Lakh',
+                  image: 'https://api.a0.dev/assets/image?text=luxury%20lexus%20es%20front%20view%20studio%20lighting&aspect=16:9&seed=12',
+                  specs: ['2487 cc', 'Automatic', '5 Seater']
+                }
+              ].map((car, index) => (
+                <TouchableOpacity key={index} style={styles.carCard}>
+                  <Image source={{ uri: car.image }} style={styles.carCardImage} />
+                  <View style={styles.carCardContent}>
+                    <Text style={styles.carCardName}>{car.name}</Text>
+                    <Text style={styles.carCardPrice}>{car.price}</Text>
+                    <View style={styles.carCardSpecs}>
+                      {car.specs.map((spec, specIndex) => (
+                        <Text key={specIndex} style={styles.carCardSpec}>
+                          {spec}
+                          {specIndex !== car.specs.length - 1 ? ' • ' : ''}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>          
+            </View>
 
           {/* WhatsApp Button */}
           <TouchableOpacity style={styles.whatsappButton}>
@@ -481,7 +528,7 @@ const CarDetailScreen = ({ navigation, route }) => {
 
       {/* Sticky Footer */}
       <View style={styles.stickyFooter}>
-        <TouchableOpacity style={styles.reserveButton} onPress={onReserveBtnClick}>
+        <TouchableOpacity style={styles.reserveButton}>
           <Text style={styles.reserveButtonText}>Reserve Now</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.callButton}>

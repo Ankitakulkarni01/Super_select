@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { arrayRange } from "../../utils/arrayRange";
 import { currencyValueFormatter } from "../../utils/numberOperations";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { Slider } from "@miblanchard/react-native-slider";
 import { Colors } from "../../utils/color";
@@ -37,14 +37,14 @@ const CarFilter: FC<{
   props: any;
   onClose: () => void;
 }> = ({ filterOptions, setCurrentFilters, onReset = () => { }, props, onClose }) => {
-  
+
 
   const [current, setCurrent] = useState<CarCurrentFilterType>({});
 
   // Handle Current Filters
   const handleCurrentFilters = useCallback(
     (values: CarCurrentFilterType) => {
-   console.log("apply", values)
+      console.log("apply", values)
       setCurrentFilters(values);
     },
 
@@ -97,13 +97,15 @@ const CarFilter: FC<{
   return (
     <View style={styles.CarFilter}>
       <View style={styles.heading}>
-<Text style={{ color: Colors.BLACK_COLR,
-    fontSize: 28,
-    flex:1,
-marginLeft:10,
-    fontFamily: 'Oxanium-Medium'}}>Filter</Text>
-      <ActionButton
-        onPress={() => reset()}
+        <Text style={{
+          color: Colors.BLACK_COLR,
+          fontSize: 28,
+          flex: 1,
+          marginLeft: 10,
+          fontFamily: 'Oxanium-Medium'
+        }}>Filter</Text>
+        <ActionButton
+          onPress={() => reset()}
           title="Reset" backgroundColor={Colors.PURE_WHITE}
           color={Colors.BLACK_COLR}
           border={1}
@@ -236,7 +238,7 @@ const CustomMUISelect: FC<{
     const onChange = useCallback(
       (value: string) => {
         console.log("value", value);
-        
+
         setValue(value);
 
         let obj = {};
@@ -262,14 +264,14 @@ const CustomMUISelect: FC<{
 
     return (
       <View style={styles.item}>
-        <View style={{flexDirection:'row'}}>
-        <Text style={styles.title} onPress={() => refScrollable?.current.open()}>{title}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.title} onPress={() => refScrollable?.current.open()}>{title}</Text>
 
-        {value !== "" ? (
-          <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
-            <Text style={{ color: Colors.BLACK_COLR }}>{value}</Text>
-          </TouchableOpacity>
-        ) : null}
+          {value !== "" ? (
+            <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
+              <Text style={{ color: Colors.BLACK_COLR }}>{value}</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
 
         <RBSheet
@@ -291,27 +293,39 @@ const CustomMUISelect: FC<{
           }}>
           <View style={{ padding: 10 , flex:1}}>
             <ScrollView>
-              <Text style={[styles.title, { marginBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.SHADOW_COLOR, paddingBottom: 10 }]} >{title}</Text>
-              <Text style={[styles.title, { paddingBottom: 10 }]}>{placeholder} {title}</Text>
+              <Text style={[styles.title, { marginBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.SHADOW_COLOR }]} >{title}</Text>
+              <View style={{ padding: 10, flexDirection: "row" }}>
+                <FlatList
+                  style={styles.dashboard}
+                  data={options}
+                  renderItem={({ item, index }: { item: string; index: number }) => {
+                    return (
+                      <TouchableOpacity style={{ paddingBottom: 5, fontFamily: value == item?.value ? 'Oxanium-Bold' : 'Oxanium-Medium', backgroundColor: value == item?.value ? 'grey' :"#000000",  borderRadius: 10, margin: 10, padding:10, paddingHorizontal:15}} >
+                      <Text style={[styles.title,{color: Colors.PURE_WHITE, textAlign:'center'}]} >
+                        {item?.label ?? item.value}
+                      </Text>
+                      </TouchableOpacity>
+                    )
+                  }}
+                  numColumns={3}
+                />
+                {/* {options?.map((opt, k) => (
+                 
+                ))} */}
+              </View>
 
-              {options?.map((opt, k) => (
-                <Text style={[styles.title, { paddingBottom: 5, fontFamily: value == opt?.value ? 'Oxanium-Bold': 'Oxanium-Medium'  }]} key={k} onPress={() => onChange(opt?.value)}>
-                  {opt?.label ?? opt.value}
-                </Text>
-              ))}
-            
             </ScrollView>
             <ActionButton
-                onPress={() => refScrollable?.current.close()}
-                title="Apply "
-                backgroundColor={Colors.PURE_WHITE}
-                color={Colors.BLACK_COLR}
-                border={1}
-              />
-              <ActionButton
-                onPress={() => refScrollable?.current.close()}
-                title="Reset" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
-              />
+              onPress={() => refScrollable?.current.close()}
+              title="Apply "
+              backgroundColor={Colors.PURE_WHITE}
+              color={Colors.BLACK_COLR}
+              border={1}
+            />
+            <ActionButton
+              onPress={() => refScrollable?.current.close()}
+              title="Reset" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+            />
           </View>
         </RBSheet>
       </View>
@@ -332,7 +346,7 @@ const CustomMUIRangeSlider: FC<{
   title: string;
   handleChange?: (value: CarCurrentFilterType) => void;
   defaultValue?: string;
-}> = ({ name, title, handleChange = () => {}, defaultValue }) => {
+}> = ({ name, title, handleChange = () => { }, defaultValue }) => {
   const [value, setValue] = useState<[number, number]>([
     MIN_VALUATION,
     MAX_VALUATION,
@@ -406,7 +420,7 @@ const CustomMUIRangeSlider: FC<{
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.sub_title}>{visibleValue}</Text>
       <Slider
-      onValueChange={onChange}
+        onValueChange={onChange}
         value={value}
         animateTransitions
         minimumTrackTintColor={Colors.BLACK_COLR}
@@ -433,13 +447,13 @@ export const CarFilterSkeleton: FC<{ count?: number }> = ({ count }) => {
 
       {data.map((_, i) => (
         <View style={styles.CarItemListSkeleton} key={i}>
-        <View style={styles.wrap}>
-          <View style={styles.img} />
-          <View style={[styles.points,{marginRight:60}]} />
-          <View style={[styles.points,{marginRight:100}]} />
-          <View style={[styles.points,{marginTop:25, height:50}]} />
+          <View style={styles.wrap}>
+            <View style={styles.img} />
+            <View style={[styles.points, { marginRight: 60 }]} />
+            <View style={[styles.points, { marginRight: 100 }]} />
+            <View style={[styles.points, { marginTop: 25, height: 50 }]} />
+          </View>
         </View>
-      </View>
       ))}
     </ScrollView>
   );
@@ -493,6 +507,7 @@ const getDrivenList = () => {
       value: "100000",
       label: "< 100000",
     },
+
   ];
 };
 //
@@ -515,8 +530,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: Colors.BLACK_COLR,
-    flexDirection:'row', 
-    alignItems:'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     // justifyContent:'center'
   },
   item: {
@@ -533,15 +548,15 @@ const styles = StyleSheet.create({
     elevation: 10
   },
   title: {
-    flex:1,
+    flex: 1,
     color: Colors.BLACK_COLR,
     fontSize: 16,
 
     fontFamily: 'Oxanium-Medium'
   },
   clear_btn: {
-    justifyContent:'flex-end',
-    alignItems:'flex-end'
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
   },
   price: {
     marginTop: 20,
@@ -554,40 +569,44 @@ const styles = StyleSheet.create({
     fontFamily: 'Oxanium-Medium'
   },
   CarFilterSkeleton_Wrapper: {
-    backgroundColor: '#F6F6F6', 
-        borderRadius: 13, 
-        padding: 16, 
-        marginBottom: 16, 
-        marginTop: 50, 
+    backgroundColor: '#F6F6F6',
+    borderRadius: 13,
+    padding: 16,
+    marginBottom: 16,
+    marginTop: 50,
   },
 
   CarItemListSkeleton: {
     // backgroundColor: '#ccc', 
-    borderRadius: 4, 
-    marginBottom: 20, 
-    height:350,
+    borderRadius: 4,
+    marginBottom: 20,
+    height: 350,
     // borderWidth:1,
 
-borderColor: '#ccc', 
-marginHorizontal:10
+    borderColor: '#ccc',
+    marginHorizontal: 10
   },
-  img:{
-    backgroundColor: '#ccc', 
-    height:200,
-    borderRadius: 4, 
-    marginBottom: 8, 
+  img: {
+    backgroundColor: '#ccc',
+    height: 200,
+    borderRadius: 4,
+    marginBottom: 8,
   },
-  points:{
-    backgroundColor: '#ccc', 
-    borderRadius: 4, 
-    height:20,
-    marginBottom: 8, 
+  points: {
+    backgroundColor: '#ccc',
+    borderRadius: 4,
+    height: 20,
+    marginBottom: 8,
   },
   wrap: {
-    borderRadius: 4, 
-    marginBottom: 8, 
+    borderRadius: 4,
+    marginBottom: 8,
   },
   select: {
-    height:100
+    height: 100
+  },
+  dashboard: {
+    marginBottom: 20,
+    flex: 1,
   }
 })

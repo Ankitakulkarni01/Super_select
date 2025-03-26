@@ -82,18 +82,18 @@ const SliderContainer = (props: {
   return (
     <View style={styles.sliderContainer}>
       <View style={styles.titleContainer}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 15 }}>
-          <Text style={{ color: 'black', fontSize: 16, flex: 1, }}>{caption}  </Text>
+        <View style={{ paddingBottom: 15 }}>
+          <Text style={{ color: 'black', fontSize: 18,marginBottom:10, fontFamily:'Oxanium-Medium', }}>{caption}  </Text>
           <TextInput
             style={{
-              width: 130,
+              width:"100%",
               overflow: 'hidden',
               flexShrink: 0,
               backgroundColor: Colors.LIGTH_COLOR,
-              flex: 1,
-              alignItems: 'flex-end',
               color: 'black',
-
+              marginBottom:10,
+              borderRadius:10,
+              padding:10
             }}
             value={`${values}`}
             onChangeText={(text) => onChangeInner(text)}
@@ -206,7 +206,7 @@ const Calculatorscreen = ({ route, navigation }) => {
   //
   //
   return (
-    <ScrollView style={{ backgroundColor: Colors.PURE_WHITE, padding: 20, }}>
+    <ScrollView style={{ backgroundColor: Colors.PURE_WHITE, padding: 20,paddingBottom:100 }}>
       <Text style={{ color: 'black', fontSize: 28, flex: 1, fontFamily: 'Zebulon', }}>EMI Calculator</Text>
       <Text style={{ color: 'black', fontSize: 22, flex: 1, fontFamily: ZebulonCondensed, fontWeight: '700', letterSpacing: 2, paddingBottom: 10, }}>
         {currencyValueFormatter(outputValues.emi)}/mo.
@@ -279,24 +279,24 @@ const Calculatorscreen = ({ route, navigation }) => {
           thumbTintColor={Colors.BLACK_COLR}
         />
       </SliderContainer>
-      <View >
+      <View style={{backgroundColor:Colors.BLACK_COLR, borderTopLeftRadius:20, borderTopRightRadius:20, paddingVertical:20,paddingHorizontal:10, paddingBottom:100}} >
         <View style={styles.calculationView}>
-          <Text style={styles.titleText}>Monthly EMI</Text>
+          <Text style={[styles.titleText,{color: Colors.LIGTH_COLOR}]}>Monthly EMI</Text>
           <Text style={styles.titleText}>{currencyValueFormatter(outputValues.emi)}</Text>
         </View>
 
         <View style={styles.calculationView}>
-          <Text style={styles.titleText}>Principal amount</Text>
+          <Text style={[styles.titleText,{color: Colors.LIGTH_COLOR}]}>Principal amount</Text>
           <Text style={styles.titleText}>{currencyValueFormatter(outputValues.principalAmount)}</Text>
         </View>
 
         <View style={styles.calculationView}>
-          <Text style={styles.titleText}>Interest amount</Text>
+          <Text style={[styles.titleText,{color: Colors.LIGTH_COLOR}]}>Interest amount</Text>
           <Text style={styles.titleText}>{currencyValueFormatter(outputValues.totalInterest)}</Text>
         </View>
 
         <View style={styles.calculationView}>
-          <Text style={styles.titleText}>Total amount</Text>
+          <Text style={[styles.titleText,{color: Colors.LIGTH_COLOR}]}>Total amount</Text>
           <Text style={styles.titleText}>{currencyValueFormatter(outputValues.totalAmount)}</Text>
         </View>
       </View>

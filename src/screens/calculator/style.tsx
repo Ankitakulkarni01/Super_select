@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
         paddingVertical: 16,
     },
     titleContainer: {
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center',
     },
     vertical: {
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     },
     titleText: {
          fontSize: 20,
-            color: Colors.BLACK_COLR,
+            color: Colors.PURE_WHITE,
             fontWeight: '400',
                 flex: 1,
           },   

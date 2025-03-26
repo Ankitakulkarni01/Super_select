@@ -22,6 +22,7 @@ import SpecialTag from '../../assets/svg/specialTag.svg';
 import CarKeyPointsItem from "../CarKeyPointsItem";
 // import soldOutImg from "../../src/assets/img/sold-out.png";
 
+
 const CarItem: FC<{ data: Car, props?: any }> = ({
   data,
   props
@@ -49,7 +50,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
       />
       </View>
 
-      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 20, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 16, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
           data.price > 0
