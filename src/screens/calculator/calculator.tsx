@@ -96,6 +96,8 @@ const SliderContainer = (props: {
               padding:10
             }}
             value={`${values}`}
+maxLength={8}
+            keyboardType={"numeric"}
             onChangeText={(text) => onChangeInner(text)}
           />
         </View>

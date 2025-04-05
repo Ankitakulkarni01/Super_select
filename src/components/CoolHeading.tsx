@@ -12,7 +12,7 @@ const CoolHeading: FC<{ title?: string; text?: string }> = ({ title, text }) => 
           text !== undefined  &&     <Text style={styles.mainText}>{text}</Text>
         }
     
-        <Text style={styles.subText}>{title}</Text>
+        <Text style={styles.subText}>{title} </Text>
       </View>
     </View>
   );
@@ -30,14 +30,14 @@ const styles = StyleSheet.create({
       // marginVertical: 10, 
       textAlign:'center',
       fontFamily: 'Zebulon-Condensed-Italic', 
-      fontSize: 36,
+      fontSize: 34,
     },
     subText:{
         color: Colors.BLACK_COLR, 
         // marginVertical: 10, 
         // fontWeight: "700",
         fontFamily: 'Zebulon-Condensed-Italic', 
-        fontSize: 36,
+        fontSize: 34,
         textAlign:'center',
         // lineHeight: 22
     }

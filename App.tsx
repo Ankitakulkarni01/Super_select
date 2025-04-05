@@ -19,7 +19,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import HomeStack from './src/utils/navigation/navigation';
 import RemoteNotification from './src/components/RemoteNotification';
-import { Colors } from './src/utils/color';
 
 
 

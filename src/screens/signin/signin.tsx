@@ -130,10 +130,10 @@ const SignInScreen = (props: any) => {
             <View style={styles.logoContainer}>
                 {/* <Logo height={80} width={180} /> */}
                 <Image
-                    source={require('../../assets/logo/logo.png')}
-                    resizeMode={'contain'}
-                    style={{ height: 80, width: '100%' }}
-                />
+                         source={require('../../assets/img/LoginBackgroud.jpg')}
+                         resizeMode={'cover'}
+                         style={{ height: 300, width: '100%' }}
+                       />
             </View>
             <Text style={styles.errorText}>{error}</Text>
             <Formik
@@ -155,7 +155,7 @@ const SignInScreen = (props: any) => {
                     isValid,
                 }) => (
                     <>
-                        <View >
+                        <View style={{paddingHorizontal:20}} >
                             <View style={styles.textinputParentContainer}>
                                 <View style={styles.textinputContainer}>
                                     <Ionicons name={'call-outline'} size={25} color={Colors.BLACK_COLR} style={styles.iconStyle} />
@@ -206,7 +206,7 @@ const SignInScreen = (props: any) => {
                                 </View>
                             </View>
                         </View>
-                        <View>
+                        <View style={{paddingHorizontal:20}}>
                             <ActionButton
                                 backgroundColor={Colors.BLACK_COLR}
                                 color={Colors.PURE_WHITE}
@@ -230,16 +230,12 @@ const SignInScreen = (props: any) => {
 const styles = StyleSheet.create({
     loginContainer: {
         flex: 1,
-        justifyContent: 'center',
-        padding: 25,
+        // justifyContent: 'center',
+        // padding: 25,
         elevation: 10,
         // backgroundColor: 'black',
     },
-    logoContainer: {
-        alignItems: 'center',
-        marginBottom: 20,
-        justifyContent: 'center',
-        borderWidth: 2,
+    logoContainer: {        marginBottom: 20,
         // borderColor:'while',
         // height:100,
         // width:100
@@ -277,8 +273,8 @@ const styles = StyleSheet.create({
     signUpContainer: {
         flexDirection: "row",
         flexWrap: 'wrap',
-        padding: 20,
-        marginTop: 15,
+        // padding: 20,
+        // marginTop: 15,
         justifyContent: 'center',
         alignItems: 'center'
     },

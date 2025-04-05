@@ -24,6 +24,7 @@ import { createFirebaseToken } from '../../utils/firebase';
 import { StackActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Signup } from '../../utils/extraAPIs/signUP';
+import { ScrollView } from 'react-native';
 
 const loginValidationSchema = yup.object().shape({
   name: yup
@@ -105,13 +106,13 @@ const SignUpScreen = (props: any) => {
   //
 
   return (
-    <View style={styles.loginContainer}>
+    <ScrollView style={styles.loginContainer}>
       <View style={styles.logoContainer}>
         {/* <Logo height={80} width={180} /> */}
         <Image
-          source={require('../../assets/logo/logo.png')}
-          resizeMode={'contain'}
-          style={{ height: 80, width: '100%' }}
+          source={require('../../assets/img/LoginBackgroud.jpg')}
+          resizeMode={'cover'}
+          style={{ height: 300, width: '100%' }}
         />
       </View>
       <Text style={styles.errorText}>{error}</Text>
@@ -258,19 +259,19 @@ const SignUpScreen = (props: any) => {
           props.navigation.navigate('SignIn')
         }>Login</Text>
       </View>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center',  marginBottom: 100, }}>
         <Text style={{ color: Colors.BLACK_COLR, textAlign: 'center', fontSize: 12 }}>By proceeding, you agree to our <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", }}>Terms and Conditions</Text> and </Text>
         <Text style={{ color: Colors.BLACK_COLR, fontSize: 12 }}>confirm you have read our <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", }}> Privacy Policy.</Text></Text>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 10,
+    // justifyContent: 'center',
+  
     elevation: 10,
     backgroundColor: Colors.PURE_WHITE,
   },

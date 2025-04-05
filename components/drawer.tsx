@@ -3,13 +3,10 @@ import { Button, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import { Drawer } from 'react-native-drawer-layout';
 import { Colors } from '../src/utils/color';
 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
 import User from '../src/assets/svg/user_logo.svg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SuperSelectDrawer = (props) => {
+const SuperSelectDrawer = (props : any) => {
   const [username, setName] = React.useState("");
   const [login, setLogin] = React.useState(false);
 
@@ -29,7 +26,7 @@ const SuperSelectDrawer = (props) => {
   return (
     <View style={{ marginTop: 25, marginHorizontal: 15, justifyContent: 'space-between', flex: 1, marginBottom: 10 }}>
       <ScrollView >
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, { borderWidth:1 }]}>
           <User height={50} width={40} />
           <Text numberOfLines={1} style={styles.titleText}>Hello, {username}</Text>
         </View>
@@ -39,7 +36,7 @@ const SuperSelectDrawer = (props) => {
             <TouchableOpacity style={[styles.buttonContainer, { flex: 1, backgroundColor: Colors.BLACK_COLR, justifyContent: 'center' }]} onPress={() => props.navigation.navigate('SignIn')}>
               <Text style={[styles.titleText, { color: Colors.PURE_WHITE }]}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, justifyContent: 'center', marginLeft: 10 }]} onPress={() => props.navigation.navigate('SignUp')}>
+            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, justifyContent: 'center', marginLeft: 10, borderWidth:1 }]} onPress={() => props.navigation.navigate('SignUp')}>
               <Text style={styles.titleText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
@@ -66,8 +63,8 @@ const SuperSelectDrawer = (props) => {
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
           <Text style={styles.titleText}>Insurance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor: !login ? Colors.BLACK_COLR : Colors.PURE_WHITE }]} onPress={() => props.navigation.navigate('Calculator')}>
-          <Text style={[styles.titleText, { color: !login ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign: login ? 'center' : 'left' }]}>Emi Calculator</Text>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Calculator')}>
+          <Text style={styles.titleText}>Emi Calculator</Text>
         </TouchableOpacity>
       
       </ScrollView>
@@ -106,8 +103,6 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     alignItems: 'center',
-    // justifyContent:'center',
-    borderWidth:1,
     flexDirection: 'row',
     marginVertical: 10,
     borderRadius: 25,
@@ -120,7 +115,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 15
   },
-  titleText: { fontSize: 20, color: Colors.BLACK_COLR, fontWeight: '400', paddingHorizontal: 10 }
+  titleText: { fontSize: 16, color: Colors.BLACK_COLR, fontWeight: '400', paddingHorizontal: 10, fontFamily:'Oxanium-Medium' }
 });
 
 export default SuperSelectDrawer

@@ -10,6 +10,7 @@ import {
   Platform,
   Modal,
   StatusBar,
+  Linking,
 } from 'react-native';
 import { Colors } from '../../utils/color';
 import getEMI from '../../utils/getEMI';
@@ -31,6 +32,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishlist';
 import Gallery from '../../../components/Gallery/gallery';
 import ReserveNow from './ReserveModal';
+import { DescriptionItem } from '../../../components/DescriptionItem/DescriptionItem';
+import { Alert } from 'react-native';
 
 
 const { width } = Dimensions.get('window');
@@ -302,13 +305,42 @@ const CarDetailScreen = ({ navigation, route }) => {
 
   }, [carDataRes]);
 
+  const onWhatsApp = () =>{
+    let msg = "Welcome To Super Select";
+    let phoneWithCountryCode = "918607086070";
+  
+    let mobile =
+      Platform.OS == "ios" ? phoneWithCountryCode : "+" + phoneWithCountryCode;
+    if (mobile) {
+      if (msg) {
+        let url = "whatsapp://send?text=" + msg + "&phone=" + mobile;
+        Linking.openURL(url)
+          .then(data => {
+            console.log("WhatsApp Opened");
+          })
+          .catch(() => {
+            Alert.alert("Make sure WhatsApp installed on your device");
+          });
+      } else {
+        Alert.alert("Please insert message to send");
+      }
+    } else {
+      Alert.alert("Please insert mobile no");
+    }
+  }
+
+  const onCall = () =>{
+    let phoneNumber = "8607086070";
+    if (Platform.OS === 'android') { phoneNumber = `tel:${phoneNumber}`; }
+    else {phoneNumber = `telprompt:${phoneNumber}`; }
+    Linking.openURL(phoneNumber);
+  }
+
   const specifications = [
-    { icon: 'engine', label: 'Engine', value: carData?.engine },
+    // { icon: 'engine', label: 'Engine', value: carData?.engine },
     { icon: 'horse', label: 'Power', value: carData?.driven },
     { icon: 'tachometer-alt', label: 'Mileage', value: carData?.fuelType },
     { icon: 'cogs', label: 'Transmission', value: carData?.type },
-    { icon: 'car', label: 'Body Type', value: 'Sedan' },
-    { icon: 'users', label: 'Seating', value: '5 Seater' },
   ];
 
   const renderImageDots = () => {
@@ -457,9 +489,65 @@ const CarDetailScreen = ({ navigation, route }) => {
           <View style={styles.specificationsContainer}>
             <Text style={styles.sectionTitle}>Specifications and Features</Text>
             <View style={styles.specificationsList}>
+              <Text style={styles.specificationTitle}>Description</Text>
+               <DescriptionItem name="Variant" value={carData?.variant} />
+                      <DescriptionItem name="Transmission" value={carData?.transmission} />
+                      <DescriptionItem name="Fuel" value={carData?.fuelType} />
+                      <DescriptionItem
+                        name="Seating Capacity"
+                        value={carData?.seatingCapacity}
+                      />
+                      <DescriptionItem name="Engine" value={carData?.engine} suffix="CC" />
+                      <DescriptionItem name="Exterior Color" value={carData?.exteriorColor} />
+                      <DescriptionItem name="Interior Color" value={carData?.interiorColor} />
+                      <DescriptionItem name="Interior Type" value={carData?.interiorType} />
+                      <DescriptionItem name="Type" value={carData?.type} />
+                      <DescriptionItem name="Driven" value={carData?.driven} suffix="km" />
+                      <DescriptionItem
+                        name="Top Speed"
+                        value={carData?.topSpeed}
+                        suffix="km/h"
+                      />
+                      <DescriptionItem name="Power" value={carData?.power} suffix="bhp" />
+                      <DescriptionItem name="Engine Type" value={carData?.engineType} />
+                      <DescriptionItem name="Drivetrain" value={carData?.drivetrain} />
+                      <DescriptionItem name="Torque" value={carData?.torque} suffix="Nm" />
+                      <DescriptionItem
+                        name="Ground Clearance"
+                        value={carData?.groundClearance}
+                        suffix="mm"
+                      />
+              
+                      <DescriptionItem name="Ownership" value={carData?.ownership} />
+                      <DescriptionItem
+                        name="Registration"
+                        value={carData?.registrationDate}
+                      />
+                      <DescriptionItem
+                        name="Registration RTO"
+                        value={carData?.registrationRTO}
+                      />
+                      <DescriptionItem name="Insurance" value={carData?.insuranceTillDate} />
+                      <DescriptionItem
+                        name="Manufacturing"
+                        value={carData?.manufacturingDate}
+                      />
+                      <DescriptionItem
+                        name="Extended Warranty"
+                        value={carData?.extendedWarrantyYear}
+                      />
+                      <DescriptionItem
+                        name="Service Pack Duration"
+                        value={carData?.servicePackDuration}
+                        suffix="y"
+                      />
+                      <DescriptionItem
+                        name="Service Pack KM"
+                        value={carData?.servicePackKm}
+                        suffix="km"
+                      />
+                      <Text style={styles.specificationTitle}>Features</Text>
               {featuresArray.map((section, index) => {
-                console.log("section", section);
-
                 return (
                   <View key={index} style={styles.specificationSection}>
                     <View style={styles.specificationRow}>
@@ -472,7 +560,7 @@ const CarDetailScreen = ({ navigation, route }) => {
           </View>
 
           {/* WhatsApp Button */}
-          <TouchableOpacity style={styles.whatsappButton}>
+          <TouchableOpacity style={styles.whatsappButton} onPress={() => onWhatsApp()}>
             <FontAwesome5 name="whatsapp" size={20} color="#FFFFFF" />
             <Text style={styles.whatsappButtonText}>Chat on WhatsApp</Text>
           </TouchableOpacity>
@@ -484,7 +572,7 @@ const CarDetailScreen = ({ navigation, route }) => {
         <TouchableOpacity style={styles.reserveButton} onPress={onReserveBtnClick}>
           <Text style={styles.reserveButtonText}>Reserve Now</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.callButton}>
+        <TouchableOpacity style={styles.callButton} onPress={() => onCall()}>
           <MaterialIcons name="phone" size={24} color="#000000" />
         </TouchableOpacity>
       </View>
@@ -754,7 +842,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 12,
+    margin: 12,
   },
   specificationRow: {
     flexDirection: 'row',

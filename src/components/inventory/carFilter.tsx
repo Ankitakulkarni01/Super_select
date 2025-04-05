@@ -111,7 +111,7 @@ const CarFilter: FC<{
           border={1}
         />
       </View>
-      <ScrollView>
+      <ScrollView style={{paddingTop:20}}>
 
         <CustomMUISelect
           name="makeId"
@@ -153,6 +153,7 @@ const CarFilter: FC<{
           options={getDrivenList()}
           handleChange={batchHandleChanges}
           defaultValue={current?.driven}
+         
         />
 
         <CustomMUISelect
@@ -162,6 +163,7 @@ const CarFilter: FC<{
           options={getYearList().map((d) => ({ value: d, label: d }))}
           handleChange={batchHandleChanges}
           defaultValue={current?.year}
+          showSLider={true}
         />
 
         <CustomMUISelect
@@ -215,6 +217,7 @@ const CustomMUISelect: FC<{
   options: Array<{ value: string; label: string }>;
   handleChange?: (value: CarCurrentFilterType) => void;
   defaultValue?: string;
+  showSLider?: boolean
 }> = ({
   name,
   title,
@@ -222,6 +225,7 @@ const CustomMUISelect: FC<{
   placeholder,
   handleChange = () => { },
   defaultValue,
+  showSLider
 }) => {
     const [value, setValue] = useState("");
     const refScrollable = useRef();
@@ -258,14 +262,14 @@ const CustomMUISelect: FC<{
       handleChange(obj);
     }, [name, setValue, handleChange]);
     //
-
     //
     //
+console.log("showSLider",showSLider);
 
     return (
       <View style={styles.item}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title} onPress={() => refScrollable?.current.open()}>{title}</Text>
+          <Text style={styles.title} onPress={() => refScrollable?.current?.open()}>{title}</Text>
 
           {value !== "" ? (
             <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
@@ -276,7 +280,7 @@ const CustomMUISelect: FC<{
 
         <RBSheet
           ref={refScrollable}
-          height={500}
+          height={300}
           draggable
           customModalProps={{
             animationType: 'slide',
@@ -288,20 +292,35 @@ const CustomMUISelect: FC<{
               borderTopRightRadius: 10,
             },
             draggableIcon: {
-              width: 80,
+              width: 0,
             },
           }}>
           <View style={{ padding: 10 , flex:1}}>
             <ScrollView>
-              <Text style={[styles.title, { marginBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.SHADOW_COLOR }]} >{title}</Text>
-              <View style={{ padding: 10, flexDirection: "row" }}>
+              <Text style={[styles.title, { marginBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.SHADOW_COLOR ,fontFamily:  'Oxanium-Bold'}]} >{title}</Text>
+              {
+                showSLider ? 
+                <View style={styles.price}>
+                <Slider
+                onValueChange={onChange}
+                value={defaultValue}
+                animateTransitions
+                minimumTrackTintColor={Colors.BLACK_COLR}
+                maximumTrackTintColor="#000000"
+                maximumValue={10000}
+                minimumValue={20000}
+                step={2}
+              />
+              </View>
+                :
+                <View style={{ padding: 10, flexDirection: "row" }}>
                 <FlatList
                   style={styles.dashboard}
                   data={options}
                   renderItem={({ item, index }: { item: string; index: number }) => {
                     return (
-                      <TouchableOpacity style={{ paddingBottom: 5, fontFamily: value == item?.value ? 'Oxanium-Bold' : 'Oxanium-Medium', backgroundColor: value == item?.value ? 'grey' :"#000000",  borderRadius: 10, margin: 10, padding:10, paddingHorizontal:15}} >
-                      <Text style={[styles.title,{color: Colors.PURE_WHITE, textAlign:'center'}]} >
+                      <TouchableOpacity style={{ paddingBottom: 5, fontFamily: value == item?.value ? 'Oxanium-Bold' : 'Oxanium-Medium', backgroundColor: value == item?.value ? '#000000' :Colors.SKELETON_COLOR_1,  borderRadius: 10, margin: 10, padding:10, paddingHorizontal:15}} >
+                      <Text style={[styles.title,{color: value == item?.value ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign:'center'}]} >
                         {item?.label ?? item.value}
                       </Text>
                       </TouchableOpacity>
@@ -309,10 +328,9 @@ const CustomMUISelect: FC<{
                   }}
                   numColumns={3}
                 />
-                {/* {options?.map((opt, k) => (
-                 
-                ))} */}
               </View>
+              }
+          
 
             </ScrollView>
             <ActionButton
@@ -321,10 +339,7 @@ const CustomMUISelect: FC<{
               backgroundColor={Colors.PURE_WHITE}
               color={Colors.BLACK_COLR}
               border={1}
-            />
-            <ActionButton
-              onPress={() => refScrollable?.current.close()}
-              title="Reset" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
+              height={"30"}
             />
           </View>
         </RBSheet>
@@ -535,31 +550,24 @@ const styles = StyleSheet.create({
     // justifyContent:'center'
   },
   item: {
-    height: 50,
+    height: 30,
     justifyContent: 'center',
-    padding: 10,
+    padding: 5,
     margin: 5,
-    shadowColor: '#171717',
-    borderRadius: 10,
-    backgroundColor: Colors.PURE_WHITE,
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 10
   },
   title: {
     flex: 1,
     color: Colors.BLACK_COLR,
-    fontSize: 16,
+    fontSize: 18,
 
-    fontFamily: 'Oxanium-Medium'
+    fontFamily: 'Oxanium-SemiBold'
   },
   clear_btn: {
     justifyContent: 'flex-end',
     alignItems: 'flex-end'
   },
   price: {
-    marginTop: 20,
+    marginTop: 100,
     paddingHorizontal: 10
   },
   sub_title: {

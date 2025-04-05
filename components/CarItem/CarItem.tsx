@@ -37,8 +37,8 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
 
 
   return (
-    <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} activeOpacity={0.8}>
-      <View style={{ margin: 15 }}>
+    <View style={styles.CarItem} >
+       <TouchableOpacity style={styles.CarItem} onPress={onOpenCarDetails} activeOpacity={0.8}>
 
       <FastImage
         style={{ width: '100%', height: 250,borderRadius:10}}
@@ -48,8 +48,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         }}
         resizeMode={FastImage.resizeMode.stretch}
       />
-      </View>
-
+      </TouchableOpacity>
       <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 16, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
@@ -113,7 +112,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
           </View>
         )}
 
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: 'row',
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
   special: {
 

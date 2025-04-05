@@ -11,7 +11,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import HeaderNavigationMenu from "../../utils/navigation/HeaderNavigationMenu";
 import ActionButton from "../../components/actionButton";
+import { ScrollView } from "react-native";
 
+const { width } = Dimensions.get('window');
 
 const showroomImages = {
   pune: [
@@ -70,16 +72,49 @@ const ShowroomImageGallery: FC<{
   console.log("images", images)
 
   //
+   const [activeImageIndex, setActiveImageIndex] = useState(0);
   //
 
+    const renderImageDots = () => {
+      return (
+        <View style={styles.dotsContainer}>
+          {images?.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.dot,
+                { backgroundColor: index === activeImageIndex ? '#000000' : '#D1D1D1' },
+              ]}
+            />
+          ))}
+        </View>
+      );
+    };
+
   return (
-    <>
-      <View style={styles.ShowroomImageGallery}>
+    <View>
+      {/* <View style={styles.ShowroomImageGallery}>
         <CarouselComponent list={images} displayPaginOrNot={false} />
-      </View>
-
-
-    </>
+      </View> */}
+ <View>
+            <ScrollView
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              onScroll={(event) => {
+                const slide = Math.round(
+                  event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width,
+                );
+                setActiveImageIndex(slide);
+              }}
+              scrollEventThrottle={16}>
+              {images?.map((image, index) => (
+                <Image key={index} source={image} style={styles.carImage} />
+              ))}
+            </ScrollView>
+          </View>
+          {renderImageDots()}
+    </View>
   );
 }
 //
@@ -269,7 +304,31 @@ const styles = StyleSheet.create({
   },
   ShowroomMapEmbedItem: {
     flex: 1
-  }
+  },
+  carImage: {
+    width: width,
+    height:300,
+    resizeMode: 'cover',
+  },
+  dotsContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  }, detailsContainer: {
+    padding: 16,
+    paddingBottom: 90, // Add padding to account for sticky footer
+    backgroundColor: '#fff',
+  },
 });
 
 export default ShowRoomDetailsTab; 

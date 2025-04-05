@@ -168,8 +168,6 @@ const InventoryPage = (props: any) => {
           </View>
           <RBSheet
           ref={refScrollable}
-          height={500}
-          draggable
           customModalProps={{
             animationType: 'slide',
             statusBarTranslucent: true,
@@ -178,9 +176,6 @@ const InventoryPage = (props: any) => {
             container: {
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
-            },
-            draggableIcon: {
-              width: 80,
             },
           }}>
           <View style={{ padding: 10 , flex:1}}>
@@ -240,8 +235,8 @@ const styles = StyleSheet.create({
   title: {
     flex:1,
     color: Colors.BLACK_COLR,
-    fontSize: 16,
-
+    fontSize: 18,
+padding:20,
     fontFamily: 'Oxanium-Medium'
   },
 
