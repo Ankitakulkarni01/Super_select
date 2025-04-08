@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 apply plugin: 'com.google.gms.google-services'
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+apply plugin: "org.jetbrains.kotlin.android"
 
 import com.android.build.OutputFile
 
