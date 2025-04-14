@@ -1,4 +1,3 @@
-import { log } from "react-native-reanimated";
 import { API_BASE_PATH } from "../constants";
 import fetchExtended from "../fetchExtended";
 import { queryObjectToString } from "../queryObjectToString";

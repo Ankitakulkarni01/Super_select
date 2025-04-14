@@ -20,6 +20,8 @@ import { Alert } from 'react-native';
 import HomeStack from './src/utils/navigation/navigation';
 import RemoteNotification from './src/components/RemoteNotification';
 
+import './gesture-handler';
+
 
 
 const App = (props: any) => {

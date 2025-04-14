@@ -3,14 +3,14 @@
 buildscript {
     ext {
         buildToolsVersion = "35.0.0"
-        minSdkVersion = 21
+        minSdkVersion = 23
         compileSdkVersion = 35
         targetSdkVersion = 35
 
-        kotlinVersion = "1.8.10"
+        kotlinVersion = "1.9.20" // or try 1.9.0 if needed
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "23.1.7779620"
+     ndkVersion = "25.1.8937393" //  Add it here
 
                firebaseVersion = "17.3.4" // default: "+"
         
@@ -28,8 +28,17 @@ buildscript {
         }
 
     }
+    allprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.jetbrains.kotlin') {
+                details.useVersion "1.9.22"
+            }
+        }
+    }
+}
     dependencies {
-        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.android.tools.build:gradle:8.1.0")   
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
         classpath 'com.google.gms:google-services:4.3.13'
