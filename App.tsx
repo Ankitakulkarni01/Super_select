@@ -22,11 +22,11 @@ import RemoteNotification from './src/components/RemoteNotification';
 
 import './gesture-handler';
 
+const queryClient = new QueryClient()
 
 
 const App = (props: any) => {
 
-  const queryClient = new QueryClient()
 
 
 
@@ -168,7 +168,6 @@ CommonActions.navigate('CarDetails', {
         <PaperProvider>
           <NavigationContainer>
             <RemoteNotification />
-            <StatusBar animated={true} backgroundColor="#0000000" />
             <HomeStack />
           </NavigationContainer>
         </PaperProvider>
