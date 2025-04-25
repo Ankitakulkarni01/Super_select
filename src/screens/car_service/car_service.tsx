@@ -13,17 +13,6 @@ import CarouselComponent from '../../../components/Carousel/Carousel';
 // import { SliderBox } from "react-native-image-slider-box";
 
 
-const carServiceImages = [
-  require('../../../assets/img/car-service/1.jpg'),
-  require('../../../assets/img/car-service/2.jpg'),
-  require('../../../assets/img/car-service/3.jpg'),
-  require('../../../assets/img/car-service/4.jpg'),
-  require('../../../assets/img/car-service/5.jpg'),
-  require('../../../assets/img/car-service/6.jpg'),
-  require('../../../assets/img/car-service/7.jpg'),
-  require('../../../assets/img/car-service/8.jpg'),
-]
-
 const CarServiceScreen = () => {
 
   // On Form Submit

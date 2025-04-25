@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 
-import { FlatList, Image, Modal, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Modal, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { getCarList } from "../../utils/carAPIs/carList";
 import { CarList } from "../../../interface/car";
 import CarFilter, { CarCurrentFilterType, CarFilterOptionsType, CarFilterSkeleton } from "../../components/inventory/carFilter";
@@ -14,8 +14,15 @@ import { Switch } from "react-native";
 import { CarSortType } from "../../components/inventory/carFilter";
 import RBSheet from "react-native-raw-bottom-sheet";
 
-const InventoryPage = (props: any) => {
+const CarListScreen = (props) => {
 
+  
+  const [cars, setCars] = useState([]);
+  const [page, setPage] = useState(1);
+  const [nextPage, setNextPage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [error, setError] = useState(null);
 
   const [carData, setCarData] = useState<CarList>([]);
   const [currentFilters, setCurrentFilters] = useState<CarCurrentFilterType>({});
@@ -36,66 +43,45 @@ const InventoryPage = (props: any) => {
     if (sortValue) return { ...currentFilters, sort: sortValue };
     else return currentFilters;
   }, [currentFilters, sortValue, setCurrentFilters]);
-  //
 
-
-
-
-
-  // Get Data
-  const {
-    isLoading,
-    data: carListRES,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(
-    // @ts-ignore
-    {
-      queryKey: ["car-list", filterWithSort],
-      queryFn: async ({ pageParam }) =>
-        await getCarList(pageParam as number, filterWithSort),
-      getNextPageParam: (lastPage) => (lastPage as any).nextPageNo,
-    }
-  );
-  //
-
-  console.log(carListRES, filterWithSort, isLoading);
-
-
+  // Initial load or when filter changes
   useEffect(() => {
-    try {
-      const f = (carListRES?.pages[0] as any).data?.filters;
-      console.log("filter Data", (carListRES?.pages[0] as any).data?.filters);
-
-      if (f) setFilterOptions(f);
-    } catch (err) { }
-  }, [carListRES, setFilterOptions]);
-
-  // Process Data
-  const [totalCarDataLength, setTotalCarDataLength] = useState(0);
-
-  useEffect(() => {
-    try {
-      let carDataCopy = [];
-
-      for (let i = 0; i < carListRES.pages.length; i++) {
-        carDataCopy.push(...(carListRES.pages[i] as any).data.list);
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        setIsLoading(false);
+        const result = await getCarList(1, filterWithSort);
+        setCars(result.data);
+        setNextPage(result.nextPageNo);
+        setPage(1);
+      } catch (err) {
+        setIsLoading(false);
+        setError(err.message || 'Something went wrong');
       }
+    };
 
-      setTotalCarDataLength(carDataCopy?.length ?? 0);
+    loadData();
+  }, [filterWithSort]);
 
-      // Remove Sold Out
-      if (removeSoldOuts) {
-        carDataCopy = carDataCopy.filter((x) => x.status !== "soldOut");
-      }
+  // Load more when needed
+  const loadMore = async () => {
+    if (!nextPage || isFetchingMore) return;
 
-      setCarData(carDataCopy);
+    setIsFetchingMore(true);
+    try {
+      const result = await getCarList(nextPage, filterWithSort);
+      setCars((prev) => [...prev, ...result.data]);
+      setNextPage(result.nextPageNo);
+      setPage(nextPage);
     } catch (err) {
-      setCarData([]);
+      console.error('Failed to fetch more cars:', err);
+    } finally {
+      setIsFetchingMore(false);
     }
-  }, [carListRES, removeSoldOuts, setCarData, setTotalCarDataLength]);
+  };
 
-  const toggleSwitch = () => { setRemoveSoldOuts(removeSoldOuts => !removeSoldOuts) };
+  if (isLoading) return <ActivityIndicator size="large" />;
+  if (error) return <Text>{error}</Text>;
 
   return (
     <View style={{flex:1}}>
@@ -227,7 +213,10 @@ const InventoryPage = (props: any) => {
    
     </View>
   );
+
 };
+
+export default CarListScreen;
 
 
 const styles = StyleSheet.create({
@@ -242,5 +231,5 @@ padding:20,
 
 })
 
-export default InventoryPage;
+// export default Car;
 
