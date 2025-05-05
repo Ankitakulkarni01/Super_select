@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 
-import { ActivityIndicator, FlatList, Image, Modal, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Modal, Platform, ScrollView, StyleSheet, TouchableOpacity, View,  Alert} from "react-native";
 import { getCarList } from "../../utils/carAPIs/carList";
 import { CarList } from "../../../interface/car";
 import CarFilter, { CarCurrentFilterType, CarFilterOptionsType, CarFilterSkeleton } from "../../components/inventory/carFilter";
 import CarItem from "../../../components/CarItem/CarItem";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Text } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from "../../utils/color";
 import { Switch } from "react-native";
 import { CarSortType } from "../../components/inventory/carFilter";
@@ -51,11 +50,13 @@ const CarListScreen = (props) => {
       try {
         setIsLoading(false);
         const result = await getCarList(1, filterWithSort);
+        Alert.alert(result?.data)
         setCars(result.data);
         setNextPage(result.nextPageNo);
         setPage(1);
       } catch (err) {
         setIsLoading(false);
+        Alert.alert(err.message)
         setError(err.message || 'Something went wrong');
       }
     };
