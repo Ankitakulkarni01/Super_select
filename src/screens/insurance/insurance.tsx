@@ -9,7 +9,7 @@ import { Colors } from '../../utils/color';
 import GeneralForm from '../../../components/GeneralForm/generalForm';
 import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
-import InsuranceHeroSvg from "D:/Projects/Super_select/assets/svg/insurance-hero-one.svg";
+import InsuranceHeroSvg from "../../assets/svg/insurance-hero.svg";
 import CoolHeading from '../../components/CoolHeading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

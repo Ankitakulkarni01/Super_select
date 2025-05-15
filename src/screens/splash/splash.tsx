@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Image,
+    Alert,
 } from 'react-native'
 import { StackActions } from '@react-navigation/native';
 
@@ -23,6 +24,7 @@ const SplashScreen = (props) => {
 
     useEffect(() => {
          loading()
+         Alert.alert("hi")
     }, []);
 
     const loading = async () => {

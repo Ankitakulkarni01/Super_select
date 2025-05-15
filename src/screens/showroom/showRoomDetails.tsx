@@ -230,7 +230,7 @@ const SecondRoute = () => {
 
 const routes = [
   { key: 'first', value: 'Pune' },
-  { key: 'second', value: 'Hydrabad' },
+  { key: 'second', value: 'Hyderabad' },
 ];
 
 const ShowRoomDetailsTab = () => {
@@ -250,7 +250,7 @@ const ShowRoomDetailsTab = () => {
           headerMenuValue === "Pune" && <FirstRoute />
         }
         {
-          headerMenuValue === "Hydrabad" && <SecondRoute />
+          headerMenuValue === "Hyderabad" && <SecondRoute />
         }
       </View>
     </View>

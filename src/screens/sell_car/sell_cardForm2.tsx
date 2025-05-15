@@ -17,19 +17,19 @@ import * as Yup from 'yup';
 
 // Yup schema with image array validation
 const CarSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  year: Yup.number().required('Year is required').min(1886),
+  title: Yup.string().required('Mandatory Field'),
+  year: Yup.number().required('Mandatory Field').min(1886),
   mileage: Yup.number().required('Mileage is required'),
   price: Yup.number().required('Price is required'),
   location: Yup.string().required('Location is required'),
-  description: Yup.string().required('Description is required'),
+  description: Yup.string().required('Mandatory Field'),
   photoUris: Yup.array()
-    .min(8, 'At least 8 photos are required')
-    .max(15, 'You can only upload up to 15 photos')
+    .min(4, 'At least 4 photos are required')
+    .max(8, 'You can only upload up to 8 photos')
     .required('Car photos are required'),
 });
 
-export default function SellYourCarScreen() {
+export default function SellCarForm() {
   const requestPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(
@@ -79,8 +79,6 @@ export default function SellYourCarScreen() {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
           <>
-            <Text style={styles.subHeader}>Car Photos</Text>
-
             <FlatList
               data={values.photoUris}
               horizontal
@@ -106,69 +104,46 @@ export default function SellYourCarScreen() {
             )}
 
             <View style={styles.form}>
-              <Text style={styles.formHeader}>Car Details</Text>
-
               <TextInput
                 style={styles.input}
-                placeholder="Title"
+                placeholder="Car Make & Model"
                 onChangeText={handleChange('title')}
                 onBlur={handleBlur('title')}
                 value={values.title}
               />
               {touched.title && errors.title && <Text style={styles.error}>{errors.title}</Text>}
 
-              <View style={styles.row}>
-                <TextInput
-                  style={[styles.input, styles.halfInput]}
-                  placeholder="Year"
-                  keyboardType="numeric"
-                  onChangeText={handleChange('year')}
-                  onBlur={handleBlur('year')}
-                  value={values.year}
-                />
-                <TextInput
-                  style={[styles.input, styles.halfInput]}
-                  placeholder="Mileage"
-                  keyboardType="numeric"
-                  onChangeText={handleChange('mileage')}
-                  onBlur={handleBlur('mileage')}
-                  value={values.mileage}
-                />
-              </View>
-              {touched.year && errors.year && <Text style={styles.error}>{errors.year}</Text>}
-              {touched.mileage && errors.mileage && <Text style={styles.error}>{errors.mileage}</Text>}
-
-              <TextInput
-                style={styles.input}
-                placeholder="Price"
-                keyboardType="numeric"
-                onChangeText={handleChange('price')}
-                onBlur={handleBlur('price')}
-                value={values.price}
-              />
-              {touched.price && errors.price && <Text style={styles.error}>{errors.price}</Text>}
-
-              <TextInput
-                style={styles.input}
-                placeholder="Location"
-                onChangeText={handleChange('location')}
-                onBlur={handleBlur('location')}
-                value={values.location}
-              />
-              {touched.location && errors.location && <Text style={styles.error}>{errors.location}</Text>}
-
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Description"
+             <TextInput
+               style={styles.input}
+                placeholder="Name"
                 multiline
-                onChangeText={handleChange('description')}
-                onBlur={handleBlur('description')}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.description}
+              />
+              {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                multiline
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.description}
+              />
+              {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
+              <TextInput
+                style={styles.input}
+                placeholder="Phone No"
+                multiline
+                onChangeText={handleChange('phonenumber')}
+                onBlur={handleBlur('phonenumber')}
                 value={values.description}
               />
               {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
 
+
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>List Your Car</Text>
+                <Text style={styles.buttonText}>Submit Request</Text>
               </TouchableOpacity>
             </View>
           </>
@@ -186,6 +161,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     fontWeight: 'bold',
+    marginBottom:10
   },
   subHeader: {
     fontSize: 16,
@@ -249,7 +225,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
-    fontSize: 12,
-    marginBottom: 5,
+    fontSize: 10,
+    marginVertical: 5,
   },
 });

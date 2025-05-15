@@ -38,61 +38,6 @@ import { Alert } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-const value = [
-  {
-    title: 'Engine & Transmission',
-    items: [
-      { label: 'Engine Type', value: '2.0L Turbocharged I4' },
-      { label: 'Displacement', value: '1995 cc' },
-      { label: 'Max Power', value: '194 bhp @ 5800 rpm' },
-      { label: 'Max Torque', value: '320 Nm @ 1650 rpm' },
-      { label: 'Transmission', value: '9-Speed Automatic' },
-      { label: 'Drivetrain', value: 'RWD' }
-    ]
-  },
-  {
-    title: 'Performance & Efficiency',
-    items: [
-      { label: '0-100 km/h', value: '7.3 seconds' },
-      { label: 'Top Speed', value: '250 km/h' },
-      { label: 'Fuel Economy', value: '20.37 kmpl' },
-      { label: 'Fuel Tank', value: '66 L' }
-    ]
-  },
-  {
-    title: 'Dimensions & Weight',
-    items: [
-      { label: 'Length', value: '4,686 mm' },
-      { label: 'Width', value: '1,810 mm' },
-      { label: 'Height', value: '1,442 mm' },
-      { label: 'Wheelbase', value: '2,865 mm' },
-      { label: 'Boot Space', value: '455 L' }
-    ]
-  },
-  {
-    title: 'Safety Features',
-    items: [
-      { label: 'Airbags', value: '8 Airbags' },
-      { label: 'ABS with EBD', value: 'Yes' },
-      { label: 'ESP', value: 'Yes' },
-      { label: 'Parking Sensors', value: 'Front & Rear' },
-      { label: '360° Camera', value: 'Yes' },
-      { label: 'ADAS Features', value: 'Available' }
-    ]
-  },
-  {
-    title: 'Comfort & Convenience',
-    items: [
-      { label: 'Climate Control', value: '3-Zone Automatic' },
-      { label: 'Sunroof', value: 'Panoramic' },
-      { label: 'Seat Upholstery', value: 'Leather' },
-      { label: 'Front Seats', value: 'Power Adjustable with Memory' },
-      { label: 'Infotainment', value: '11.9" Touchscreen' },
-      { label: 'Sound System', value: 'Burmester® 3D' }
-    ]
-  }
-]
-
 const CarDetailScreen = ({ navigation, route }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [showFullSpecs, setShowFullSpecs] = useState(false); const [isFullScreen, setIsFullScreen] = useState(false);
@@ -336,11 +281,15 @@ const CarDetailScreen = ({ navigation, route }) => {
     Linking.openURL(phoneNumber);
   }
 
+  console.log("carData",carData);
+  
+
   const specifications = [
-    // { icon: 'engine', label: 'Engine', value: carData?.engine },
-    { icon: 'horse', label: 'Power', value: carData?.driven },
-    { icon: 'tachometer-alt', label: 'Mileage', value: carData?.fuelType },
-    { icon: 'cogs', label: 'Transmission', value: carData?.type },
+    { icon: 'engine', label: 'Engine', value: `${carData?.engine} cc` },
+    { icon: 'engine', label: 'Type', value: carData?.type },
+    { icon: 'horse', label: 'Driven', value: carData?.driven },
+    { icon: 'tachometer-alt', label: 'Fuel', value: carData?.fuelType },
+    { icon: 'cogs', label: 'Transmission', value: carData?.transmission },
   ];
 
   const renderImageDots = () => {
@@ -380,6 +329,7 @@ const CarDetailScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* {renderHeader()} */}
+     {reserveModal && <ReserveNow carData={carData} onClose={() => setReserveModal(false)}/> }
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Gallery */}
         <View style={styles.imageContainer}>

@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as yup from 'yup';
 
 import ActionButton from '../../components/actionButton';
@@ -65,19 +66,19 @@ const SignInScreen = (props: any) => {
 
     const sendOTP = async (phoneNumber: string) => {
         console.log("forgot")
-        if(phoneNumber !== ""){
-        const { success, message, data } = await doSendOTP({ number: phoneNumber, type: 'forgot-password' });
+        if (phoneNumber !== "") {
+            const { success, message, data } = await doSendOTP({ number: phoneNumber, type: 'forgot-password' });
 
-        if (success) {
-            console.log("its ", message, data)
-            props.navigation.navigate('ForgotPassword', { phoneNumber })
+            if (success) {
+                console.log("its ", message, data)
+                props.navigation.navigate('ForgotPassword', { phoneNumber })
+            } else {
+                console.log(message);
+                setError("No account found with this number")
+            }
         } else {
-            console.log(message);
-            setError("No account found with this number")
+            setError("Please Enter Phone Number")
         }
-    }else{
-        setError("Please Enter Phone Number")
-    }
     }
 
     //
@@ -105,7 +106,7 @@ const SignInScreen = (props: any) => {
                             placeholder="Phone Number"
                             style={styles.textInput}
                             onChangeText={(text) => setphoneNumber(text)}
-                               keyboardType="number-pad"
+                            keyboardType="number-pad"
                             placeholderTextColor={Colors.BLACK_COLR}
                         />
 
@@ -127,13 +128,18 @@ const SignInScreen = (props: any) => {
 
     return (
         <View style={styles.loginContainer}>
+            <View style={{ padding: 10 }}>
+                <TouchableOpacity onPress={() => props.navigation.goBack()} style={{height:20, width:20}}>
+                    <MaterialIcons name={'arrow-back-ios'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                </TouchableOpacity>
+            </View>
             <View style={styles.logoContainer}>
                 {/* <Logo height={80} width={180} /> */}
                 <Image
-                         source={require('../../assets/img/LoginBackgroud.jpg')}
-                         resizeMode={'cover'}
-                         style={{ height: 300, width: '100%' }}
-                       />
+                    source={require('../../assets/img/LoginBackgroud.jpg')}
+                    resizeMode={'cover'}
+                    style={{ height: 300, width: '100%' }}
+                />
             </View>
             <Text style={styles.errorText}>{error}</Text>
             <Formik
@@ -155,7 +161,7 @@ const SignInScreen = (props: any) => {
                     isValid,
                 }) => (
                     <>
-                        <View style={{paddingHorizontal:20}} >
+                        <View style={{ paddingHorizontal: 20 }} >
                             <View style={styles.textinputParentContainer}>
                                 <View style={styles.textinputContainer}>
                                     <Ionicons name={'call-outline'} size={25} color={Colors.BLACK_COLR} style={styles.iconStyle} />
@@ -174,7 +180,7 @@ const SignInScreen = (props: any) => {
                                     <Text style={styles.errorMsgText}>{errors.phoneNumber}</Text>
                                 }
                             </View>
-                          
+
                             <View style={styles.textinputParentContainer}>
                                 <View style={styles.textinputContainer}>
                                     <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
@@ -206,7 +212,7 @@ const SignInScreen = (props: any) => {
                                 </View>
                             </View>
                         </View>
-                        <View style={{paddingHorizontal:20}}>
+                        <View style={{ paddingHorizontal: 20 }}>
                             <ActionButton
                                 backgroundColor={Colors.BLACK_COLR}
                                 color={Colors.PURE_WHITE}
@@ -233,9 +239,10 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
         // padding: 25,
         elevation: 10,
-        // backgroundColor: 'black',
+        backgroundColor:Colors.PURE_WHITE,
     },
-    logoContainer: {        marginBottom: 20,
+    logoContainer: {
+        marginBottom: 20,
         // borderColor:'while',
         // height:100,
         // width:100
@@ -248,7 +255,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderRadius:10,
+        borderRadius: 10,
         borderColor: Colors.BLACK_COLR
     },
     iconStyle: {
@@ -261,8 +268,8 @@ const styles = StyleSheet.create({
     },
     errorMsgText: {
         fontSize: 14,
-    color: 'red',
-    paddingBottom: 10
+        color: 'red',
+        paddingBottom: 10
     },
     errorText: {
         fontSize: 16,

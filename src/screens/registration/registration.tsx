@@ -13,7 +13,7 @@ import ActionButton from '../../components/actionButton';
 import { Colors } from '../../utils/color';
 import { formatDate } from '../../utils/date-time';
 import Pdf from 'react-native-pdf'
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import RNFS from 'react-native-fs';
 import { Platform } from 'react-native';
 import Share from 'react-native-share';
@@ -168,7 +168,7 @@ const downloadFile = (fileUrl) => {
   return (
     <View style={styles.fullScreen} >
       <Text style={{ color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>hello {username}</Text>
-      <Text style={{ color: Colors.BLACK_COLR,marginVertical: 15, fontSize: 18, textTransform: 'uppercase' }}>Here are your purchase details</Text>
+      <Text style={{ color: Colors.BLACK_COLR,marginVertical: 15, fontSize: 18 }}>Here are your purchase details</Text>
       {
       pdfData.length !== 0 ?
 

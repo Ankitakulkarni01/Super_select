@@ -165,7 +165,7 @@ CommonActions.navigate('CarDetails', {
       <QueryClientProvider client={queryClient}>
         <PaperProvider>
           <NavigationContainer>
-            <RemoteNotification />
+            {/* <RemoteNotification /> */}
             <StatusBar animated={true} backgroundColor="#0000000" />
             <HomeStack />
           </NavigationContainer>

@@ -11,9 +11,9 @@ import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
 import InsuranceHeroSvg from "../../assets/svg/insurance-hero.svg";
 
-import Big_call from "D:/Projects/Super_select/assets/svg/big_call.svg";
-import Big_mail from "D:/Projects/Super_select/assets/svg/big_mail.svg";
-import Big_time from "D:/Projects/Super_select/assets/svg/big_time.svg";
+import Big_call from "../../../assets/svg/big_call.svg";
+import Big_mail from "../../../assets/svg/big_mail.svg";
+import Big_time from "../../../assets/svg/big_time.svg";
 import { ContactDataType } from '../../utils/formAPIs/contact';
 import CoolHeading from '../../components/CoolHeading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -49,12 +49,11 @@ useEffect(() => {
 
       <CoolHeading
         title={"Get in Touch"}
-        text={"Contact"}
       />
 
       <View style={{ margin: 15 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-          <Big_call height={50} width={40} />
+        <Big_mail height={50} width={40} />
           <View style={{ marginLeft: 15 }}>
             <Text style={styles.headingText}>info@superselect.in</Text>
             <Text style={styles.smallText}>
@@ -63,7 +62,8 @@ useEffect(() => {
           </View>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-          <Big_mail height={50} width={40} />
+
+          <Big_call height={50} width={40} />
           <View style={{ marginLeft: 15 }}>
             <Text style={styles.headingText}>+91 86070 86070 <Text style={styles.smallText}>(Pune)</Text></Text>
             <Text style={styles.headingText}>+91 98906 98906<Text style={styles.smallText}> (Hyderabad)</Text></Text>
@@ -123,12 +123,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   headingText: {
-    fontSize: 19,
+    fontSize: 15,
     color: Colors.BLACK_COLR,
     paddingRight: 10
   },
   smallText: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "300",
     color: Colors.BLACK_COLR,
   }

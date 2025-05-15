@@ -10,6 +10,7 @@ import Sell_car from '../../assets/svg/sell_car_icon.svg'
 
 import { type SellCarDataType } from "../../utils/formAPIs/sellCar";
 import { Alert, Linking, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GeneralForm from "../../../components/GeneralForm/generalForm";
 import { Colors } from "../../utils/color";
 import { Image } from "react-native";
@@ -18,6 +19,7 @@ import siteInfo from "../../utils/data/siteDetails";
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { Button } from "react-native";
 import CoolHeading from "../../components/CoolHeading";
+import SellCarForm from "./sell_cardForm2";
 
 //
 //
@@ -68,26 +70,6 @@ export default function SellPage() {
 
   //
   //
-  const onCall = (number: string) => {
-    let phoneNumber = '';
-    if (Platform.OS === 'android') { phoneNumber = `tel:${number}`; }
-    else { phoneNumber = `telprompt:${number}`; }
-    Linking.openURL(phoneNumber)
-
-  }
-
-  const onWhatappChat = (mobileNumber: string) => {
-    let url =
-      'whatsapp://send?' +
-      'phone=91' + mobileNumber;
-    Linking.openURL(url)
-      .then((data) => {
-        console.log('WhatsApp Opened');
-      })
-      .catch(() => {
-        Alert.alert('Make sure Whatsapp installed on your device');
-      });
-  }
 
   const [photo, setPhoto] = useState(null);
 
@@ -114,6 +96,37 @@ export default function SellPage() {
       })
       .catch((e) => console.log(e));
   };
+
+   const onWhatsApp = () =>{
+      let msg = "Welcome To Super Select";
+      let phoneWithCountryCode = "918607086070";
+    
+      let mobile =
+        Platform.OS == "ios" ? phoneWithCountryCode : "+" + phoneWithCountryCode;
+      if (mobile) {
+        if (msg) {
+          let url = "whatsapp://send?text=" + msg + "&phone=" + mobile;
+          Linking.openURL(url)
+            .then(data => {
+              console.log("WhatsApp Opened");
+            })
+            .catch(() => {
+              Alert.alert("Make sure WhatsApp installed on your device");
+            });
+        } else {
+          Alert.alert("Please insert message to send");
+        }
+      } else {
+        Alert.alert("Please insert mobile no");
+      }
+    }
+  
+    const onCall = () =>{
+      let phoneNumber = "8607086070";
+      if (Platform.OS === 'android') { phoneNumber = `tel:${phoneNumber}`; }
+      else {phoneNumber = `telprompt:${phoneNumber}`; }
+      Linking.openURL(phoneNumber);
+    }
 
 
   return (
@@ -151,19 +164,14 @@ export default function SellPage() {
 
         </View>
 
-        <View style={{ padding: 5, flexDirection: 'row', flex: 1 }}>
-          <ActionButton
-            onPress={() => onWhatappChat(siteInfo.showrooms.pune.phone)}
-            title="Chat On Whatsapp " backgroundColor={'#2DB742'} color={Colors.PURE_WHITE}
-          />
-          <TouchableOpacity style={{  justifyContent: 'center' }} onPress={() => onCall(siteInfo.showrooms.pune.phone)}>
-            <CallIcon height={50} width={50} color={Colors.BLACK_COLR} />
-          </TouchableOpacity>
-          {/* <ActionButton
-            onPress={() => onCall(siteInfo.showrooms.pune.phone)}
-            backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE}
-          /> */}
-        </View>
+        <View style={styles.stickyFooter}>
+               <TouchableOpacity style={styles.whatsappButton} onPress={() => onWhatsApp()}>
+                 <Text style={styles.whatsappButtonText}>Chat on WhatsApp</Text>
+               </TouchableOpacity>
+               <TouchableOpacity style={styles.callButton} onPress={() => onCall()}>
+                 <MaterialIcons name="phone" size={24} color="#000000" />
+               </TouchableOpacity>
+             </View>
 
         <View style={styles.wrapper}>
           <View style={styles.hero}>
@@ -176,20 +184,20 @@ export default function SellPage() {
               <TopPointsItem icon={<Image
                 source={require("../../assets/img/icons/FaTag.png")}
                 resizeMode={'contain'}
-                style={{ height: 40, width: 100, padding: 10 }}
+                style={{ height: 35, width: 100, padding: 10 }}
               />
               } title="Competitive Price" />
               <TopPointsItem icon={<Image
                 source={require("../../assets/img/icons/FaMoneyCheck.png")}
                 resizeMode={'contain'}
-                style={{ height: 40, width: 100, padding: 10 }}
+                style={{ height: 35, width: 100, padding: 10 }}
               />
               } title="Fast Transaction" />
               <TopPointsItem
                 icon={<Image
                   source={require("../../assets/img/icons/FaListCheck.png")}
                   resizeMode={'contain'}
-                  style={{ height: 40, width: 100, padding: 10 }}
+                  style={{ height: 35, width: 100, padding: 10 }}
                 />
                 }
                 title="Multiple Checkpoints"
@@ -197,7 +205,7 @@ export default function SellPage() {
               <TopPointsItem icon={<Image
                 source={require("../../assets/img/icons/FaGears.png")}
                 resizeMode={'contain'}
-                style={{ height: 40, width: 100, padding: 10 }}
+                style={{ height: 35, width: 100, padding: 10 }}
               />
               } title="Seamless Process" />
               <TopPointsItem icon={<Image
@@ -215,34 +223,7 @@ export default function SellPage() {
                 Want to speak to our team, about your car?
               </Text>
             </View>
-            <GeneralForm
-              formName="sellForm"
-              inputs={[
-                {
-                  name: "makeModel",
-                  type: "text",
-                  placeholder: "Car Make & Model",
-                  required: true,
-                },
-                { name: "name", type: "text", required: true },
-                { name: "email", type: "email", required: true },
-                {
-                  name: "phone",
-                  type: "tel",
-                  placeholder: "Phone no",
-                  required: true,
-                },
-                {
-                  name: "image",
-                  type: "image",
-                  placeholder: "Phone no",
-                  required: true,
-                },
-              ]}
-              onSubmit={onFormSubmit}
-              // filesAreUploading={filesAreUploading}
-              withAcknowledgment
-            />
+            <SellCarForm />
           </View>
         </View>
 
@@ -313,15 +294,15 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: Colors.BLACK_COLR,
-    fontSize: 18,
-    padding: 5,
+    fontSize: 16,
+    // padding: 5,
     fontFamily: 'Oxanium-Medium',
     textAlign: 'center',
     display: 'flex'
   },
   titleText: {
     color: Colors.BLACK_COLR,
-    fontSize: 20,
+    fontSize: 22,
     // padding: 10,
     fontFamily: 'Oxanium-Medium',
     textAlign: 'center',
@@ -330,7 +311,7 @@ const styles = StyleSheet.create({
   heading: {
     color: Colors.BLACK_COLR,
     marginVertical: 5,
-    fontSize: 28,
+    fontSize: 22,
     fontFamily: 'Oxanium-Medium',
     textAlign: 'center'
   },
@@ -383,8 +364,8 @@ const styles = StyleSheet.create({
   tp_item: {
     backgroundColor: Colors.PURE_WHITE,
     paddingVertical: 20,
-    width: 150,
-    paddingHorizontal: 10,
+    width: 120,
+    paddingHorizontal: 8,
     alignItems: 'center',
     margin: 10,
     borderRadius: 10,
@@ -393,5 +374,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 20
+  },
+  whatsappButton: {
+    backgroundColor: '#25D366',
+    flexDirection: 'row',
+     paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 50,
+    alignItems: 'center',
+    flex: 1,
+    justifyContent:'center'
+  },
+  callButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    marginLeft:10,
+    borderWidth: 1,
+    borderColor: '#000000',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  whatsappButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  stickyFooter:{
+    flexDirection: 'row',
+    padding:10
   }
 });
