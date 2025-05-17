@@ -30,8 +30,8 @@ const SuperSelectDrawer = (props : any) => {
           <User height={50} width={40} />
           <Text numberOfLines={1} style={styles.titleText}>Hello, {username}</Text>
         </View>
-        {
-          !login &&
+        {/* {
+          !login && */}
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={[styles.buttonContainer, { flex: 1, backgroundColor: Colors.BLACK_COLR, justifyContent: 'center' }]} onPress={() => props.navigation.navigate('SignIn')}>
               <Text style={[styles.titleText, { color: Colors.PURE_WHITE }]}>Login</Text>
@@ -40,7 +40,7 @@ const SuperSelectDrawer = (props : any) => {
               <Text style={styles.titleText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
-        }
+        {/* } */}
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Registration')}>
           <Text style={styles.titleText}>Purchase details</Text>

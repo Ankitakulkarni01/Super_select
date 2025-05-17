@@ -5,6 +5,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
+    Platform,
 } from 'react-native'
 import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -44,11 +45,14 @@ const SignInScreen = (props: any) => {
     const bagRef = useRef(null);
 
     const logins = async (phoneNumber: string, password: string) => {
+        const fcmToken = await createFirebaseToken();
+
         const values = {
-            "number": phoneNumber,
-            "password": password,
-            "fcmToken": await createFirebaseToken()
-        }
+          number: phoneNumber,
+          password: password,
+          fcmToken: fcmToken || '', // fallback to empty string if null
+          "deviceType": Platform.OS === "android" ? 1 : 2
+        };
 
         const { success, message, data } = await login(values)
         if (success) {
@@ -58,6 +62,9 @@ const SignInScreen = (props: any) => {
             );
             await AsyncStorage.setItem("access_token", data.token)
             await AsyncStorage.setItem("name", data.name)
+            await AsyncStorage.setItem("userId", data.userId)
+            console.log("data",data);
+            
         } else {
             console.log(message);
             setError(message)

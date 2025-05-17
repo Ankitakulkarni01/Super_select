@@ -6,7 +6,8 @@ import { arrayRange } from "../../utils/arrayRange";
 import { currencyValueFormatter } from "../../utils/numberOperations";
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { Slider } from "@miblanchard/react-native-slider";
+import Slider from '@react-native-community/slider';
+import Icon from 'react-native-vector-icons/Feather';
 import { Colors } from "../../utils/color";
 import ActionButton from "../actionButton";
 
@@ -53,6 +54,7 @@ const CarFilter: FC<{
   //
 
   //
+  const [priceRange, setPriceRange] = useState({ min: 5000000, max: 200000000 });
   //
 
   // Batch Handle Changes
@@ -96,107 +98,52 @@ const CarFilter: FC<{
 
   return (
     <View style={styles.CarFilter}>
-      <View style={styles.heading}>
-        <Text style={{
-          color: Colors.BLACK_COLR,
-          fontSize: 28,
-          flex: 1,
-          marginLeft: 10,
-          fontFamily: 'Oxanium-Medium'
-        }}>Filter</Text>
-        <ActionButton
-          onPress={() => reset()}
-          title="Reset" backgroundColor={Colors.PURE_WHITE}
-          color={Colors.BLACK_COLR}
-          border={1}
-        />
-      </View>
-      <ScrollView style={{paddingTop:20}}>
+      <ScrollView contentContainerStyle={styles.content}>
+        {/* Top Navigation */}
+        <View style={styles.header}>
+          <TouchableOpacity>
+            <Icon name="arrow-left" size={24} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon name="filter" size={24} />
+          </TouchableOpacity>
+        </View>
 
-        <CustomMUISelect
-          name="makeId"
-          title="Make"
-          placeholder="All Make"
-          options={filterOptions?.make?.map((d) => ({
-            value: d.id?.toString(),
-            label: d.name,
-          }))}
-          handleChange={batchHandleChanges}
-          defaultValue={current?.makeId}
-        />
+        {/* Filter Categories */}
+        <View style={styles.filters}>
+          <Text style={styles.filterLabel}>Make</Text>
+          <Text style={[styles.filterLabel, styles.disabledText]}>Type</Text>
+          <Text style={styles.filterLabel}>Location</Text>
+          <Text style={styles.filterLabel}>Driven</Text>
+          <Text style={styles.filterLabel}>Year</Text>
+          <Text style={styles.filterLabel}>Availability</Text>
+        </View>
 
-        <CustomMUISelect
-          name="type"
-          title="Type"
-          placeholder="All Type"
-          options={filterOptions?.type?.map((d) => ({ value: d, label: d }))}
-          handleChange={batchHandleChanges}
-          defaultValue={current?.type}
-        />
+        {/* Price Range */}
+        <View style={styles.priceSection}>
+          <Text style={styles.sectionTitle}>Price Range</Text>
+          <Text style={styles.priceText}>
+            ₹{priceRange.min.toLocaleString('en-IN')} - ₹{priceRange.max.toLocaleString('en-IN')}
+          </Text>
+          <Slider
+            style={{ width: '100%', height: 40 }}
+            minimumValue={5000000}
+            maximumValue={200000000}
+            minimumTrackTintColor="#000"
+            maximumTrackTintColor="#ccc"
+            step={100000}
+            value={priceRange.min}
+            onValueChange={(value) =>
+              setPriceRange((prev) => ({ ...prev, min: Math.round(value) }))
+            }
+          />
+        </View>
 
-        <CustomMUISelect
-          name="location"
-          title="Location"
-          placeholder="All Location"
-          options={[
-            { value: "1", label: "Pune" },
-            { value: "2", label: "Hyderabad" },
-          ]}
-          handleChange={batchHandleChanges}
-          defaultValue={current?.location}
-        />
-
-        <CustomMUISelect
-          name="driven"
-          title="Driven"
-          placeholder="Any Driven"
-          options={getDrivenList()}
-          handleChange={batchHandleChanges}
-          defaultValue={current?.driven}
-         
-        />
-
-        <CustomMUISelect
-          name="year"
-          title="Year"
-          placeholder="Any Year"
-          options={getYearList().map((d) => ({ value: d, label: d }))}
-          handleChange={batchHandleChanges}
-          defaultValue={current?.year}
-          showSLider={true}
-        />
-
-        <CustomMUISelect
-          name="status"
-          title="Availability"
-          placeholder="All"
-          options={[
-            {
-              value: "available",
-              label: "Available",
-            },
-            { value: "booked", label: "Booked" },
-            { value: "soldOut", label: "Sold" },
-          ]}
-          handleChange={batchHandleChanges}
-          defaultValue={current?.status}
-        />
-
-        <CustomMUIRangeSlider
-          name="priceRange"
-          title="Price Range"
-          handleChange={batchHandleChanges}
-          defaultValue={current?.priceRange}
-        />
+        {/* Apply Button */}
+        <TouchableOpacity style={styles.applyButton}>
+          <Text style={styles.applyButtonText}>Apply</Text>
+        </TouchableOpacity>
       </ScrollView>
-      <View style={{ flexShrink: 0 }}>
-        <ActionButton
-          onPress={() => onClose()}
-          title="Apply" backgroundColor={Colors.BLACK_COLR}
-          color={Colors.PURE_WHITE}
-          border={1}
-        />
-      </View>
     </View>
   );
 };
@@ -234,6 +181,10 @@ const CustomMUISelect: FC<{
     useEffect(() => {
       setValue(defaultValue ?? "");
     }, [defaultValue, setValue]);
+
+    const [priceRange, setPriceRange] = useState({ min: 5000000, max: 200000000 });
+
+
     //
 
     //
@@ -542,6 +493,51 @@ const getYearList = () => {
 const styles = StyleSheet.create({
   CarFilter: {
     padding: 10
+  },
+  content: {
+    padding: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  filters: {
+    marginBottom: 30,
+  },
+  filterLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#000',
+  },
+  disabledText: {
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  priceSection: {
+    marginBottom: 30,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  priceText: {
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  applyButton: {
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+  applyButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   heading: {
     color: Colors.BLACK_COLR,

@@ -10,6 +10,7 @@ import { getWishlistAPI } from '../../utils/extraAPIs/wishlist';
 import CarItem from '../../../components/CarItem/CarItem';
 import { CarList } from '../cars/carsDetail';
 import { CarFilterSkeleton } from '../../components/inventory/carFilter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const WishListScreen = (props: any) => {
@@ -22,6 +23,9 @@ const WishListScreen = (props: any) => {
 
   const getWishlist = async () => {
     setLoading(true)
+    const access_token = await AsyncStorage.getItem("userId")
+    console.log("access_token",access_token);
+    
     const { success, message, data } = await getWishlistAPI()
     console.log("wishlist data", data);
     if (success) {

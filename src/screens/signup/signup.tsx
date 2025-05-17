@@ -75,7 +75,7 @@ const SignUpScreen = (props: any) => {
       "password": values.password,
       "otp": values.Otp,
       "fcmToken": await createFirebaseToken(),
-      "deviceType": 1
+      "deviceType": Platform.OS === "android" ? 1 : 2
     }
     const { success, message, data } = await Signup(passingValue)
     if (success) {

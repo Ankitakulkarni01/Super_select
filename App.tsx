@@ -1,184 +1,109 @@
+// App.js
 import React, { useState, useEffect } from 'react';
-
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from '@tanstack/react-query'
-
+import { SafeAreaView, Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import {
-  Platform,
-  SafeAreaView, StatusBar, Text,
-} from 'react-native';
-import notifee, { EventType } from '@notifee/react-native';
-
-import { CommonActions, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+
 import HomeStack from './src/utils/navigation/navigation';
-import RemoteNotification from './src/components/RemoteNotification';
 
+export const navigationRef = createNavigationContainerRef();
 
-
-const App = (props: any) => {
-
-  const queryClient = new QueryClient()
-
-
-
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      const {data} = remoteMessage
-
-      console.log("data?.carId",data?.carId);
-      
-      if (data?.carId) {
-        CommonActions.navigate('CarDetails', {
-          carId: data?.carId,
-        })
-      }
-
-    });
-
-    // Foreground event handler
-notifee.onForegroundEvent((message) => {
-  console.log('onForegroundEvent', JSON.stringify(remoteMessage));
-  switch (message?.type) {
-    case EventType.PRESS:
-      CommonActions.navigate('CarDetails', {
-        carId: message?.data?.carId,
-      })
-      break;
-    default:
-      break;
+function navigate(name, params) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
   }
-});
+}
 
-// Background event handler
-notifee.onBackgroundEvent(async (message) => {
-  console.log('onForegroundEventCLICKBACKGROUND✨', Platform.OS, message);
+const queryClient = new QueryClient();
 
-// on kill mode redirection to specific page was not happeing so did this workaround
-CommonActions.navigate('CarDetails', {
-  carId: message?.data?.carId,
-})
-});
+export default function App() {
+  const [initialCarId, setInitialCarId] = useState<string | null>(null);
+  const [firebaseReady, setFirebaseReady] = useState(false);
+  const [navReady, setNavReady] = useState(false);
 
-    return unsubscribe;
-  }, []);
-
-
+  // 1. Cold-start: check if a notification launched the app
   useEffect(() => {
-    requestUserPermission();
-    // Assume a message-notification contains a "type" property in the data payload of the screen to open
-
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-    });
-
-    // Check whether an initial notification is available
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
+        if (remoteMessage?.data?.carId) {
+          setInitialCarId(remoteMessage.data.carId);
         }
-        setLoading(false);
+      })
+      .finally(() => {
+        setFirebaseReady(true);
       });
   }, []);
 
-  const requestUserPermission = async () => {
-    const user_id = await AsyncStorage.getItem('fcmToken');
-    console.log("fcm  ", user_id);
+  // 2. Background & foreground opened handlers
+  useEffect(() => {
+    // Background (when app is in BG and user taps)
+    const bgUnsub = messaging().onNotificationOpenedApp(remoteMessage => {
+      const carId = remoteMessage.data?.carId;
+      if (carId) navigate('CarDetails', { carId });
+    });
 
+    // Foreground (while app is open)
+    const fgUnsub = messaging().onMessage(async remoteMessage => {
+      Alert.alert('New message', remoteMessage.notification?.body ?? '');
+    });
 
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    if (enabled) {
-      checkToken();
-      messaging().setBackgroundMessageHandler(async remoteMessage => {
+    return () => {
+      bgUnsub();
+      fgUnsub();
+    };
+  }, []);
 
-        console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-        console.log('notifycallback')
-
-
-      });
-    }
-  };
-
-  const checkToken = async () => {
-    const fcmToken = await AsyncStorage.getItem('firebase_token');
-    console.log("firebase_token'", fcmToken)
-    if (fcmToken) {
-
-      messaging().onNotificationOpenedApp(async remoteMessage => {
-
-        console.log(remoteMessage)
-        console.log('notifycallback')
-
-      });
-
-      // Check whether an initial notification is available
-      messaging()
-        .getInitialNotification()
-        .then(async remoteMessage => {
-
-          if (remoteMessage) {
-            console.log(remoteMessage)
-
-
-
-            console.log('remoteMessage.data.type')
-
-
-            console.log('notifycallback')
-
-
-          }
+  // 3. Request permission & token
+  useEffect(() => {
+    async function setup() {
+      const auth = await messaging().requestPermission();
+      if (
+        auth === messaging.AuthorizationStatus.AUTHORIZED ||
+        auth === messaging.AuthorizationStatus.PROVISIONAL
+      ) {
+        let token = await AsyncStorage.getItem('firebase_token');
+        if (!token) {
+          token = await messaging().getToken();
+          if (token) await AsyncStorage.setItem('firebase_token', token);
+        }
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+          console.log('BG message:', remoteMessage);
         });
+      }
     }
-  };
+    setup();
+  }, []);
 
-  if (loading) {
+  // 4. When both Firebase init (getInitialNotification done) and NavContainer is ready, navigate if needed
+  useEffect(() => {
+    if (firebaseReady && navReady && initialCarId) {
+      navigate('CarDetails', { carId: initialCarId });
+      setInitialCarId(null);       // clear, so it doesn't repeat on re‐render
+    }
+  }, [firebaseReady, navReady, initialCarId]);
+
+  // 5. Only render when both are ready
+  if (!firebaseReady) {
+    // you could return a splash screen here
     return null;
   }
 
-
   return (
-    
-      <SafeAreaView style={{ flex: 1, }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <PaperProvider>
-          <NavigationContainer>
-            {/* <RemoteNotification /> */}
-            <StatusBar animated={true} backgroundColor="#0000000" />
+          <NavigationContainer
+            ref={navigationRef}
+            onReady={() => setNavReady(true)}
+          >
             <HomeStack />
           </NavigationContainer>
         </PaperProvider>
-        </QueryClientProvider>
-      </SafeAreaView>
-    
-
+      </QueryClientProvider>
+    </SafeAreaView>
   );
-};
-
-export default App;
-
-
-
-
+}

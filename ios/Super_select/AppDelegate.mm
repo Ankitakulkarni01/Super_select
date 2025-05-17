@@ -7,38 +7,53 @@
 #import <Firebase.h>
 #import <UserNotifications/UserNotifications.h>
 
+@interface AppDelegate () <UNUserNotificationCenterDelegate>
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // 1. Configure Firebase
   [FIRApp configure];
-//if ([FIRApp defaultApp] == nil) {
-//    [FIRApp configure];
-//  }
 
-  // Define UNUserNotificationCenter
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  
-  
-  
-  
+  // 2. Set UNUserNotificationCenter delegate
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  center.delegate = self;
+
+  // 3. Request permission to show notifications
+  [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert |
+                                           UNAuthorizationOptionSound |
+                                           UNAuthorizationOptionBadge)
+                        completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    if (error) {
+      NSLog(@"❌ Notification permission request error: %@", error);
+    }
+    // You might dispatch to JS here if you need to know permission status early
+  }];
+
+  // 4. Register with APNS to get the device token
+  [[UIApplication sharedApplication] registerForRemoteNotifications];
+
+  // 5. Usual React setup
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"Super_select"  initialProperties:[RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions]];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+                                                   moduleName:@"Super_select"
+                                            initialProperties:[RNFBMessagingModule
+                                                addCustomPropsToUserProps:nil
+                                                              withLaunchOptions:launchOptions]];
 
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
-
+  rootView.backgroundColor = [UIColor whiteColor];
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
 
-  
   return YES;
 }
 
-
-
+// --- React Native bridge URL resolver ---
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG
@@ -47,22 +62,44 @@
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
- 
-- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
+
+// --- APNS Registration Callbacks ---
+
+// Called when APNS has successfully registered the device
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+  NSLog(@"✅ APNS device token received: %@", deviceToken);
+
+  // Forward the APNS token to Firebase Messaging
+  [FIRMessaging messaging].APNSToken = deviceToken;
 }
 
-// For universal links
-- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
- restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+// Called when APNS registration fails
+- (void)application:(UIApplication *)application
+didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-  return [RCTLinkingManager application:application
-                   continueUserActivity:userActivity
-                     restorationHandler:restorationHandler];
+  NSLog(@"❌ Failed to register for remote notifications: %@", error);
 }
-//Called when a notification is delivered to a foreground app.
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+
+// Called when a notification is delivered while the app is in the foreground
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
+  // Show the alert, sound, and badge even when in foreground
+  completionHandler(UNNotificationPresentationOptionAlert |
+                    UNNotificationPresentationOptionSound |
+                    UNNotificationPresentationOptionBadge);
+}
+
+// Called when the user interacts with a notification (background/tapped)
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void(^)(void))completionHandler
+{
+  // You can forward this event to React Native if needed
+  completionHandler();
 }
 
 @end
