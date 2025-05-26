@@ -4,6 +4,7 @@ import FastImage from "react-native-fast-image";
 import HeaderNavigationMenu from "../../src/utils/navigation/HeaderNavigationMenu";
 import { Colors } from "../../src/utils/color";
 import PreviewImage from "./PreviewImage";
+import { FONT_FAMILY } from "../../src/utils/fonts";
 
 
 export const GALLERY_POPUP_NAME = "gallery";
@@ -83,7 +84,7 @@ const Gallery: FC<Props> = ({
       />
 
       <Text style={{   color: Colors.BLACK_COLR,
-          fontFamily: 'Zebulon-Condensed',
+          fontFamily: FONT_FAMILY.REGULAR,
           fontSize: 22,
           fontWeight: '300',
           marginTop: 10 }} >Gallery</Text>

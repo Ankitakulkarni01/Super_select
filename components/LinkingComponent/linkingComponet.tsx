@@ -9,6 +9,7 @@ import { CarList } from "../../interface/car";
 import { Colors } from "../../src/utils/color";
 import { useQuery } from "@tanstack/react-query";
 import { ActivityIndicator } from "react-native-paper";
+import { FONT_FAMILY } from "../../src/utils/fonts";
 
 //
 
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     },
     sub_heading: {
       fontSize: 16,
-      fontFamily: 'Zebulon-Condensed',
+      fontFamily: FONT_FAMILY.REGULAR,
       color: Colors.BLACK_COLR,
       paddingBottom: 10,
       lineHeight: 25,

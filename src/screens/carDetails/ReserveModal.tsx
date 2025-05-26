@@ -10,6 +10,7 @@ import GeneralForm from "../../../components/GeneralForm/generalForm";
 import { Colors } from "../../utils/color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from "react-native-confirmation-code-field";
+import { FONT_FAMILY } from "../../utils/fonts";
 
 export const RESERVE_NOW_POPUP_NAME = "reserve_now";
 
@@ -90,8 +91,11 @@ const ReserveNow: FC<{
     <View style={styles.wrapper}>
       <View style={styles.ReserveNow}>
 
-        <Modal visible={open}
+        <Modal 
+        visible={open}
+        style={{flex:1}}
                 onRequestClose={() => setopen(false)}>
+
         <>
         <Text  style={styles.carName}>
           Verify OTP
@@ -200,7 +204,7 @@ const styles = StyleSheet.create({
     color: Colors.BLACK_COLR,
     flex:1,
     fontSize: 28,
-    fontFamily: 'Zebulon-Condensed-Italic',
+    fontFamily: FONT_FAMILY.ITALIC, 
   },
   subHeadingText: {
     color: Colors.BLACK_COLR,

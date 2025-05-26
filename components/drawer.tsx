@@ -6,7 +6,7 @@ import { Colors } from '../src/utils/color';
 import User from '../src/assets/svg/user_logo.svg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SuperSelectDrawer = (props : any) => {
+const SuperSelectDrawer = (props: any) => {
   const [username, setName] = React.useState("");
   const [login, setLogin] = React.useState(false);
 
@@ -17,7 +17,6 @@ const SuperSelectDrawer = (props : any) => {
   const getName = async () => {
     const name = await AsyncStorage.getItem('name');
     const access_token = await AsyncStorage.getItem("access_token")
-    console.log("acess",access_token)
     setLogin(access_token !== null)
     setName(name)
   }
@@ -26,25 +25,27 @@ const SuperSelectDrawer = (props : any) => {
   return (
     <View style={{ marginTop: 25, marginHorizontal: 15, justifyContent: 'space-between', flex: 1, marginBottom: 10 }}>
       <ScrollView >
-        <View style={[styles.buttonContainer, { borderWidth:1 }]}>
+        <View style={[styles.buttonContainer, { borderWidth: 1 }]}>
           <User height={50} width={40} />
           <Text numberOfLines={1} style={styles.titleText}>Hello, {username}</Text>
         </View>
-        {/* {
-          !login && */}
+        {
+          !login &&
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={[styles.buttonContainer, { flex: 1, backgroundColor: Colors.BLACK_COLR, justifyContent: 'center' }]} onPress={() => props.navigation.navigate('SignIn')}>
               <Text style={[styles.titleText, { color: Colors.PURE_WHITE }]}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, justifyContent: 'center', marginLeft: 10, borderWidth:1 }]} onPress={() => props.navigation.navigate('SignUp')}>
+            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, justifyContent: 'center', marginLeft: 10, borderWidth: 1 }]} onPress={() => props.navigation.navigate('SignUp')}>
               <Text style={styles.titleText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
-        {/* } */}
-
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Registration')}>
-          <Text style={styles.titleText}>Purchase details</Text>
-        </TouchableOpacity>
+        }
+        {
+          login &&
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Registration')}>
+            <Text style={styles.titleText}>Purchase details</Text>
+          </TouchableOpacity>
+        }
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Inventory')}>
           <Text style={styles.titleText}>Buy Car</Text>
         </TouchableOpacity>
@@ -66,25 +67,25 @@ const SuperSelectDrawer = (props : any) => {
         <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Calculator')}>
           <Text style={styles.titleText}>Emi Calculator</Text>
         </TouchableOpacity>
-      
+
       </ScrollView>
-      <View style={{flexDirection:'row'}}>
-      <TouchableOpacity style={{
-marginHorizontal:5
-      }} onPress={() => Linking.openURL('https://www.superselect.in/about')}>
-          <Text style={[styles.titleText,{fontSize:14}]}>About Us</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity style={{
+          marginHorizontal: 5
+        }} onPress={() => Linking.openURL('https://www.superselect.in/about')}>
+          <Text style={[styles.titleText, { fontSize: 14 }]}>About Us</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{
-marginHorizontal:5
-}} onPress={() => Linking.openURL('https://www.superselect.in/privacy')}>
-    <Text style={[styles.titleText,{fontSize:14}]}>Privacy</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={{
-marginHorizontal:5
-}} onPress={() => Linking.openURL('https://www.superselect.in/terms')}>
-    <Text style={[styles.titleText,{fontSize:14}]}>Term</Text>
-  </TouchableOpacity>
-  </View>
+          marginHorizontal: 5
+        }} onPress={() => Linking.openURL('https://www.superselect.in/privacy')}>
+          <Text style={[styles.titleText, { fontSize: 14 }]}>Privacy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{
+          marginHorizontal: 5
+        }} onPress={() => Linking.openURL('https://www.superselect.in/terms')}>
+          <Text style={[styles.titleText, { fontSize: 14 }]}>Term</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 15
   },
-  titleText: { fontSize: 16, color: Colors.BLACK_COLR, fontWeight: '400', paddingHorizontal: 10, fontFamily:'Oxanium-Medium' }
+  titleText: { fontSize: 16, color: Colors.BLACK_COLR, fontWeight: '400', paddingHorizontal: 10, fontFamily: 'Oxanium-Medium' }
 });
 
 export default SuperSelectDrawer

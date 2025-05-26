@@ -20,6 +20,7 @@ import FastImage from "react-native-fast-image";
 import { getYearFromFormattedDateString } from "../../src/utils/date-time";
 import SpecialTag from '../../assets/svg/specialTag.svg';
 import CarKeyPointsItem from "../CarKeyPointsItem";
+import { FONT_FAMILY } from "../../src/utils/fonts";
 // import soldOutImg from "../../src/assets/img/sold-out.png";
 
 
@@ -49,7 +50,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         resizeMode={FastImage.resizeMode.stretch}
       />
       </TouchableOpacity>
-      <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 16, paddingHorizontal: 15, fontWeight: '300' }}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: FONT_FAMILY.REGULAR, fontSize: 16, paddingHorizontal: 15,paddingBottom:10, fontWeight: '300' }}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
           data.price > 0
@@ -70,7 +71,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         )}
       </View>
 
-      <ScrollView style={styles.info} horizontal={true}>
+      <ScrollView style={styles.info} horizontal={true}   showsHorizontalScrollIndicator={false}>
           <CarKeyPointsItem
             name="Engine"
             value={data?.engine}

@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { View, Text, StyleSheet } from "react-native";
 import { Colors } from "../utils/color";
+import { FONT_FAMILY } from "../utils/fonts";
 
 const CoolHeading: FC<{ title?: string; text?: string }> = ({ title, text }) => {
   console.log("text", text)
@@ -29,14 +30,14 @@ const styles = StyleSheet.create({
       color: Colors.BLACK_COLR, 
       // marginVertical: 10, 
       textAlign:'center',
-      fontFamily: 'Zebulon-Condensed-Italic', 
+      fontFamily: FONT_FAMILY.ITALIC, 
       fontSize: 34,
     },
     subText:{
         color: Colors.BLACK_COLR, 
         // marginVertical: 10, 
         // fontWeight: "700",
-        fontFamily: 'Zebulon-Condensed-Italic', 
+        fontFamily: FONT_FAMILY.ITALIC, 
         fontSize: 34,
         textAlign:'center',
         // lineHeight: 22

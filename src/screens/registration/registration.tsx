@@ -18,6 +18,7 @@ import RNFS from 'react-native-fs';
 import { Platform } from 'react-native';
 import Share from 'react-native-share';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FONT_FAMILY } from '../../utils/fonts';
 
 
 const RegistrationScreen = (props: any) => {
@@ -167,7 +168,7 @@ const downloadFile = (fileUrl) => {
 
   return (
     <View style={styles.fullScreen} >
-      <Text style={{ color: Colors.BLACK_COLR,  fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>hello {username}</Text>
+      <Text style={{ color: Colors.BLACK_COLR,  fontFamily: FONT_FAMILY.BOLD, fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>hello {username}</Text>
       <Text style={{ color: Colors.BLACK_COLR,marginVertical: 15, fontSize: 18 }}>Here are your purchase details</Text>
       {
       pdfData.length !== 0 ?
@@ -183,7 +184,7 @@ const downloadFile = (fileUrl) => {
             shadowRadius: 3,
             elevation:20
          }}>
-            <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed', fontSize: 22, paddingHorizontal: 15, fontWeight: '300', marginTop: 10 }}>{d.name}</Text>
+            <Text style={{ color: Colors.BLACK_COLR, fontFamily: FONT_FAMILY.REGULAR, fontSize: 22, paddingHorizontal: 15, fontWeight: '300', marginTop: 10 }}>{d.name}</Text>
             <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Oxanium-Medium', fontSize: 18, letterSpacing: 2, padding: 15 }}>{formatDate(d.purchaseDate)}</Text>
             <View style={{ flex: 1, flexDirection: 'row' }}>
 

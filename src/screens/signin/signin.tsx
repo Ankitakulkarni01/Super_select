@@ -6,6 +6,8 @@ import {
     TextInput,
     TouchableOpacity,
     Platform,
+    KeyboardAvoidingView,
+    ScrollView,
 } from 'react-native'
 import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -48,10 +50,10 @@ const SignInScreen = (props: any) => {
         const fcmToken = await createFirebaseToken();
 
         const values = {
-          number: phoneNumber,
-          password: password,
-          fcmToken: fcmToken || '', // fallback to empty string if null
-          "deviceType": Platform.OS === "android" ? 1 : 2
+            number: phoneNumber,
+            password: password,
+            fcmToken: fcmToken || '', // fallback to empty string if null
+            "deviceType": Platform.OS === "android" ? 1 : 2
         };
 
         const { success, message, data } = await login(values)
@@ -63,8 +65,8 @@ const SignInScreen = (props: any) => {
             await AsyncStorage.setItem("access_token", data.token)
             await AsyncStorage.setItem("name", data.name)
             await AsyncStorage.setItem("userId", data.userId)
-            console.log("data",data);
-            
+            console.log("data", data);
+
         } else {
             console.log(message);
             setError(message)
@@ -102,31 +104,35 @@ const SignInScreen = (props: any) => {
                     />
                 </View>
                 <Text style={styles.errorText}>{error}</Text>
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                >
+                    <View style={styles.forgotPassword}>
 
-                <View style={styles.forgotPassword}>
 
+                        <View style={styles.textinputContainer}>
+                            <Ionicons name={'call-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                            <TextInput
+                                // name="email"
+                                placeholder="Phone Number"
+                                style={styles.textInput}
+                                onChangeText={(text) => setphoneNumber(text)}
+                                keyboardType="number-pad"
+                                placeholderTextColor={Colors.BLACK_COLR}
+                            />
 
-                    <View style={styles.textinputContainer}>
-                        <Ionicons name={'call-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
-                        <TextInput
-                            // name="email"
-                            placeholder="Phone Number"
-                            style={styles.textInput}
-                            onChangeText={(text) => setphoneNumber(text)}
-                            keyboardType="number-pad"
-                            placeholderTextColor={Colors.BLACK_COLR}
-                        />
+                        </View>
 
+                        <Text style={styles.headerText}>
+                            We will check if there is any account associated with super select by this mobile number using OTP verification
+                        </Text>
+
+                        <TouchableOpacity style={styles.processButton} onPress={() => { sendOTP(phoneNumber) }}>
+                            <Text style={styles.processText}>Proceed</Text>
+                        </TouchableOpacity>
                     </View>
-
-                    <Text style={styles.headerText}>
-                        We will check if there is any account associated with super select by this mobile number using OTP verification
-                    </Text>
-
-                    <TouchableOpacity style={styles.processButton} onPress={() => { sendOTP(phoneNumber) }}>
-                        <Text style={styles.processText}>Proceed</Text>
-                    </TouchableOpacity>
-                </View>
+                </KeyboardAvoidingView>
             </View>
         );
     //
@@ -136,107 +142,116 @@ const SignInScreen = (props: any) => {
     return (
         <View style={styles.loginContainer}>
             <View style={{ padding: 10 }}>
-                <TouchableOpacity onPress={() => props.navigation.goBack()} style={{height:20, width:20}}>
+                <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ height: 20, width: 20 }}>
                     <MaterialIcons name={'arrow-back-ios'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
                 </TouchableOpacity>
             </View>
-            <View style={styles.logoContainer}>
-                {/* <Logo height={80} width={180} /> */}
-                <Image
-                    source={require('../../assets/img/LoginBackgroud.jpg')}
-                    resizeMode={'cover'}
-                    style={{ height: 300, width: '100%' }}
-                />
-            </View>
-            <Text style={styles.errorText}>{error}</Text>
-            <Formik
-                validationSchema={loginValidationSchema}
-                initialValues={{ phoneNumber: '', password: '' }}
-                onSubmit={values => {
-                    logins(values.phoneNumber, values.password)
-                }}
-
-                innerRef={bagRef}
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             >
-                {({
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    values,
-                    errors,
-                    touched,
-                    isValid,
-                }) => (
-                    <>
-                        <View style={{ paddingHorizontal: 20 }} >
-                            <View style={styles.textinputParentContainer}>
-                                <View style={styles.textinputContainer}>
-                                    <Ionicons name={'call-outline'} size={25} color={Colors.BLACK_COLR} style={styles.iconStyle} />
-                                    <TextInput
-                                        // name="email"
-                                        placeholder="Phone Number"
-                                        style={styles.textInput}
-                                        onChangeText={handleChange('phoneNumber')}
-                                        onBlur={handleBlur('phoneNumber')}
-                                        value={values.phoneNumber}
-                                        keyboardType="number-pad"
-                                        placeholderTextColor={Colors.BLACK_COLR}
-                                    />
+                <ScrollView>
+                <View style={styles.logoContainer}>
+                    {/* <Logo height={80} width={180} /> */}
+                    <Image
+                        source={require('../../assets/img/LoginBackgroud.jpg')}
+                        resizeMode={'cover'}
+                        style={{ height: 300, width: '100%' }}
+                    />
+                </View>
+                <Text style={styles.errorText}>{error}</Text>
+
+                <Formik
+                    validationSchema={loginValidationSchema}
+                    initialValues={{ phoneNumber: '', password: '' }}
+                    onSubmit={values => {
+                        logins(values.phoneNumber, values.password)
+                    }}
+
+                    innerRef={bagRef}
+                >
+                    {({
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values,
+                        errors,
+                        touched,
+                        isValid,
+                    }) => (
+                        <>
+                            <View style={{ paddingHorizontal: 20 }} >
+                                <View style={styles.textinputParentContainer}>
+                                    <View style={styles.textinputContainer}>
+                                        <Ionicons name={'call-outline'} size={25} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                                        <TextInput
+                                            // name="email"
+                                            placeholder="Phone Number"
+                                            style={styles.textInput}
+                                            onChangeText={handleChange('phoneNumber')}
+                                            onBlur={handleBlur('phoneNumber')}
+                                            value={values.phoneNumber}
+                                            keyboardType="number-pad"
+                                            placeholderTextColor={Colors.BLACK_COLR}
+                                        />
+                                    </View>
+                                    {errors.phoneNumber && touched.phoneNumber &&
+                                        <Text style={styles.errorMsgText}>{errors.phoneNumber}</Text>
+                                    }
                                 </View>
-                                {errors.phoneNumber && touched.phoneNumber &&
-                                    <Text style={styles.errorMsgText}>{errors.phoneNumber}</Text>
-                                }
+
+                                <View style={styles.textinputParentContainer}>
+                                    <View style={styles.textinputContainer}>
+                                        <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                                        <TextInput
+                                            // name="password"
+                                            placeholder="Password"
+                                            style={styles.textInput}
+                                            onChangeText={handleChange('password')}
+                                            onBlur={handleBlur('password')}
+                                            value={values.password}
+                                            secureTextEntry={showPassword}
+                                            placeholderTextColor={Colors.BLACK_COLR}
+                                        />
+                                    </View>
+                                    {errors.password && touched.password &&
+                                        <Text style={styles.errorMsgText}>{errors.password}</Text>
+                                    }
+                                    <View style={styles.linkContainer}>
+                                        <Text style={styles.linkText} onPress={() => {
+                                            setShowResetPassword(true)
+                                            // const { email } = bagRef.current.values
+                                            // const link = `${CONSTANTS.yoair_web_sit}/account/password_reset${email ? `?email=${email}` : ''}`
+                                            // Linking.canOpenURL(link).then(supported => {
+                                            //     if (supported)
+                                            //         Linking.openURL(link);
+                                            //     else console.log("Don't know how to open URI: " + link);
+                                            // });
+                                        }}>Forgot Password?</Text>
+                                    </View>
+                                </View>
                             </View>
+                            <View style={{ paddingHorizontal: 20 }}>
+                                <ActionButton
+                                    backgroundColor={Colors.BLACK_COLR}
+                                    color={Colors.PURE_WHITE}
+                                    onPress={handleSubmit}
+                                    title="Login" /></View>
 
-                            <View style={styles.textinputParentContainer}>
-                                <View style={styles.textinputContainer}>
-                                    <Ionicons name={'lock-closed-outline'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
-                                    <TextInput
-                                        // name="password"
-                                        placeholder="Password"
-                                        style={styles.textInput}
-                                        onChangeText={handleChange('password')}
-                                        onBlur={handleBlur('password')}
-                                        value={values.password}
-                                        secureTextEntry={showPassword}
-                                        placeholderTextColor={Colors.BLACK_COLR}
-                                    />
-                                </View>
-                                {errors.password && touched.password &&
-                                    <Text style={styles.errorMsgText}>{errors.password}</Text>
-                                }
-                                <View style={styles.linkContainer}>
-                                    <Text style={styles.linkText} onPress={() => {
-                                        setShowResetPassword(true)
-                                        // const { email } = bagRef.current.values
-                                        // const link = `${CONSTANTS.yoair_web_sit}/account/password_reset${email ? `?email=${email}` : ''}`
-                                        // Linking.canOpenURL(link).then(supported => {
-                                        //     if (supported)
-                                        //         Linking.openURL(link);
-                                        //     else console.log("Don't know how to open URI: " + link);
-                                        // });
-                                    }}>Forgot Password?</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{ paddingHorizontal: 20 }}>
-                            <ActionButton
-                                backgroundColor={Colors.BLACK_COLR}
-                                color={Colors.PURE_WHITE}
-                                onPress={handleSubmit}
-                                title="Login" /></View>
+                        </>
+                    )}
+                </Formik>
 
-                    </>
-                )}
-            </Formik>
-            <View style={styles.signUpContainer}>
-                <Text style={{ color: Colors.BLACK_COLR, fontSize: 14 }}>Dont have an Account?</Text>
-                <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() =>
-                    props.navigation.navigate('SignUp')
-                }>Open an Account</Text>
-            </View>
-
+                <View style={styles.signUpContainer}>
+                    <Text style={{ color: Colors.BLACK_COLR, fontSize: 14 }}>Dont have an Account?</Text>
+                    <Text style={{ color: Colors.BLACK_COLR, marginHorizontal: 5, textDecorationLine: "underline", fontWeight: 'bold', fontSize: 14 }} onPress={() =>
+                        props.navigation.navigate('SignUp')
+                    }>Open an Account</Text>
+                </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </View>
+
     )
 }
 
@@ -246,13 +261,12 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
         // padding: 25,
         elevation: 10,
-        backgroundColor:Colors.PURE_WHITE,
+        backgroundColor: Colors.PURE_WHITE,
     },
-    logoContainer: {
-        marginBottom: 20,
-        // borderColor:'while',
-        // height:100,
-        // width:100
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
     },
     textinputParentContainer: {
         marginVertical: 15,

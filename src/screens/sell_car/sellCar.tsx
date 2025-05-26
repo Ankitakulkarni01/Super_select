@@ -402,6 +402,8 @@ const styles = StyleSheet.create({
   },
   stickyFooter:{
     flexDirection: 'row',
-    padding:10
+    padding:10,
+    marginTop:15,
+    marginBottom:10
   }
 });

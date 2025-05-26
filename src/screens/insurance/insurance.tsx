@@ -12,6 +12,7 @@ import { Text } from 'react-native';
 import InsuranceHeroSvg from "../../assets/svg/insurance-hero.svg";
 import CoolHeading from '../../components/CoolHeading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FONT_FAMILY } from '../../utils/fonts';
 
 
 
@@ -84,7 +85,7 @@ useEffect(() => {
 const styles = StyleSheet.create({
   sub_heading: {
     fontSize: 16,
-    fontFamily: 'Zebulon-Condensed',
+    fontFamily: FONT_FAMILY.REGULAR,
     color: Colors.BLACK_COLR,
     paddingBottom: 10,
     lineHeight: 20,

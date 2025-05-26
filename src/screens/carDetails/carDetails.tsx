@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, FC } from 'react';
 import {
   View,
   Text,
@@ -12,25 +12,17 @@ import {
   StatusBar,
   Linking,
 } from 'react-native';
-import { Colors } from '../../utils/color';
 import getEMI from '../../utils/getEMI';
 import { stringToJson } from '../../utils/commons'
-import SwipeableButton from '../../../components/swipeButton/swipeButton';
 import { Car } from '../../../interface/car';
 import { getCarDetails } from '../../utils/carAPIs/carDetails';
 import { useQuery } from '@tanstack/react-query';
-import CarKeyPointsItem from '../../../components/CarKeyPointsItem';
-import PagerView from 'react-native-pager-view';
-import TabViewExample from './tabCarDetails';
-import DynamicCarouselComponent from '../../../components/Carousel/DynamicCarousel';
-import ActionButton from '../../components/actionButton';
 import { currencyValueFormatter } from '../../utils/numberOperations';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishlist';
-import Gallery from '../../../components/Gallery/gallery';
 import ReserveNow from './ReserveModal';
 import { DescriptionItem } from '../../../components/DescriptionItem/DescriptionItem';
 import { Alert } from 'react-native';
@@ -329,9 +321,10 @@ const CarDetailScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* {renderHeader()} */}
-     {reserveModal && <ReserveNow carData={carData} onClose={() => setReserveModal(false)}/> }
+    
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Gallery */}
+        {reserveModal && <ReserveNow carData={carData} onClose={() => setReserveModal(false)}/> }
         <View style={styles.imageContainer}>
           <TouchableOpacity activeOpacity={0.9} onPress={() => setIsFullScreen(true)}>
             <ScrollView
@@ -428,7 +421,7 @@ const CarDetailScreen = ({ navigation, route }) => {
               {specifications.map((spec, index) => (
                 <View key={index} style={styles.specCard}>
                   <View style={styles.specIconContainer}>
-                    <FontAwesome5 name={spec.icon} size={24} color="#000000" />
+                    <Icon name={spec.label} icon={spec.icon}/>
                   </View>
                   <Text style={styles.specValue}>{spec.value}</Text>
                   <Text style={styles.specLabel}>{spec.label}</Text>
@@ -529,6 +522,34 @@ const CarDetailScreen = ({ navigation, route }) => {
     </View>
   );
 }
+
+const Icon: FC<{ name: string, icon: string }> = ({ name , icon}) => {
+  console.log('name',name);
+  
+  switch (name.toLowerCase()) {
+    case "engine":
+      return <Image
+        source={require("../../../assets/img/engine.png")}
+        resizeMode={'contain'}
+        style={{ height: 30, width: 50, padding: 10 }}
+      />
+
+    case "type":
+      return <Image
+        source={require("../../../assets/img/Car.png")}
+        resizeMode={'contain'}
+        style={{ height: 40, width: 60, padding: 10 }}
+      />;
+    case "year":
+      return <Image
+        source={require("../../assets/img/CarIcon.png")}
+        resizeMode={'contain'}
+        style={{ height: 40, width: 50, padding: 10 }}
+      />;
+    default:
+      return  <FontAwesome5 name={icon} size={24} color="#000000" />;
+  }
+};
 
 const styles = StyleSheet.create({
   fullScreenContainer: {
@@ -705,7 +726,7 @@ const styles = StyleSheet.create({
   specCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    padding: 12,
+    padding: 8,
     marginLeft: 12,
     alignItems: 'center',
     width: 120,
@@ -714,7 +735,6 @@ const styles = StyleSheet.create({
   },
   specIconContainer: {
     width: 40,
-    height: 40,
     borderRadius: 20,
     backgroundColor: '#f8f8f8',
     justifyContent: 'center',
