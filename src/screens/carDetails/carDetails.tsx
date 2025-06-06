@@ -325,7 +325,7 @@ const CarDetailScreen = ({ navigation, route }) => {
     
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Gallery */}
-        {reserveModal && <ReserveNow carData={carData} onClose={() => setReserveModal(false)}/> }
+       
         <View style={styles.imageContainer}>
           <TouchableOpacity activeOpacity={0.9} onPress={() => setIsFullScreen(true)}>
             <ScrollView
@@ -520,6 +520,17 @@ const CarDetailScreen = ({ navigation, route }) => {
           <MaterialIcons name="phone" size={24} color="#000000" />
         </TouchableOpacity>
       </View>
+      {
+              reserveModal &&
+              <Modal
+                visible={reserveModal}
+                onRequestClose={() => setReserveModal(false)}>
+                  <ReserveNow carData={carData}
+                  onClose={() => setReserveModal(false)}
+                  />
+               
+              </Modal>
+            }
     </View>
   );
 }

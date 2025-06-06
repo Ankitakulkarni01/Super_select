@@ -54,7 +54,6 @@ const CarFilter: FC<{
   //
 
   //
-  const [priceRange, setPriceRange] = useState({ min: 5000000, max: 200000000 });
   //
 
   // Batch Handle Changes
@@ -101,49 +100,98 @@ const CarFilter: FC<{
       <ScrollView contentContainerStyle={styles.content}>
         {/* Top Navigation */}
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity  onPress={() => onClose()}>
             <Icon name="arrow-left" size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity  onPress={() => onClose()}>
             <Icon name="filter" size={24} />
           </TouchableOpacity>
         </View>
 
-        {/* Filter Categories */}
-        <View style={styles.filters}>
-          <Text style={styles.filterLabel}>Make</Text>
-          <Text style={[styles.filterLabel, styles.disabledText]}>Type</Text>
-          <Text style={styles.filterLabel}>Location</Text>
-          <Text style={styles.filterLabel}>Driven</Text>
-          <Text style={styles.filterLabel}>Year</Text>
-          <Text style={styles.filterLabel}>Availability</Text>
-        </View>
+        <CustomMUISelect
+          name="makeId"
+          title="Make"
+          placeholder="All Make"
+          options={filterOptions?.make?.map((d) => ({
+            value: d.id?.toString(),
+            label: d.name,
+          }))}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.makeId}
+        />
 
-        {/* Price Range */}
-        <View style={styles.priceSection}>
-          <Text style={styles.sectionTitle}>Price Range</Text>
-          <Text style={styles.priceText}>
-            ₹{priceRange.min.toLocaleString('en-IN')} - ₹{priceRange.max.toLocaleString('en-IN')}
-          </Text>
-          <Slider
-            style={{ width: '100%', height: 40 }}
-            minimumValue={5000000}
-            maximumValue={200000000}
-            minimumTrackTintColor="#000"
-            maximumTrackTintColor="#ccc"
-            step={100000}
-            value={priceRange.min}
-            onValueChange={(value) =>
-              setPriceRange((prev) => ({ ...prev, min: Math.round(value) }))
-            }
-          />
-        </View>
+        <CustomMUISelect
+          name="type"
+          title="Type"
+          placeholder="All Type"
+          options={filterOptions?.type?.map((d) => ({ value: d, label: d }))}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.type}
+        />
 
-        {/* Apply Button */}
-        <TouchableOpacity style={styles.applyButton}>
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>
+        <CustomMUISelect
+          name="location"
+          title="Location"
+          placeholder="All Location"
+          options={[
+            { value: "1", label: "Pune" },
+            { value: "2", label: "Hyderabad" },
+          ]}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.location}
+        />
+
+        <CustomMUISelect
+          name="driven"
+          title="Driven"
+          placeholder="Any Driven"
+          options={getDrivenList()}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.driven}
+         
+        />
+
+        <CustomMUISelect
+          name="year"
+          title="Year"
+          placeholder="Any Year"
+          options={getYearList().map((d) => ({ value: d, label: d }))}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.year}
+          showSLider={true}
+        />
+
+        <CustomMUISelect
+          name="status"
+          title="Availability"
+          placeholder="All"
+          options={[
+            {
+              value: "available",
+              label: "Available",
+            },
+            { value: "booked", label: "Booked" },
+            { value: "soldOut", label: "Sold" },
+          ]}
+          handleChange={batchHandleChanges}
+          defaultValue={current?.status}
+        />
+
+        <CustomMUIRangeSlider
+          name="priceRange"
+          title="Price Range"
+          handleChange={batchHandleChanges}
+          defaultValue={current?.priceRange}
+        />
       </ScrollView>
+      <View style={{ flexShrink: 0 }}>
+        <ActionButton
+          onPress={() => onClose()}
+          title="Apply" backgroundColor={Colors.BLACK_COLR}
+          color={Colors.PURE_WHITE}
+          border={1}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -181,10 +229,6 @@ const CustomMUISelect: FC<{
     useEffect(() => {
       setValue(defaultValue ?? "");
     }, [defaultValue, setValue]);
-
-    const [priceRange, setPriceRange] = useState({ min: 5000000, max: 200000000 });
-
-
     //
 
     //
