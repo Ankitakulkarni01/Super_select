@@ -26,6 +26,7 @@ import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishli
 import ReserveNow from './ReserveModal';
 import { DescriptionItem } from '../../../components/DescriptionItem/DescriptionItem';
 import { Alert } from 'react-native';
+import { FONT_FAMILY } from '../../utils/fonts';
 
 
 const { width } = Dimensions.get('window');
@@ -645,7 +646,7 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: FONT_FAMILY.BOLD,
     color: '#333',
   },
   variant: {

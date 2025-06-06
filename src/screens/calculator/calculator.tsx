@@ -244,7 +244,7 @@ const Calculatorscreen = ({ route, navigation }) => {
 
         />
       </SliderContainer>
-      <SliderContainer caption="Rate Of Interest"
+      <SliderContainer caption="Rate of Interest"
         values={inputValues.rateOfInterest}
         min={8}
         max={30}

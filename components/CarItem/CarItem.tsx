@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     borderRadius: 5,
     paddingHorizontal: 20,
+    marginBottom:10
   },
   info: {
     flexDirection: 'row',

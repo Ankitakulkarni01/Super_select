@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { arrayRange } from "../../utils/arrayRange";
 import { currencyValueFormatter } from "../../utils/numberOperations";
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/Feather';
@@ -97,7 +97,7 @@ const CarFilter: FC<{
   //
 
   return (
-    <View style={styles.CarFilter}>
+    <SafeAreaView style={styles.CarFilter}>
       <ScrollView contentContainerStyle={styles.content}>
         {/* Top Navigation */}
         <View style={styles.header}>
@@ -144,7 +144,7 @@ const CarFilter: FC<{
           <Text style={styles.applyButtonText}>Apply</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
