@@ -6,6 +6,9 @@ export const getCarDetails = async (id: string) => {
   console.log("id", id);
 
   const userId= await AsyncStorage.getItem("userId")
+console.log(userId,"userId");
+
+
   const addUserid = userId !== null ?  `${API_BASE_PATH}/car-details/${id}?userId=${userId}` :  `${API_BASE_PATH}/car-details/${id}`
 
   console.log(userId, addUserid);

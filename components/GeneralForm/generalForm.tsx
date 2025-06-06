@@ -440,7 +440,7 @@ const GeneralForm: FC<GeneralFormType> = ({
             })}
             <View style={{ marginVertical: 10 }}>
               <ActionButton onPress={handleSubmit}
-                title="Submit Request" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE} /></View>
+                title={submitButtonText} backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE} /></View>
 
 
           </>

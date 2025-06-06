@@ -1,6 +1,6 @@
-import { API_BASE_PATH } from "@/utils/constants";
+import { API_BASE_PATH } from "../constants";
+import fetchExtended from "../fetchExtended";
 
-import fetchExtended from "@/utils/fetchExtended";
 
 export type SellCarDataType = {
   makeModel: string;
@@ -8,7 +8,7 @@ export type SellCarDataType = {
   email: string;
   phone: string;
   carPhotos: Array<string> | Array<File>;
-  folder: string;
+  // folder: string;
 };
 
 export const doSellCar = async (data: SellCarDataType) => {

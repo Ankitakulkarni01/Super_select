@@ -10,23 +10,25 @@ import {
   PermissionsAndroid,
   Platform,
   FlatList,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-// Yup schema with image array validation
+// Yup validation schema
 const CarSchema = Yup.object().shape({
-  title: Yup.string().required('Mandatory Field'),
-  year: Yup.number().required('Mandatory Field').min(1886),
-  mileage: Yup.number().required('Mileage is required'),
-  price: Yup.number().required('Price is required'),
-  location: Yup.string().required('Location is required'),
-  description: Yup.string().required('Mandatory Field'),
-  photoUris: Yup.array()
+  makeModel: Yup.string().required('Car Make & Model is required'),
+  name: Yup.string().required('Name is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  phone: Yup.string()
+    .required('Phone number is required')
+    .matches(/^[6-9]\d{9}$/, 'Phone number is not valid'),
+  carPhotos: Yup.array()
     .min(4, 'At least 4 photos are required')
-    .max(8, 'You can only upload up to 8 photos')
+    .max(8, 'You can upload up to 8 photos')
     .required('Car photos are required'),
+  folder: Yup.string().required('Folder name is required'),
 });
 
 export default function SellCarForm() {
@@ -45,111 +47,158 @@ export default function SellCarForm() {
     return true;
   };
 
-  const pickImages = async (photoUris, setFieldValue) => {
+  const pickImages = async (carPhotos, setFieldValue) => {
     const hasPermission = await requestPermission();
     if (!hasPermission) return;
 
-    launchImageLibrary({ mediaType: 'photo', selectionLimit: 15 }, (response) => {
+    launchImageLibrary({ mediaType: 'photo', selectionLimit: 8 }, (response) => {
       if (!response.didCancel && !response.errorCode) {
         const newUris = response.assets?.map((asset) => asset.uri) || [];
-        const combinedUris = [...photoUris, ...newUris].slice(0, 15);
-        setFieldValue('photoUris', combinedUris);
+        const combinedUris = [...carPhotos, ...newUris].slice(0, 8);
+        setFieldValue('carPhotos', combinedUris);
       }
     });
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Sell Your Car</Text>
-
-      <Formik
-        initialValues={{
-          title: '',
-          year: '',
-          mileage: '',
-          price: '',
-          location: '',
-          description: '',
-          photoUris: [],
-        }}
-        validationSchema={CarSchema}
-        onSubmit={(values) => {
-          console.log('Form Submitted:', values);
-        }}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
       >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
-          <>
-            <FlatList
-              data={values.photoUris}
-              horizontal
-              keyExtractor={(uri, index) => `${uri}-${index}`}
-              renderItem={({ item }) => (
-                <Image source={{ uri: item }} style={styles.previewImage} />
+        <Text style={styles.header}>Sell Your Car</Text>
+
+        <Formik
+          initialValues={{
+            makeModel: '',
+            name: '',
+            email: '',
+            phone: '',
+            carPhotos: [],
+            folder: '',
+          }}
+          validationSchema={CarSchema}
+          onSubmit={async(values) => {
+            console.log('Form Submitted:', values);
+            try {
+
+        const dataCopy = { ...values };
+  
+        dataCopy.carPhotos = values.carPhotos;
+
+
+        const { doSellCar } = await import("../../utils/formAPIs/sellCar");
+        const res = await doSellCar(dataCopy);
+        return res;
+      } catch (err) {
+        return;
+      }
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            setFieldValue,
+          }) => (
+            <>
+              <FlatList
+                data={values.carPhotos}
+                horizontal
+                keyExtractor={(uri, index) => `${uri}-${index}`}
+                renderItem={({ item }) => (
+                  <Image source={{ uri: item }} style={styles.previewImage} />
+                )}
+                ListFooterComponent={
+                  values.carPhotos.length < 8 ? (
+                    <TouchableOpacity
+                      onPress={() => pickImages(values.carPhotos, setFieldValue)}
+                      style={styles.photoBox}
+                    >
+                      <Text style={styles.addPhotoText}>+ Add Photo</Text>
+                    </TouchableOpacity>
+                  ) : null
+                }
+                contentContainerStyle={{ gap: 10 }}
+              />
+              {touched.carPhotos && errors.carPhotos && (
+                <Text style={styles.error}>{errors.carPhotos}</Text>
               )}
-              ListFooterComponent={
-                values.photoUris.length < 15 ? (
-                  <TouchableOpacity
-                    onPress={() => pickImages(values.photoUris, setFieldValue)}
-                    style={styles.photoBox}
-                  >
-                    <Text style={styles.addPhotoText}>+ Add Photo</Text>
-                  </TouchableOpacity>
-                ) : null
-              }
-              contentContainerStyle={{ gap: 10 }}
-            />
 
-            {touched.photoUris && errors.photoUris && (
-              <Text style={styles.error}>{errors.photoUris}</Text>
-            )}
+              <View style={styles.form}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Car Make & Model"
+                  onChangeText={handleChange('makeModel')}
+                  onBlur={handleBlur('makeModel')}
+                  value={values.makeModel}
+                />
+                {touched.makeModel && errors.makeModel && (
+                  <Text style={styles.error}>{errors.makeModel}</Text>
+                )}
 
-            <View style={styles.form}>
-              <TextInput
-                style={styles.input}
-                placeholder="Car Make & Model"
-                onChangeText={handleChange('title')}
-                onBlur={handleBlur('title')}
-                value={values.title}
-              />
-              {touched.title && errors.title && <Text style={styles.error}>{errors.title}</Text>}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name"
+                  onChangeText={handleChange('name')}
+                  onBlur={handleBlur('name')}
+                  value={values.name}
+                />
+                {touched.name && errors.name && (
+                  <Text style={styles.error}>{errors.name}</Text>
+                )}
 
-             <TextInput
-               style={styles.input}
-                placeholder="Name"
-                multiline
-                onChangeText={handleChange('name')}
-                onBlur={handleBlur('name')}
-                value={values.description}
-              />
-              {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                multiline
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.description}
-              />
-              {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
-              <TextInput
-                style={styles.input}
-                placeholder="Phone No"
-                multiline
-                onChangeText={handleChange('phonenumber')}
-                onBlur={handleBlur('phonenumber')}
-                value={values.description}
-              />
-              {touched.description && errors.description && <Text style={styles.error}>{errors.description}</Text>}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
 
+                <TextInput
+                  style={styles.input}
+                  placeholder="Phone Number"
+                  keyboardType="phone-pad"
+                  maxLength={10}
+                  onChangeText={handleChange('phone')}
+                  onBlur={handleBlur('phone')}
+                  value={values.phone}
+                />
+                {touched.phone && errors.phone && (
+                  <Text style={styles.error}>{errors.phone}</Text>
+                )}
 
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Submit Request</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </Formik>
-    </ScrollView>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Folder Name"
+                  onChangeText={handleChange('folder')}
+                  onBlur={handleBlur('folder')}
+                  value={values.folder}
+                />
+                {touched.folder && errors.folder && (
+                  <Text style={styles.error}>{errors.folder}</Text>
+                )}
+
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Submit Request</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </Formik>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -161,12 +210,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom:10
-  },
-  subHeader: {
-    fontSize: 16,
-    marginTop: 10,
-    color: '#666',
+    marginBottom: 10,
   },
   photoBox: {
     width: 100,
@@ -188,29 +232,12 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 20,
   },
-  formHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#666',
-  },
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  halfInput: {
-    width: '48%',
   },
   button: {
     backgroundColor: '#000',
@@ -225,7 +252,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
-    fontSize: 10,
-    marginVertical: 5,
+    fontSize: 12,
+    marginBottom: 5,
   },
 });

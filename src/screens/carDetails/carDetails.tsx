@@ -27,6 +27,7 @@ import ReserveNow from './ReserveModal';
 import { DescriptionItem } from '../../../components/DescriptionItem/DescriptionItem';
 import { Alert } from 'react-native';
 import { FONT_FAMILY } from '../../utils/fonts';
+import { Colors } from '../../utils/color';
 
 
 const { width } = Dimensions.get('window');
@@ -37,6 +38,7 @@ const CarDetailScreen = ({ navigation, route }) => {
   const [showCallButton, setShowCallButton] = useState(true);
 
   const [wishlist, setwishlist] = useState(false)
+  const [wishListId, setwishlistID] = useState(0)
   const [showGallery, setshowGallery] = useState(false)
   const [loading, setLoding] = useState(false)
 
@@ -71,16 +73,19 @@ const CarDetailScreen = ({ navigation, route }) => {
   //
 
   const postWishlist = async () => {
-    if (carDataRes?.data?.wishListId !== null) {
-      const { success, message, data } = await removeWishlistAPI(carDataRes?.data?.wishListId)
+    if (wishlist) {
+      const { success, message, data } = await removeWishlistAPI(wishListId)
       if (success) {
         setwishlist(false)
       }
+      console.log(message);
+      
     } else {
       const values = {
         "carId": carDataRes?.data.id
       }
       const { success, message, data } = await postWishlistAPI(values)
+      console.log(message);
       if (success) {
         setwishlist(true)
       }
@@ -225,9 +230,13 @@ const CarDetailScreen = ({ navigation, route }) => {
     if (carDataRes?.data.exteriorImages !== undefined) {
       const dataImages = [...carDataRes?.data.exteriorImages]
 
-      setwishlist(carDataRes?.data?.wishListId !== null)
+      console.log("wishlist data from", carDataRes?.data );
+      
 
-      console.log("wishlist", carDataRes?.data?.wishListId !== null)
+      setwishlist(carDataRes?.data?.wishListId !== null)
+      setwishlistID(carDataRes?.data?.wishListId)
+
+      console.log("wishlist", carDataRes?.data?.wishListId)
 
 
       const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
@@ -519,6 +528,17 @@ const CarDetailScreen = ({ navigation, route }) => {
         <TouchableOpacity style={styles.callButton} onPress={() => onCall()}>
           <MaterialIcons name="phone" size={24} color="#000000" />
         </TouchableOpacity>
+         <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50 }} onPress={postWishlist}>
+                      {
+                        wishlist
+                          ?
+                          <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+        
+                          :
+                          <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+        
+                      }
+                    </TouchableOpacity>
       </View>
       {
               reserveModal &&

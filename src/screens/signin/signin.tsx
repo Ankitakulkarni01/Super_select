@@ -64,7 +64,7 @@ const SignInScreen = (props: any) => {
             );
             await AsyncStorage.setItem("access_token", data.token)
             await AsyncStorage.setItem("name", data.name)
-            await AsyncStorage.setItem("userId", data.userId)
+            await AsyncStorage.setItem("userId", JSON.stringify(data.userId));
             console.log("data", data);
 
         } else {

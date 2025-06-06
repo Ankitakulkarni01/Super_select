@@ -1,417 +1,215 @@
-import React, { FC, useMemo, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
-  Button,
-  ScrollView,
+  Image,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
-import { object, ObjectShape, string, number, mixed } from "yup";
-import DatePicker from 'react-native-date-picker'
-import moment from 'moment';
-
-
-import { Colors } from '../../src/utils/color';
-import { isPhoneNumber } from '../../src/utils/regex';
-import { ApiResponseType } from '../../src/utils/fetchExtended';
 import { Formik } from 'formik';
-import { imageArray } from './customScheme';
-import { TextInput } from '@react-native-material/core';
-import MenuItem from 'react-native-paper/lib/typescript/components/Menu/MenuItem';
-import { RadioButton } from 'react-native-paper';
-import DateInput from './DateInput';
-import { addDaysToDate, formatDate, parseDate } from '../../src/utils/date-time';
-import ActionButton from '../../src/components/actionButton';
-import {
-  launchCamera,
-  launchImageLibrary
-} from 'react-native-image-picker';
+import * as Yup from 'yup';
+import { launchImageLibrary } from 'react-native-image-picker';
 
+const SellCarForm = () => {
+  const [photo, setPhoto] = useState(null);
 
-
-
-
-const SellCarForm: FC<SellCarFormType> = ({
-  onSubmit,
-}) => {
-  const [filePath, setFilePath] = useState({});
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
-  // Initial Values
-  const initialValues = useMemo(() => {
-    const values: FormValueType = {};
-
-    for (let i = 0; i < inputs.length; i++) {
-      const ele = inputs[i];
-      values[ele.name] = ele?.defaultValue ? ele.defaultValue : "";
-    }
-    console.log("values", values)
-    for (let i = 0; i < fileInputs.length; i++) {
-      const ele = fileInputs[i];
-      values[ele.name] = [];
-    }
-
-    return values;
-  }, [inputs, fileInputs]);
-  //
-  const showDatePicker = () => {
-    console.log("open",open)
-    setOpen(true);
-  };
-
-  const hideDatePicker = () => {
-    setOpen(false);
-  };
-
-  const handleConfirm = date => {
-    setDate(date);
-    hideDatePicker();
-  };
-
-  // Form Schema
-  const formSchema = useMemo(() => {
-    const values: ObjectShape = {};
-
-    for (let i = 0; i < inputs.length; i++) {
-      const ele = inputs[i];
-
-      switch (ele.type) {
-        case "text":
-          values[ele.name] = string()
-            .when("_", (_, schema) => {
-              return ele.name === "name"
-                ? schema.min(2, "Too short!").max(20, "Too long!")
-                : schema
-                  .min(5, "Too short!")
-                  .max(ele?.isTextField ? 500 : 100, "Too long!");
-            })
-            .when("_", (_, schema) => {
-              return ele.required
-                ? schema.required("Required")
-                : schema.notRequired();
-            });
-          break;
-
-        case "email":
-          values[ele.name] = string()
-            .email("Invalid email!")
-            .when("_", (_, schema) => {
-              return ele.required
-                ? schema.required("Required")
-                : schema.notRequired();
-            });
-          break;
-
-        case "number":
-          values[ele.name] = number()
-            .positive()
-            .min(100000, "Too small!")
-            .max(100000000, "Too large!")
-            .when("_", (_, schema) => {
-              return ele.required
-                ? schema.required("Required")
-                : schema.notRequired();
-            });
-          break;
-
-        case "tel":
-          values[ele.name] = string()
-            .matches(isPhoneNumber, "Invalid phone!")
-            .when("_", (_, schema) => {
-              return ele.required
-                ? schema.required("Required")
-                : schema.notRequired();
-            });
-          break;
-
-        case "select":
-        case "radio":
-          values[ele.name] = string().when("_", (_, schema) => {
-            return ele.required
-              ? schema.required("Required")
-              : schema.notRequired();
-          });
-          break;
-
-        case "date":
-          values[ele.name] = string()
-            .min(10, "Invalid date!")
-            .max(10, "Invalid date!")
-            .when("_", (_, schema) => {
-              return ele.required
-                ? schema.required("Required")
-                : schema.notRequired();
-            });
-          break;
-
-        default:
-          values[ele.name] = string();
-          break;
+  const pickImage = () => {
+    launchImageLibrary(
+      { mediaType: 'photo', quality: 1 },
+      (response) => {
+        if (response?.assets?.length > 0) {
+          setPhoto(response.assets[0]);
+        } else if (response?.errorMessage) {
+          Alert.alert('Image Picker Error', response.errorMessage);
+        }
       }
-    }
-
-    for (let i = 0; i < fileInputs.length; i++) {
-      const ele = fileInputs[i];
-
-      switch (ele.type) {
-        case "image":
-          values[ele.name] = imageArray(ele.count, ele?.required);
-          break;
-
-        default:
-          values[ele.name] = mixed();
-          break;
-      }
-    }
-
-    return object().shape(values);
-  }, [inputs, fileInputs]);
-  //
-
-  const chooseFile = (type) => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-    };
-    launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        Alert.alert('User cancelled camera picker');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        Alert.alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        Alert.alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        Alert.alert(response.errorMessage);
-        return;
-      }
-      console.log(response.assets)
-      setFilePath(response);
-    });
+    );
   };
-  //
 
-  const [globalError, setGlobalError] = useState("");
-  const [showSubmittedAcknowledgment, setShowSubmittedAcknowledgment] =
-    useState(false);
-
-  // On Submit Extra
-  const onSubmitExtra = useCallback(
-    async (values: FormValueType, options: { resetForm: () => void }) => {
-      setGlobalError("");
-      console.log("Value", values)
-      // const response = await onSubmit(values);
-
-      // if (response) {
-      //   const { success, message, data } = response;
-
-      //   if (success) {
-      //     options?.resetForm();
-
-      //     if (withAcknowledgment) setShowSubmittedAcknowledgment(true);
-      //   } else setGlobalError(message);
-      // }
-    },
-    [
-      onSubmit,
-      setGlobalError,
-      withAcknowledgment,
-      setShowSubmittedAcknowledgment,
-    ]
-  );
-  //
-
-  //
-  //
-
-  //
-  //
-
-
-
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required('Required'),
+    year: Yup.number().required('Required'),
+    mileage: Yup.number().required('Required'),
+    price: Yup.number().required('Required'),
+    location: Yup.string().required('Required'),
+    description: Yup.string().required('Required'),
+  });
 
   return (
-    <Formik
-      validationSchema={formSchema}
-      initialValues={initialValues}
-      onSubmit={onSubmitExtra}
-      enableReinitialize
-    >
-      {({
-        values,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        errors,
-        touched,
-        isSubmitting,
-      }) => (
-        <View style={{ backgroundColor: Colors.PURE_WHITE, padding: 10 }}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.header}>Sell Your Car</Text>
+      <Text style={styles.subHeader}>Car Photos</Text>
+
+      <TouchableOpacity style={styles.imageBox} onPress={pickImage}>
+        {photo ? (
+          <Image source={{ uri: photo.uri }} style={styles.image} />
+        ) : (
+          <Text style={styles.addPhotoText}>+ Add Photo</Text>
+        )}
+      </TouchableOpacity>
+
+      <Formik
+        initialValues={{
+          title: '',
+          year: '',
+          mileage: '',
+          price: '',
+          location: '',
+          description: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          console.log('Submitted:', values);
+          Alert.alert('Submitted!', JSON.stringify(values, null, 2));
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <>
-            {inputs.map((d, i) => {
-              const hasError =
-                errors[d.name] && touched[d.name] ? true : false;
+            <TextInput
+              placeholder="Title"
+              style={styles.input}
+              value={values.title}
+              onChangeText={handleChange('title')}
+              onBlur={handleBlur('title')}
+            />
+            {touched.title && errors.title && <Text style={styles.error}>{errors.title}</Text>}
 
-              //
+            <View style={styles.row}>
+              <TextInput
+                placeholder="Year"
+                style={[styles.input, styles.halfInput]}
+                keyboardType="numeric"
+                value={values.year}
+                onChangeText={handleChange('year')}
+                onBlur={handleBlur('year')}
+              />
+              <TextInput
+                placeholder="Mileage"
+                style={[styles.input, styles.halfInput]}
+                keyboardType="numeric"
+                value={values.mileage}
+                onChangeText={handleChange('mileage')}
+                onBlur={handleBlur('mileage')}
+              />
+            </View>
+            {touched.year && errors.year && <Text style={styles.error}>{errors.year}</Text>}
+            {touched.mileage && errors.mileage && <Text style={styles.error}>{errors.mileage}</Text>}
 
-              return (
-                <>
-                  {(() => {
-                    switch (d.type) {
-                      case "date": {
-                        return (
+            <TextInput
+              placeholder="Price"
+              style={styles.input}
+              keyboardType="numeric"
+              value={values.price}
+              onChangeText={handleChange('price')}
+              onBlur={handleBlur('price')}
+            />
+            {touched.price && errors.price && <Text style={styles.error}>{errors.price}</Text>}
 
-                          <TouchableOpacity onPress={showDatePicker}>
-                            <TextInput
-                              label={d?.placeholder ?? d.name}
-                              multiline={d?.isTextField}
-                              variant="standard"
-                              // size="medium"
-                              editable={false}
-                              maxLength={15}
-                          
-                              color={Colors.BLACK_COLR}
-                              value={
-                                moment(values[d.name]).format('DD-MM-YYYY')
-                              }
-                              inputStyle={{ fontFamily: 'Oxanium-Medium', }}
-                              style={{ marginVertical: 5, }}
-                              // error={hasError}
-                              helperText={
-                                !hideErrorText && hasError
-                                  ? errors[d.name]
-                                  : ""
-                              }
-                            >
-                            
-                            {/* <Text style={styles.errorMsgText}>{date}</Text> */}
-                      
-                            </TextInput>
-                            <DatePicker
-                               modal
-                               open={open}
-                               date={
-                                  values[d.name]
-                                    ? parseDate(values[d.name] as string)
-                                    : date
-                                }
-                                mode='date'
-                               onConfirm={(date) => {
-                                 setOpen(false)
-                                 handleChange({
-                                      target: {
-                                        name: d.name,
-                                        value: formatDate(date),
-                                      },
-                                    })
-                               }}
-                               onCancel={() => {
-                                 setOpen(false)
-                               }}
-                               maximumDate={addDaysToDate(new Date(), 28)}
-                               minimumDate={date}
-                               disablePast
-                          />
-                          </TouchableOpacity>
-                        );
-                      }
+            <TextInput
+              placeholder="Location"
+              style={styles.input}
+              value={values.location}
+              onChangeText={handleChange('location')}
+              onBlur={handleBlur('location')}
+            />
+            {touched.location && errors.location && <Text style={styles.error}>{errors.location}</Text>}
 
-                      case "radio":
-                        return (
-                          <RadioButton
-                 
-                            value={String(values[d.name])}
-                            options={d?.selectOptions}
-                            onChange={handleChange}
-                            error={hasError}
-                            helperText={
-                              !hideErrorText && hasError ? errors[d.name] : ""
-                            }
-                          />
-                        );
+            <TextInput
+              placeholder="Description"
+              style={[styles.input, styles.textArea]}
+              multiline
+              numberOfLines={4}
+              value={values.description}
+              onChangeText={handleChange('description')}
+              onBlur={handleBlur('description')}
+            />
+            {touched.description && errors.description && (
+              <Text style={styles.error}>{errors.description}</Text>
+            )}
 
-                      default:
-                        return (
-                          <TextInput
-                            label={d?.placeholder ?? d.name}
-
-                            multiline={d?.isTextField}
-                            variant="standard"
-                            numberOfLines={d?.isTextField ? 4 : 1}
-                            maxLength={30}
-                            color={!hideErrorText && hasError ? 'red' : Colors.BLACK_COLR}
-                            value={String(values[d.name])}
-                            onChangeText={handleChange(d.name)}
-                            onBlur={handleBlur}
-                            inputStyle={{ fontFamily: 'Oxanium-Medium', }}
-                            style={{ marginVertical: 5 }}
-
-                          // error={hasError}
-
-                          >
-
-
-                          </TextInput>
-                        );
-                    }
-                  })()}
-                  {!hideErrorText && hasError &&
-                    <Text style={styles.errorMsgText}>{errors[d.name]}</Text>
-                  }
-                  {/* <>
-                    {fileInputs?.map((d, i) => {
-                      const hasError =
-                        errors[d.name] && touched[d.name] ? true : false;
-
-                      return (
-                        <View style={styles.custom_input_file} key={i}>
-                          <TouchableOpacity onPress={() => chooseFile('photo')} style={styles.btnSection}  >
-                            <Text style={styles.btnText}>Choose File</Text>
-                          </TouchableOpacity>
-                        </View>
-                      );
-                    })}
-                  </> */}
-                </>
-              );
-            })}
-            <View style={{ marginVertical: 10 }}>
-              <ActionButton onPress={handleSubmit}
-                title="Submit Request" backgroundColor={Colors.BLACK_COLR} color={Colors.PURE_WHITE} /></View>
-
-
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitText}>List Your Car</Text>
+            </TouchableOpacity>
           </>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  custom_input_file: {
-
+  container: {
+    padding: 16,
+    backgroundColor: '#FFF',
   },
-  btnSection: {
-    flex: 1,
-    borderWidth: 1
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 12,
   },
-  btnText: {
-    color: Colors.BLACK_COLR
+  subHeader: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
   },
-  errorMsgText: {
-    fontSize: 14,
+  imageBox: {
+    width: '100%',
+    height: 150,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  addPhotoText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+  },
+  input: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  halfInput: {
+    width: '48%',
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  submitButton: {
+    backgroundColor: '#000',
+    padding: 14,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  submitText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  error: {
     color: 'red',
-    paddingBottom: 10
-  }
+    fontSize: 12,
+    marginBottom: 4,
+  },
 });
-
 
 export default SellCarForm;
