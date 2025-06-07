@@ -30,6 +30,8 @@ const InventoryPage = (props: any) => {
 
   const refScrollable = useRef();
 
+  const [filter,setFilter] = useState(false)
+
   // Inject Filter With Sort
   const filterWithSort = useMemo(() => {
     console.log("current Filter", currentFilters)
@@ -118,16 +120,19 @@ const InventoryPage = (props: any) => {
           onClose={() => {
             console.log("close");
             setModalVisible(false)
+            setFilter(true)
           }}
           onReset={() => {
             console.log("reset", modalVisible);
             setModalVisible(false)
             setOpenMobileFilter(false)
+            setFilter(false)
+            setCurrentFilters({})
           }}
         />
       </Modal>
       {
-        carData.length === 0
+        carData.length === 0 && !filter
           ?
           <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
             <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Oxanium-Bold', fontSize: 17 }}>No such cars found</Text>
@@ -135,7 +140,9 @@ const InventoryPage = (props: any) => {
           :
           <ScrollView >
             <View style={{ marginBottom: 10, padding: 10, flexDirection: 'row' }}>
-              <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center', marginRight: 15, height: 50 }}>
+              {
+                carData.length > 0 &&
+                <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 15, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center', marginRight: 15, height: 50 }}>
                 <Text style={{ color: Colors.BLACK_COLR, marginRight: 10, }} >Exclude Sold Out</Text>
                 <Switch
                   trackColor={{ false: Colors.SHADOW_COLOR, true: Colors.SHADOW_COLOR }}
@@ -144,6 +151,8 @@ const InventoryPage = (props: any) => {
                   value={removeSoldOuts}
                 ></Switch>
               </View>
+              }
+            
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end', }}>
                 <View style={{ flexDirection: 'row', borderRadius: 15, justifyContent: 'flex-end', alignItems: 'flex-end', }}>
                   <TouchableOpacity style={{ marginRight: 10, padding: 10, backgroundColor: Colors.SHADOW_COLOR, borderRadius: 15 }} onPress={() => {

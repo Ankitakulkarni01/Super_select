@@ -1,6 +1,6 @@
 // App.js
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Alert } from 'react-native';
+import { SafeAreaView, Alert, StatusBar } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -93,8 +93,10 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'black' }}>
+       <StatusBar animated={true} backgroundColor="#000000" />
       <QueryClientProvider client={queryClient}>
+     
         <PaperProvider>
           <NavigationContainer
             ref={navigationRef}
