@@ -1,6 +1,7 @@
 # Set the minimum iOS deployment target
 platform :ios, '16.0'
 
+<<<<<<< HEAD
 # Prepare the React Native project
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
@@ -26,23 +27,42 @@ target 'Super_select' do
   $RNFirebaseAsStaticFramework = true
 
   # React Native dependencies
+=======
+platform :ios, '13.0'
+prepare_react_native_project!
+
+target 'Super_select' do
+  config = use_native_modules!
+
+  # Firebase setup
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  $RNFirebaseAsStaticFramework = true
+
+>>>>>>> 4a5512c8d80d48663b429ecb7afba6fad8a8f518
   flags = get_default_flags()
 
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => true,
+<<<<<<< HEAD
     :fabric_enabled => false,
     :flipper_configuration => flipper_config,
+=======
+    :fabric_enabled => flags[:fabric_enabled],
+    :flipper_configuration => FlipperConfiguration.disabled,
+>>>>>>> 4a5512c8d80d48663b429ecb7afba6fad8a8f518
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
   target 'Super_selectTests' do
     inherit! :complete
-    # Pods for testing
   end
 
   # Post-installation hook
   post_install do |installer|
+<<<<<<< HEAD
     react_native_post_install(installer)
 
     # Ensure the correct platform and configuration for your project
@@ -53,5 +73,19 @@ target 'Super_select' do
         end
       end
     end
+=======
+    react_native_post_install(
+      installer,
+      :mac_catalyst_enabled => false
+    )
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      end
+    end
+
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+>>>>>>> 4a5512c8d80d48663b429ecb7afba6fad8a8f518
   end
 end

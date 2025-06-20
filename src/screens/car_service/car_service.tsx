@@ -10,6 +10,7 @@ import GeneralForm from '../../../components/GeneralForm/generalForm';
 import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
 import CarouselComponent from '../../../components/Carousel/Carousel';
+import { FONT_FAMILY } from '../../utils/fonts';
 // import { SliderBox } from "react-native-image-slider-box";
 
 
@@ -104,7 +105,7 @@ const CarServiceScreen = () => {
 const styles = StyleSheet.create({
   sub_heading: {
     fontSize: 16,
-    fontFamily: 'Zebulon-Condensed',
+    fontFamily: FONT_FAMILY.REGULAR,
     color: Colors.BLACK_COLR,
     paddingBottom: 10,
     lineHeight: 20,

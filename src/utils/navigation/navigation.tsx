@@ -162,6 +162,8 @@ const HomeStack = () => {
 };
 
 const MainStack = () => {
+  console.log("hi");
+  
     return (
         <Drawer.Navigator
             drawerContent={(props) => <SuperSelectDrawer {...props} />}

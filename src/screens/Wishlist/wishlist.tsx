@@ -10,6 +10,8 @@ import { getWishlistAPI } from '../../utils/extraAPIs/wishlist';
 import CarItem from '../../../components/CarItem/CarItem';
 import { CarList } from '../cars/carsDetail';
 import { CarFilterSkeleton } from '../../components/inventory/carFilter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FONT_FAMILY } from '../../utils/fonts';
 
 
 const WishListScreen = (props: any) => {
@@ -22,6 +24,9 @@ const WishListScreen = (props: any) => {
 
   const getWishlist = async () => {
     setLoading(true)
+    const access_token = await AsyncStorage.getItem("userId")
+    console.log("userId",access_token);
+    
     const { success, message, data } = await getWishlistAPI()
     console.log("wishlist data", data);
     if (success) {
@@ -40,7 +45,7 @@ const WishListScreen = (props: any) => {
    <View style={{flex:1}}>
     
       <View style={{ paddingHorizontal: 20, paddingVertical:10}}>
-        <Text style={{ color: Colors.BLACK_COLR, fontFamily: 'Zebulon-Condensed-Bold', fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>Wishlist
+        <Text style={{ color: Colors.BLACK_COLR, fontFamily: FONT_FAMILY.BOLD, fontSize: 30, textTransform: 'uppercase', letterSpacing: 5 }}>Wishlist
         </Text>
       </View>
       {

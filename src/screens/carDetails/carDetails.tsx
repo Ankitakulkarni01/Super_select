@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, FC, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,86 +12,26 @@ import {
   StatusBar,
   Linking,
 } from 'react-native';
-import { Colors } from '../../utils/color';
 import getEMI from '../../utils/getEMI';
 import { stringToJson } from '../../utils/commons'
-import SwipeableButton from '../../../components/swipeButton/swipeButton';
 import { Car } from '../../../interface/car';
 import { getCarDetails } from '../../utils/carAPIs/carDetails';
 import { useQuery } from '@tanstack/react-query';
-import CarKeyPointsItem from '../../../components/CarKeyPointsItem';
-import PagerView from 'react-native-pager-view';
-import TabViewExample from './tabCarDetails';
-import DynamicCarouselComponent from '../../../components/Carousel/DynamicCarousel';
-import ActionButton from '../../components/actionButton';
 import { currencyValueFormatter } from '../../utils/numberOperations';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { postWishlistAPI, removeWishlistAPI } from '../../utils/extraAPIs/wishlist';
-import Gallery from '../../../components/Gallery/gallery';
 import ReserveNow from './ReserveModal';
 import { DescriptionItem } from '../../../components/DescriptionItem/DescriptionItem';
 import { Alert } from 'react-native';
+import { FONT_FAMILY } from '../../utils/fonts';
+import { Colors } from '../../utils/color';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const { width } = Dimensions.get('window');
-
-const value = [
-  {
-    title: 'Engine & Transmission',
-    items: [
-      { label: 'Engine Type', value: '2.0L Turbocharged I4' },
-      { label: 'Displacement', value: '1995 cc' },
-      { label: 'Max Power', value: '194 bhp @ 5800 rpm' },
-      { label: 'Max Torque', value: '320 Nm @ 1650 rpm' },
-      { label: 'Transmission', value: '9-Speed Automatic' },
-      { label: 'Drivetrain', value: 'RWD' }
-    ]
-  },
-  {
-    title: 'Performance & Efficiency',
-    items: [
-      { label: '0-100 km/h', value: '7.3 seconds' },
-      { label: 'Top Speed', value: '250 km/h' },
-      { label: 'Fuel Economy', value: '20.37 kmpl' },
-      { label: 'Fuel Tank', value: '66 L' }
-    ]
-  },
-  {
-    title: 'Dimensions & Weight',
-    items: [
-      { label: 'Length', value: '4,686 mm' },
-      { label: 'Width', value: '1,810 mm' },
-      { label: 'Height', value: '1,442 mm' },
-      { label: 'Wheelbase', value: '2,865 mm' },
-      { label: 'Boot Space', value: '455 L' }
-    ]
-  },
-  {
-    title: 'Safety Features',
-    items: [
-      { label: 'Airbags', value: '8 Airbags' },
-      { label: 'ABS with EBD', value: 'Yes' },
-      { label: 'ESP', value: 'Yes' },
-      { label: 'Parking Sensors', value: 'Front & Rear' },
-      { label: '360° Camera', value: 'Yes' },
-      { label: 'ADAS Features', value: 'Available' }
-    ]
-  },
-  {
-    title: 'Comfort & Convenience',
-    items: [
-      { label: 'Climate Control', value: '3-Zone Automatic' },
-      { label: 'Sunroof', value: 'Panoramic' },
-      { label: 'Seat Upholstery', value: 'Leather' },
-      { label: 'Front Seats', value: 'Power Adjustable with Memory' },
-      { label: 'Infotainment', value: '11.9" Touchscreen' },
-      { label: 'Sound System', value: 'Burmester® 3D' }
-    ]
-  }
-]
 
 const CarDetailScreen = ({ navigation, route }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -99,8 +39,10 @@ const CarDetailScreen = ({ navigation, route }) => {
   const [showCallButton, setShowCallButton] = useState(true);
 
   const [wishlist, setwishlist] = useState(false)
+  const [wishListId, setwishlistID] = useState(0)
   const [showGallery, setshowGallery] = useState(false)
   const [loading, setLoding] = useState(false)
+  const [login, setLogin] = useState(true)
 
 
 
@@ -117,6 +59,9 @@ const CarDetailScreen = ({ navigation, route }) => {
   );
 
 
+  useEffect(() =>{
+    getAccessToken()
+  },[carDataRes])
 
 
   // Estimate Pay
@@ -133,16 +78,19 @@ const CarDetailScreen = ({ navigation, route }) => {
   //
 
   const postWishlist = async () => {
-    if (carDataRes?.data?.wishListId !== null) {
-      const { success, message, data } = await removeWishlistAPI(carDataRes?.data?.wishListId)
+    if (wishlist) {
+      const { success, message, data } = await removeWishlistAPI(wishListId)
       if (success) {
         setwishlist(false)
       }
+      console.log(message);
+
     } else {
       const values = {
         "carId": carDataRes?.data.id
       }
       const { success, message, data } = await postWishlistAPI(values)
+      console.log(message);
       if (success) {
         setwishlist(true)
       }
@@ -287,9 +235,14 @@ const CarDetailScreen = ({ navigation, route }) => {
     if (carDataRes?.data.exteriorImages !== undefined) {
       const dataImages = [...carDataRes?.data.exteriorImages]
 
-      setwishlist(carDataRes?.data?.wishListId !== null)
+      console.log("wishlist data from", carDataRes?.data);
+      
 
-      console.log("wishlist", carDataRes?.data?.wishListId !== null)
+
+      setwishlist(carDataRes?.data?.wishListId)
+      setwishlistID(carDataRes?.data?.wishListId)
+
+      console.log("wishlist", carDataRes?.data?.wishListId)
 
 
       const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
@@ -305,10 +258,18 @@ const CarDetailScreen = ({ navigation, route }) => {
 
   }, [carDataRes]);
 
-  const onWhatsApp = () =>{
+
+  const getAccessToken = async () => {
+    const access_token = await AsyncStorage.getItem("access_token")
+    console.log(access_token !== null);
+    
+    setLogin(access_token === null)
+  }
+
+  const onWhatsApp = () => {
     let msg = "Welcome To Super Select";
     let phoneWithCountryCode = "918607086070";
-  
+
     let mobile =
       Platform.OS == "ios" ? phoneWithCountryCode : "+" + phoneWithCountryCode;
     if (mobile) {
@@ -329,18 +290,22 @@ const CarDetailScreen = ({ navigation, route }) => {
     }
   }
 
-  const onCall = () =>{
+  const onCall = () => {
     let phoneNumber = "8607086070";
     if (Platform.OS === 'android') { phoneNumber = `tel:${phoneNumber}`; }
-    else {phoneNumber = `telprompt:${phoneNumber}`; }
+    else { phoneNumber = `telprompt:${phoneNumber}`; }
     Linking.openURL(phoneNumber);
   }
 
+  console.log("carData", carData);
+
+
   const specifications = [
-    // { icon: 'engine', label: 'Engine', value: carData?.engine },
-    { icon: 'horse', label: 'Power', value: carData?.driven },
-    { icon: 'tachometer-alt', label: 'Mileage', value: carData?.fuelType },
-    { icon: 'cogs', label: 'Transmission', value: carData?.type },
+    { icon: 'engine', label: 'Engine', value: `${carData?.engine} cc` },
+    { icon: 'engine', label: 'Type', value: carData?.type },
+    { icon: 'tachometer-alt', label: 'Driven', value: carData?.driven },
+    { icon: 'tachometer-alt', label: 'Fuel', value: carData?.fuelType },
+    { icon: 'cogs', label: 'Transmission', value: carData?.transmission },
   ];
 
   const renderImageDots = () => {
@@ -380,8 +345,10 @@ const CarDetailScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* {renderHeader()} */}
+
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Gallery */}
+
         <View style={styles.imageContainer}>
           <TouchableOpacity activeOpacity={0.9} onPress={() => setIsFullScreen(true)}>
             <ScrollView
@@ -461,7 +428,7 @@ const CarDetailScreen = ({ navigation, route }) => {
           <View style={styles.priceContainer}>
             <Text style={styles.price}>{currencyValueFormatter(carData?.price)}</Text>
             {/* <Text style={styles.priceSubtext}>Ex-showroom Price in Delhi</Text> */}
-            <TouchableOpacity style={styles.emiButton}  onPress={onEmailCalculator}>
+            <TouchableOpacity style={styles.emiButton} onPress={onEmailCalculator}>
               <Text style={styles.emiButtonText}>Calculate EMI</Text>
             </TouchableOpacity>
           </View>
@@ -478,7 +445,7 @@ const CarDetailScreen = ({ navigation, route }) => {
               {specifications.map((spec, index) => (
                 <View key={index} style={styles.specCard}>
                   <View style={styles.specIconContainer}>
-                    <FontAwesome5 name={spec.icon} size={24} color="#000000" />
+                    <Icon name={spec.label} icon={spec.icon} />
                   </View>
                   <Text style={styles.specValue}>{spec.value}</Text>
                   <Text style={styles.specLabel}>{spec.label}</Text>
@@ -490,69 +457,69 @@ const CarDetailScreen = ({ navigation, route }) => {
             <Text style={styles.sectionTitle}>Specifications and Features</Text>
             <View style={styles.specificationsList}>
               <Text style={styles.specificationTitle}>Description</Text>
-               <DescriptionItem name="Variant" value={carData?.variant} />
-                      <DescriptionItem name="Transmission" value={carData?.transmission} />
-                      <DescriptionItem name="Fuel" value={carData?.fuelType} />
-                      <DescriptionItem
-                        name="Seating Capacity"
-                        value={carData?.seatingCapacity}
-                      />
-                      <DescriptionItem name="Engine" value={carData?.engine} suffix="CC" />
-                      <DescriptionItem name="Exterior Color" value={carData?.exteriorColor} />
-                      <DescriptionItem name="Interior Color" value={carData?.interiorColor} />
-                      <DescriptionItem name="Interior Type" value={carData?.interiorType} />
-                      <DescriptionItem name="Type" value={carData?.type} />
-                      <DescriptionItem name="Driven" value={carData?.driven} suffix="km" />
-                      <DescriptionItem
-                        name="Top Speed"
-                        value={carData?.topSpeed}
-                        suffix="km/h"
-                      />
-                      <DescriptionItem name="Power" value={carData?.power} suffix="bhp" />
-                      <DescriptionItem name="Engine Type" value={carData?.engineType} />
-                      <DescriptionItem name="Drivetrain" value={carData?.drivetrain} />
-                      <DescriptionItem name="Torque" value={carData?.torque} suffix="Nm" />
-                      <DescriptionItem
-                        name="Ground Clearance"
-                        value={carData?.groundClearance}
-                        suffix="mm"
-                      />
-              
-                      <DescriptionItem name="Ownership" value={carData?.ownership} />
-                      <DescriptionItem
-                        name="Registration"
-                        value={carData?.registrationDate}
-                      />
-                      <DescriptionItem
-                        name="Registration RTO"
-                        value={carData?.registrationRTO}
-                      />
-                      <DescriptionItem name="Insurance" value={carData?.insuranceTillDate} />
-                      <DescriptionItem
-                        name="Manufacturing"
-                        value={carData?.manufacturingDate}
-                      />
-                      <DescriptionItem
-                        name="Extended Warranty"
-                        value={carData?.extendedWarrantyYear}
-                      />
-                      <DescriptionItem
-                        name="Service Pack Duration"
-                        value={carData?.servicePackDuration}
-                        suffix="y"
-                      />
-                      <DescriptionItem
-                        name="Service Pack KM"
-                        value={carData?.servicePackKm}
-                        suffix="km"
-                      />
-                      <Text style={styles.specificationTitle}>Features</Text>
+              <DescriptionItem name="Variant" value={carData?.variant} />
+              <DescriptionItem name="Transmission" value={carData?.transmission} />
+              <DescriptionItem name="Fuel" value={carData?.fuelType} />
+              <DescriptionItem
+                name="Seating Capacity"
+                value={carData?.seatingCapacity}
+              />
+              <DescriptionItem name="Engine" value={carData?.engine} suffix="CC" />
+              <DescriptionItem name="Exterior Color" value={carData?.exteriorColor} />
+              <DescriptionItem name="Interior Color" value={carData?.interiorColor} />
+              <DescriptionItem name="Interior Type" value={carData?.interiorType} />
+              <DescriptionItem name="Type" value={carData?.type} />
+              <DescriptionItem name="Driven" value={carData?.driven} suffix="km" />
+              <DescriptionItem
+                name="Top Speed"
+                value={carData?.topSpeed}
+                suffix="km/h"
+              />
+              <DescriptionItem name="Power" value={carData?.power} suffix="bhp" />
+              <DescriptionItem name="Engine Type" value={carData?.engineType} />
+              <DescriptionItem name="Drivetrain" value={carData?.drivetrain} />
+              <DescriptionItem name="Torque" value={carData?.torque} suffix="Nm" />
+              <DescriptionItem
+                name="Ground Clearance"
+                value={carData?.groundClearance}
+                suffix="mm"
+              />
+
+              <DescriptionItem name="Ownership" value={carData?.ownership} />
+              <DescriptionItem
+                name="Registration"
+                value={carData?.registrationDate}
+              />
+              <DescriptionItem
+                name="Registration RTO"
+                value={carData?.registrationRTO}
+              />
+              <DescriptionItem name="Insurance" value={carData?.insuranceTillDate} />
+              <DescriptionItem
+                name="Manufacturing"
+                value={carData?.manufacturingDate}
+              />
+              <DescriptionItem
+                name="Extended Warranty"
+                value={carData?.extendedWarrantyYear}
+              />
+              <DescriptionItem
+                name="Service Pack Duration"
+                value={carData?.servicePackDuration}
+                suffix="y"
+              />
+              <DescriptionItem
+                name="Service Pack KM"
+                value={carData?.servicePackKm}
+                suffix="km"
+              />
+              <Text style={styles.specificationTitle}>Features</Text>
               {featuresArray.map((section, index) => {
                 return (
                   <View key={index} style={styles.specificationSection}>
                     <View style={styles.specificationRow}>
-                      <Text style={styles.specificationLabel}>{section}</Text>                  
-                      </View>
+                      <Text style={styles.specificationLabel}>{section}</Text>
+                    </View>
                   </View>
                 )
               })}
@@ -575,10 +542,70 @@ const CarDetailScreen = ({ navigation, route }) => {
         <TouchableOpacity style={styles.callButton} onPress={() => onCall()}>
           <MaterialIcons name="phone" size={24} color="#000000" />
         </TouchableOpacity>
+        {
+          !login && 
+          <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 50 }} onPress={postWishlist}>
+          {
+            wishlist
+              ?
+              <Ionicons name={'heart-sharp'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+              :
+              <Ionicons name={'heart-outline'} size={30} color={Colors.BLACK_COLR} style={{ padding: 10 }} />
+
+          }
+        </TouchableOpacity>
+        }
+       
       </View>
+      {
+        reserveModal &&
+        <Modal
+          visible={reserveModal}
+          onRequestClose={() => setReserveModal(false)}>
+          <ReserveNow carData={carData}
+            onClose={() => setReserveModal(false)}
+          />
+
+        </Modal>
+      }
     </View>
   );
 }
+
+const Icon: FC<{ name: string, icon: string }> = ({ name, icon }) => {
+  console.log('name', name);
+
+  switch (name.toLowerCase()) {
+    case "engine":
+      return <Image
+        source={require("../../../assets/img/engine.png")}
+        resizeMode={'contain'}
+        style={{ height: 30, width: 50, padding: 10 }}
+      />
+
+    case "type":
+      return <Image
+        source={require("../../../assets/img/Car.png")}
+        resizeMode={'contain'}
+        style={{ height: 40, width: 60, padding: 10 }}
+      />;
+    case "year":
+      return <Image
+        source={require("../../assets/img/CarIcon.png")}
+        resizeMode={'contain'}
+        style={{ height: 40, width: 50, padding: 10 }}
+      />;
+    case "fuel":
+      return <Image
+        source={require("../../assets/img/icons/PiGasPumpLight.png")}
+        resizeMode={'contain'}
+        style={{ height: 30, width: 50, padding: 10 }}
+      />;
+    default:
+      return <FontAwesome5 name={icon} size={24} color="#000000" />;
+  }
+};
 
 const styles = StyleSheet.create({
   fullScreenContainer: {
@@ -674,7 +701,7 @@ const styles = StyleSheet.create({
   },
   carName: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: FONT_FAMILY.BOLD,
     color: '#333',
   },
   variant: {
@@ -755,7 +782,7 @@ const styles = StyleSheet.create({
   specCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    padding: 12,
+    padding: 8,
     marginLeft: 12,
     alignItems: 'center',
     width: 120,
@@ -764,7 +791,6 @@ const styles = StyleSheet.create({
   },
   specIconContainer: {
     width: 40,
-    height: 40,
     borderRadius: 20,
     backgroundColor: '#f8f8f8',
     justifyContent: 'center',

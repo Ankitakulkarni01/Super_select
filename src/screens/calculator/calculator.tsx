@@ -8,8 +8,8 @@ import {
 } from './style';
 import { Colors } from '../../utils/color';
 import { currencyValueFormatter } from '../../utils/numberOperations';
-import { ZebulonCondensed } from '../../utils/fonts';
 import { hasNumbersOnly } from '../../utils/regex';
+import { FONT_FAMILY } from '../../utils/fonts';
 
 
 const DEFAULT_VALUE = 0.2;
@@ -210,7 +210,7 @@ const Calculatorscreen = ({ route, navigation }) => {
   return (
     <ScrollView style={{ backgroundColor: Colors.PURE_WHITE, padding: 20,paddingBottom:100 }}>
       <Text style={{ color: 'black', fontSize: 28, flex: 1, fontFamily: 'Zebulon', }}>EMI Calculator</Text>
-      <Text style={{ color: 'black', fontSize: 22, flex: 1, fontFamily: ZebulonCondensed, fontWeight: '700', letterSpacing: 2, paddingBottom: 10, }}>
+      <Text style={{ color: 'black', fontSize: 22, flex: 1, fontFamily: FONT_FAMILY.REGULAR, fontWeight: '700', letterSpacing: 2, paddingBottom: 10, }}>
         {currencyValueFormatter(outputValues.emi)}/mo.
       </Text>
       <SliderContainer caption="Vehicle Value" onChange={(valuation) => onSetInputValues({ valuation })}
@@ -244,7 +244,7 @@ const Calculatorscreen = ({ route, navigation }) => {
 
         />
       </SliderContainer>
-      <SliderContainer caption="Rate Of Interest"
+      <SliderContainer caption="Rate of Interest"
         values={inputValues.rateOfInterest}
         min={8}
         max={30}

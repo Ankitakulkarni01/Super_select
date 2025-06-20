@@ -42,6 +42,7 @@ const fetchExtended = async (fetchdata: {
       headers: await getHeaders(),
       data: fetchdata.payload
     });
+console.log("req", req);
 
     const { success, message, data } = await req.data;
 

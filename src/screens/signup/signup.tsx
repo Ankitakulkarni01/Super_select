@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { Formik } from 'formik'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import * as yup from 'yup';
 
@@ -74,7 +75,7 @@ const SignUpScreen = (props: any) => {
       "password": values.password,
       "otp": values.Otp,
       "fcmToken": await createFirebaseToken(),
-      "deviceType": 1
+      "deviceType": Platform.OS === "android" ? 1 : 2
     }
     const { success, message, data } = await Signup(passingValue)
     if (success) {
@@ -107,6 +108,11 @@ const SignUpScreen = (props: any) => {
 
   return (
     <ScrollView style={styles.loginContainer}>
+        <View style={{ padding: 10 }}>
+                      <TouchableOpacity onPress={() => props.navigation.goBack()} style={{height:20, width:20}}>
+                          <MaterialIcons name={'arrow-back-ios'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                      </TouchableOpacity>
+                  </View>
       <View style={styles.logoContainer}>
         {/* <Logo height={80} width={180} /> */}
         <Image
@@ -409,7 +415,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     borderWidth: 1,
     marginHorizontal: 5,
-    borderColor: Colors.BORDER_COLOR,
+    borderColor: Colors.BLACK_COLR,
     textAlign: 'center',
     color: Colors.BLACK_COLR
   },

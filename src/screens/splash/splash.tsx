@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Image,
+    Alert,
 } from 'react-native'
 import { StackActions } from '@react-navigation/native';
 
@@ -45,9 +46,8 @@ const SplashScreen = (props) => {
                     ref={videoRef}
                     source={background}
                     resizeMode="cover"
-                    style={Platform.OS === "android" ? styles.videoContainerAndroid : styles.videoContainerIOS}
+                    style={styles.videoContainerAndroid}
                 />
-
 
                 <View style={styles.pauseImageWrapper}>
                     <Image
@@ -88,8 +88,6 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').width,
         minWidth: Dimensions.get('window').height,
         minHeight: Dimensions.get('window').width,
-
-        transform: [{ rotate: '90deg' }],
     },
     videoIcon: {
         width: 50,

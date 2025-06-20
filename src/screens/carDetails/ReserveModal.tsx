@@ -2,14 +2,15 @@ import { FC, useCallback, useEffect, useState } from "react";
 
 import { getYearFromFormattedDateString } from "../../utils/date-time";
 
-import { ReserveNowDataType } from "../../utils/formAPIs/reserveNow";
-import { Image, Modal, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { doReserveNow, ReserveNowDataType } from "../../utils/formAPIs/reserveNow";
+import { Image, Modal, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native";
 import { Car } from "../../../interface/car";
 import GeneralForm from "../../../components/GeneralForm/generalForm";
 import { Colors } from "../../utils/color";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from "react-native-confirmation-code-field";
+import { FONT_FAMILY } from "../../utils/fonts";
 
 export const RESERVE_NOW_POPUP_NAME = "reserve_now";
 
@@ -20,8 +21,8 @@ const ReserveNow: FC<{
   onClose: () => void;
 }> = ({ carData, onClose }) => {
   const [username, setName] = useState("");
-  const [open, setopen] = useState(true)
-  const [otp, setOtp] = useState("")
+  const [open, setopen] = useState(false)
+  const [otp, setOtp] = useState(0)
 
   const [value, setValue] = useState('');
 
@@ -57,10 +58,26 @@ const ReserveNow: FC<{
   console.log("open", open);
 
       
-
-        const { doSendOTP } = await import("../../utils/extraAPIs/sendOTP");
+if(otp === 0){
+  const { doSendOTP } = await import("../../utils/extraAPIs/sendOTP");
         await doSendOTP({ number: data.phone });
 
+}else{
+  data = {
+    otp,
+    carId: carData.id,
+    carName:carData.name,
+    name,
+    email,
+    phone,
+    requestPrice
+  }
+  data["otp"] = otp;
+        data["carId"] = carData.id;
+        data["carName"] = carData.name;
+  const res = await doReserveNow(data);
+}
+      
         // const OtpAsyncPopup = (await import("@/components/OtpAsyncPopup"))
         //   .default;
         // const otpRes = await OtpAsyncPopup();
@@ -87,7 +104,7 @@ const ReserveNow: FC<{
   //
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <View style={styles.ReserveNow}>
 
         <Modal visible={open}
@@ -161,7 +178,26 @@ const ReserveNow: FC<{
             </View>
           </View>
         </View>
-
+{
+  open &&   <CodeField
+  ref={ref}
+  value={otp}
+  onChangeText={(text: String) => setOtp(text)}
+  cellCount={CELL_COUNT}
+  autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
+  rootStyle={styles.codeFieldRoot}
+  keyboardType="number-pad"
+  textContentType="oneTimeCode"
+  renderCell={({ index, symbol, isFocused }) => (
+    <Text
+      key={index}
+      style={[styles.cell, isFocused && styles.focusCell]}
+      onLayout={getCellOnLayoutHandler(index)}>
+      {symbol || (isFocused ? <Cursor /> : null)}
+    </Text>
+  )}
+/>
+}
         <GeneralForm
           formName="contactForm"
           inputs={[
@@ -180,14 +216,15 @@ const ReserveNow: FC<{
           withAcknowledgment
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 
 const styles = StyleSheet.create({
   wrapper: {
-    padding: 10
+    padding: 10,
+    margin:10
   },
   ReserveNow: {
 
@@ -200,7 +237,7 @@ const styles = StyleSheet.create({
     color: Colors.BLACK_COLR,
     flex:1,
     fontSize: 28,
-    fontFamily: 'Zebulon-Condensed-Italic',
+    fontFamily: FONT_FAMILY.ITALIC, 
   },
   subHeadingText: {
     color: Colors.BLACK_COLR,

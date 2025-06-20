@@ -4,9 +4,10 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { arrayRange } from "../../utils/arrayRange";
 import { currencyValueFormatter } from "../../utils/numberOperations";
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { Slider } from "@miblanchard/react-native-slider";
+import Slider from '@react-native-community/slider';
+import Icon from 'react-native-vector-icons/Feather';
 import { Colors } from "../../utils/color";
 import ActionButton from "../actionButton";
 
@@ -95,23 +96,17 @@ const CarFilter: FC<{
   //
 
   return (
-    <View style={styles.CarFilter}>
-      <View style={styles.heading}>
-        <Text style={{
-          color: Colors.BLACK_COLR,
-          fontSize: 28,
-          flex: 1,
-          marginLeft: 10,
-          fontFamily: 'Oxanium-Medium'
-        }}>Filter</Text>
-        <ActionButton
-          onPress={() => reset()}
-          title="Reset" backgroundColor={Colors.PURE_WHITE}
-          color={Colors.BLACK_COLR}
-          border={1}
-        />
-      </View>
-      <ScrollView style={{paddingTop:20}}>
+    <SafeAreaView style={styles.CarFilter}>
+      <ScrollView contentContainerStyle={styles.content}>
+        {/* Top Navigation */}
+        <View style={styles.header}>
+          <TouchableOpacity  onPress={() => onClose()}>
+            <Icon name="arrow-left" size={24} />
+          </TouchableOpacity>
+          <TouchableOpacity  onPress={() => onReset()}>
+            <Icon name="filter" size={24} />
+          </TouchableOpacity>
+        </View>
 
         <CustomMUISelect
           name="makeId"
@@ -162,7 +157,7 @@ const CarFilter: FC<{
           placeholder="Any Year"
           options={getYearList().map((d) => ({ value: d, label: d }))}
           handleChange={batchHandleChanges}
-          defaultValue={current?.year}
+          defaultValue={new Date().getUTCFullYear()}
           showSLider={true}
         />
 
@@ -197,7 +192,7 @@ const CarFilter: FC<{
           border={1}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -209,144 +204,185 @@ export default CarFilter;
 //
 //
 
-// Custom MUI Select
-const CustomMUISelect: FC<{
+
+type CustomMUISelectProps = {
   name: string;
   title: string;
   placeholder: string;
   options: Array<{ value: string; label: string }>;
-  handleChange?: (value: CarCurrentFilterType) => void;
+  handleChange?: (value: Record<string, string | number>) => void;
   defaultValue?: string;
-  showSLider?: boolean
-}> = ({
+  showSLider?: boolean;
+};
+
+const CustomMUISelect: FC<CustomMUISelectProps> = ({
   name,
   title,
   options,
   placeholder,
-  handleChange = () => { },
+  handleChange = () => {},
   defaultValue,
-  showSLider
+  showSLider = false,
 }) => {
-    const [value, setValue] = useState("");
-    const refScrollable = useRef();
+  const [value, setValue] = useState<string | number>('');
+  const refScrollable = useRef<RBSheet>(null);
 
-    // Auto
-    useEffect(() => {
-      setValue(defaultValue ?? "");
-    }, [defaultValue, setValue]);
-    //
 
-    //
+  // Set default on mount/update
+  useEffect(() => {
+    if (showSLider) {
+      setValue(Number(defaultValue) || 0);
+    } else {
+      setValue(defaultValue ?? '');
+    }
+  }, [defaultValue, showSLider]);
 
-    // On Change
-    const onChange = useCallback(
-      (value: string) => {
-        console.log("value", value);
-
-        setValue(value);
-
-        let obj = {};
-        obj[name] = value;
-        handleChange(obj);
-      },
-      [name, setValue]
-    );
-    //
-
-    // On Clear
-    const onClear = useCallback(() => {
-      setValue("");
-
-      let obj = {};
-      obj[name] = "";
+  // Handle value change
+  const onChange = useCallback(
+    (val: string | number) => {
+      setValue(val);
+      let obj: Record<string, string | number> = {};
+      obj[name] = val;
       handleChange(obj);
-    }, [name, setValue, handleChange]);
-    //
-    //
-    //
-console.log("showSLider",showSLider);
+    },
+    [name, handleChange]
+  );
 
-    return (
-      <View style={styles.item}>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title} onPress={() => refScrollable?.current?.open()}>{title}</Text>
+  // Handle clear
+  const onClear = useCallback(() => {
+    setValue(showSLider ? 0 : '');
+    let obj: Record<string, string | number> = {};
+    obj[name] = showSLider ? 0 : '';
+    handleChange(obj);
+  }, [name, handleChange, showSLider]);
 
-          {value !== "" ? (
-            <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
-              <Text style={{ color: Colors.BLACK_COLR }}>{value}</Text>
-            </TouchableOpacity>
-          ) : null}
-        </View>
+  return (
+    <View style={styles.item}>
+      <View style={{ flexDirection: 'row' }}>
+        <Text
+          style={styles.title}
+          onPress={() => refScrollable?.current?.open()}>
+          {title}
+        </Text>
 
-        <RBSheet
-          ref={refScrollable}
-          height={300}
-          draggable
-          customModalProps={{
-            animationType: 'slide',
-            statusBarTranslucent: true,
-          }}
-          customStyles={{
-            container: {
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-            },
-            draggableIcon: {
-              width: 0,
-            },
-          }}>
-          <View style={{ padding: 10 , flex:1}}>
-            <ScrollView>
-              <Text style={[styles.title, { marginBottom: 10, borderBottomWidth: 1, borderBottomColor: Colors.SHADOW_COLOR ,fontFamily:  'Oxanium-Bold'}]} >{title}</Text>
-              {
-                showSLider ? 
-                <View style={styles.price}>
+        {value !== '' && (
+          <TouchableOpacity style={styles.clear_btn} onPress={onClear}>
+            <Text style={{ color: Colors.BLACK_COLR }}>
+              {typeof value === 'string' ? value : `${value !== 0 ?  value : ''}`}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      <RBSheet
+        ref={refScrollable}
+        height={300}
+        draggable
+        customModalProps={{
+          animationType: 'slide',
+          statusBarTranslucent: true,
+        }}
+        customStyles={{
+          container: {
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+          },
+          draggableIcon: {
+            width: 0,
+          },
+        }}>
+        <View style={{ padding: 10, flex: 1 }}>
+          <ScrollView>
+            <Text
+              style={[
+                styles.title,
+                {
+                  marginBottom: 10,
+                  borderBottomWidth: 1,
+                  borderBottomColor: Colors.SHADOW_COLOR,
+                  fontFamily: 'Oxanium-Bold',
+                },
+              ]}>
+              {title}
+            </Text>
+
+            {showSLider ? (
+              <View style={styles.price}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    marginBottom: 10,
+                    fontFamily: 'Oxanium-Medium',
+                  }}>
+                  {value}
+                </Text>
                 <Slider
-                onValueChange={onChange}
-                value={defaultValue}
-                animateTransitions
-                minimumTrackTintColor={Colors.BLACK_COLR}
-                maximumTrackTintColor="#000000"
-                maximumValue={10000}
-                minimumValue={20000}
-                step={2}
-              />
+                  onValueChange={onChange}
+                  value={typeof value === 'number' ? value : 0}
+                  animateTransitions
+                  minimumTrackTintColor={Colors.BLACK_COLR}
+                  maximumTrackTintColor="#000000"
+                  maximumValue={2025}
+                  minimumValue={2000}
+                  step={1}
+                />
               </View>
-                :
-                <View style={{ padding: 10, flexDirection: "row" }}>
+            ) : (
+              <View style={{ padding: 10, flexDirection: 'row' }}>
                 <FlatList
                   style={styles.dashboard}
                   data={options}
-                  renderItem={({ item, index }: { item: string; index: number }) => {
-                    return (
-                      <TouchableOpacity style={{ paddingBottom: 5, fontFamily: value == item?.value ? 'Oxanium-Bold' : 'Oxanium-Medium', backgroundColor: value == item?.value ? '#000000' :Colors.SKELETON_COLOR_1,  borderRadius: 10, margin: 10, padding:10, paddingHorizontal:15}} >
-                      <Text style={[styles.title,{color: value == item?.value ? Colors.PURE_WHITE : Colors.BLACK_COLR, textAlign:'center'}]} >
-                        {item?.label ?? item.value}
+                  keyExtractor={(item) => item.value}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => onChange(item.value)}
+                      style={{
+                        backgroundColor:
+                          value === item.value
+                            ? '#000000'
+                            : Colors.SKELETON_COLOR_1,
+                        borderRadius: 10,
+                        margin: 10,
+                        padding: 10,
+                        paddingHorizontal: 15,
+                      }}>
+                      <Text
+                        style={{
+                          color:
+                            value === item.value
+                              ? Colors.PURE_WHITE
+                              : Colors.BLACK_COLR,
+                          textAlign: 'center',
+                          fontFamily:
+                            value === item.value
+                              ? 'Oxanium-Bold'
+                              : 'Oxanium-Medium',
+                        }}>
+                        {item.label ?? item.value}
                       </Text>
-                      </TouchableOpacity>
-                    )
-                  }}
+                    </TouchableOpacity>
+                  )}
                   numColumns={3}
                 />
               </View>
-              }
-          
+            )}
+          </ScrollView>
 
-            </ScrollView>
-            <ActionButton
-              onPress={() => refScrollable?.current.close()}
-              title="Apply "
-              backgroundColor={Colors.PURE_WHITE}
-              color={Colors.BLACK_COLR}
-              border={1}
-              height={"30"}
-            />
-          </View>
-        </RBSheet>
-      </View>
-    );
-  };
-//
+          <ActionButton
+            onPress={() => refScrollable?.current?.close()}
+            title="Apply"
+            backgroundColor={Colors.PURE_WHITE}
+            color={Colors.BLACK_COLR}
+            border={1}
+            height={'30'}
+          />
+        </View>
+      </RBSheet>
+    </View>
+  );
+};
+
+
 
 //
 //
@@ -355,98 +391,89 @@ console.log("showSLider",showSLider);
 const MIN_VALUATION = 500000;
 const MAX_VALUATION = 50000000;
 
-// Custom MUI Range Slider
-const CustomMUIRangeSlider: FC<{
+type CustomMUIRangeSliderProps = {
   name: string;
   title: string;
-  handleChange?: (value: CarCurrentFilterType) => void;
+  handleChange?: (value: Record<string, string>) => void;
   defaultValue?: string;
-}> = ({ name, title, handleChange = () => { }, defaultValue }) => {
+};
+
+const CustomMUIRangeSlider: FC<CustomMUIRangeSliderProps> = ({
+  name,
+  title,
+  handleChange = () => {},
+  defaultValue,
+}) => {
   const [value, setValue] = useState<[number, number]>([
     MIN_VALUATION,
     MAX_VALUATION,
   ]);
 
-  // Initial
+  // Parse and set default value
   useEffect(() => {
     if (defaultValue) {
-      const splittedDefaultValue = defaultValue.split("-");
+      const [lowStr, highStr] = defaultValue.split('-');
+      const low = parseInt(lowStr, 10);
+      const high = parseInt(highStr, 10);
 
-      const low = parseInt(splittedDefaultValue[0]);
-      const high = parseInt(splittedDefaultValue[1]);
+      const boundedLow = isNaN(low)
+        ? MIN_VALUATION
+        : Math.max(MIN_VALUATION, Math.min(MAX_VALUATION, low));
+      const boundedHigh = isNaN(high)
+        ? MAX_VALUATION
+        : Math.max(MIN_VALUATION, Math.min(MAX_VALUATION, high));
 
-      setValue([
-        low
-          ? low < MIN_VALUATION || low > MAX_VALUATION
-            ? MIN_VALUATION
-            : low
-          : MIN_VALUATION,
-        high
-          ? high > MAX_VALUATION || high < MIN_VALUATION
-            ? MAX_VALUATION
-            : high
-          : MAX_VALUATION,
-      ]);
-    } else setValue([MIN_VALUATION, MAX_VALUATION]);
-  }, [defaultValue, setValue]);
-  //
+      setValue([boundedLow, boundedHigh]);
+    } else {
+      setValue([MIN_VALUATION, MAX_VALUATION]);
+    }
+  }, [defaultValue]);
 
-  // Visible Value
-  const visibleValue = useMemo(
-    () =>
-      `${currencyValueFormatter(value[0])} - ${currencyValueFormatter(
-        value[1]
-      )}`,
-    [value]
-  );
-  //
+  // Formatted visible value
+  const visibleValue = useMemo(() => {
+    return `${currencyValueFormatter(value[0])} - ${currencyValueFormatter(value[1])}`;
+  }, [value]);
 
-  //
-
-  // On Change
+  // Change handler
   const onChange = useCallback(
     (v: [number, number]) => {
-      console.log("slider value", v)
       setValue(v);
-      let obj = {};
-      obj[name] = `${v[0]}-${v[1]}`;
-      handleChange(obj);
+      handleChange({ [name]: `${v[0]}-${v[1]}` });
     },
-    [setValue, name, handleChange]
+    [handleChange, name]
   );
-  //
 
-  // On Change Committed
+  // Optional onChangeCommitted (for slider end events)
   const onChangeCommitted = useCallback(
     (v: [number, number]) => {
-      let obj = {};
-      obj[name] = `${v[0]}-${v[1]}`;
-      handleChange(obj);
+      handleChange({ [name]: `${v[0]}-${v[1]}` });
     },
-    [name, handleChange]
+    [handleChange, name]
   );
-  //
-
-  //
-  //
 
   return (
     <View style={styles.price}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.sub_title}>{visibleValue}</Text>
+
+      {/* Since React Native slider doesn't support range out-of-the-box,
+          this part assumes a dual-slider logic would be implemented
+          using a library like 'rn-range-slider'. Here we simulate single-slider only. */}
       <Slider
-        onValueChange={onChange}
-        value={value}
-        animateTransitions
-        minimumTrackTintColor={Colors.BLACK_COLR}
-        maximumTrackTintColor="#000000"
-        maximumValue={MAX_VALUATION}
+        onValueChange={(val) => onChange([val, value[1]])}
+        onSlidingComplete={(val) => onChangeCommitted([val, value[1]])}
+        value={value[0]}
         minimumValue={MIN_VALUATION}
-        step={2}
+        maximumValue={MAX_VALUATION}
+        step={10000}
+        minimumTrackTintColor={Colors.BLACK_COLR}
+        maximumTrackTintColor={Colors.SKELETON_COLOR_1}
       />
     </View>
   );
 };
+
+
 //
 
 //
@@ -542,6 +569,51 @@ const getYearList = () => {
 const styles = StyleSheet.create({
   CarFilter: {
     padding: 10
+  },
+  content: {
+    padding: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  filters: {
+    marginBottom: 30,
+  },
+  filterLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#000',
+  },
+  disabledText: {
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  priceSection: {
+    marginBottom: 30,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  priceText: {
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  applyButton: {
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+  applyButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   heading: {
     color: Colors.BLACK_COLR,

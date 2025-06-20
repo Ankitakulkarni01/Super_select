@@ -22,8 +22,6 @@ export const getCarList = async (
       ...filters,
     });
 
-    console.log("query",query)
-
     const res = await fetchExtended({
       url: `${API_BASE_PATH}/car-list?${query}${
         getFilter ? "&getFilter=true" : ""
@@ -31,14 +29,7 @@ export const getCarList = async (
       method: "GET",
     });
 
-    console.log(res)
-
     getFilter = false;
-
-
-    console.log(res);
-    
-
     return {
       ...res,
       // nextPageNo: res?.totalPages > page ? page + 1 : undefined,
