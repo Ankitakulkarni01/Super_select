@@ -4,6 +4,10 @@ apply plugin: "com.facebook.react"
 apply plugin: 'com.google.gms.google-services' 
 apply plugin: "kotlin-android"
 
+project.ext.vectoricons = [
+    iconFontNames: [ 'Ionicons.ttf', 'MaterialIcons.ttf', 'FontAwesome.ttf' ] // include fonts you use
+]
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -84,6 +88,9 @@ android {
         applicationId "com.super_select"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+         ndk {
+        abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+    }
         versionCode 1
         versionName "1.0"
     }
@@ -114,7 +121,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
       implementation project(':react-native-vector-icons')
-       implementation project(':react-native-fs')
+    //    implementation project(':react-native-fs')
        implementation 'androidx.core:core-ktx:1.8.0' 
 implementation 'androidx.appcompat:appcompat:1.5.0'
 
@@ -134,3 +141,4 @@ implementation 'androidx.appcompat:appcompat:1.5.0'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
