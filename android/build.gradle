@@ -2,13 +2,15 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "34.0.0"
+                buildToolsVersion = "34.0.0"
         minSdkVersion = 24
-        compileSdkVersion = 34
-        targetSdkVersion = 34
+        compileSdkVersion = 35
+        targetSdkVersion = 35
 
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "23.1.7779620"
+        // These are important for RN 0.71.1
+        kotlinVersion = "1.6.10"
+        ndkVersion = "25.1.8937393"
+
 
                firebaseVersion = "17.3.4" // default: "+"
         
