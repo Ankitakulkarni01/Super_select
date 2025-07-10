@@ -134,7 +134,7 @@ export default function SellPage() {
       <ScrollView style={styles.SellPage}>
         <CoolHeading
           title={"Sell Car"}
-          text={"Fair Price"}
+          // text={"Sell Car"}
         />
         <View style={styles.fold1}>
           <View style={styles.part1}>
@@ -142,7 +142,7 @@ export default function SellPage() {
               <Image
                 source={require("../../assets/img/img/sellcar-hero.jpg")}
                 resizeMode={'contain'}
-                style={{ height: 300, width: '100%' }}
+                style={{ height: 280, width: '100%' }}
               />
               <View style={styles.title}>
                 <Text style={styles.heading}>3 Steps to Sell Your Luxury Car</Text>
@@ -151,11 +151,12 @@ export default function SellPage() {
 
             </View>
             <View style={styles.kp_group} >
+              <KeyPointsItem icon={<Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Book Appointment" />
+
               <KeyPointsItem
                 icon={<Car_inspection height={50} width={50} color={Colors.BLACK_COLR} />}
                 title="Car Inspection & Valuation"
               />
-              <KeyPointsItem icon={<Appointmet_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Book Appointment" />
 
               <KeyPointsItem icon={<Sell_car height={50} width={50} color={Colors.BLACK_COLR} />} title="Sell Your Call" />
             </View>

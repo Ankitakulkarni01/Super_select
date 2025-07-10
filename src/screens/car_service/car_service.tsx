@@ -1,8 +1,10 @@
 import React, { useCallback } from 'react';
 import {
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Colors } from '../../utils/color';
@@ -11,6 +13,7 @@ import { InsuranceDataType } from '../../utils/formAPIs/insurance';
 import { Text } from 'react-native';
 import CarouselComponent from '../../../components/Carousel/Carousel';
 import { FONT_FAMILY } from '../../utils/fonts';
+import CoolHeading from '../../components/CoolHeading';
 // import { SliderBox } from "react-native-image-slider-box";
 
 
@@ -38,11 +41,13 @@ const CarServiceScreen = () => {
 
   return (
     <ScrollView style={{ backgroundColor: Colors.PURE_WHITE, padding: 15 }}>
-
-      <View style={{ marginBottom: 15 }}>
+  <CoolHeading
+          title={"Car Service"}
+        />
+      {/* <View style={{ marginBottom: 15 }}>
         <Text style={{ color: Colors.BLACK_COLR, marginVertical: 10, fontFamily: 'Oxanium-Bold', fontSize: 30 }}>Car Service</Text>
 
-      </View>
+      </View> */}
       <View style={{ flex: 1, marginBottom: 20 }}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Image resizeMode='contain'
@@ -64,9 +69,11 @@ const CarServiceScreen = () => {
           <Image resizeMode='contain'
             style={{ width: 150, height: 150, margin: 5 }}
             source={require("../../assets/img/car_service_logo/body_shop.png")} />
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.autowerks.ae/')}>
           <Image resizeMode='contain'
             style={{ width: 150, height: 150, margin: 5 }}
             source={require("../../assets/img/car_service_logo/detailing.png")} />
+            </TouchableOpacity>
         </View>
       </View>
       <Text style={styles.heading}>

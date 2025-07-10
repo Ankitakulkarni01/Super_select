@@ -35,6 +35,9 @@ export const postWishlistAPI = async (data:WishlistDataType) => {
       url: `${API_BASE_PATH}/wishlist-remove/${wishlistId}`,
       method: "POST",
     });
+
+    console.log(res,wishlistId);
+    
   
     return res;
   };

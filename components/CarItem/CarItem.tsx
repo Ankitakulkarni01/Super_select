@@ -29,6 +29,9 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
   props
 }) => {
 
+  console.log(data.status, data.status === "booked" );
+  
+
 
   const onOpenCarDetails = () => {
     props.navigation.navigate('CarDetails', {
@@ -50,7 +53,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         resizeMode={FastImage.resizeMode.stretch}
       />
       </TouchableOpacity>
-      <Text style={{ color: Colors.BLACK_COLR, fontFamily: FONT_FAMILY.REGULAR, fontSize: 16, paddingHorizontal: 15,paddingBottom:10, fontWeight: '300' }}>{data.name}</Text>
+      <Text style={{ color: Colors.BLACK_COLR, fontFamily: FONT_FAMILY.REGULAR, fontSize: 16, paddingHorizontal: 15,paddingBottom:10, fontWeight: '300' }} onPress={onOpenCarDetails}>{data.name}</Text>
       <View style={styles.price}>
         {data.status !== "soldOut" ? (
           data.price > 0
@@ -71,6 +74,24 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
         )}
       </View>
 
+       {data.status === "booked" && (
+          <View
+            style={
+              [styles.tags]
+            }
+          >
+             {data.status === "booked" ?
+          <Text style={{color: Colors.PURE_WHITE,  fontFamily: 'Oxanium-Medium', }}> 
+               BOOKED
+
+            </Text>
+            :
+            <SpecialTag height={40} width={40} color="yellow"/>
+             }
+          </View>
+        )}
+
+
       <ScrollView style={styles.info} horizontal={true}   showsHorizontalScrollIndicator={false}>
           <CarKeyPointsItem
             name="Engine"
@@ -90,29 +111,7 @@ const CarItem: FC<{ data: Car, props?: any }> = ({
           <CarKeyPointsItem name="Type" value={data?.type} />
         </ScrollView>
 
-      {data.status !== "soldOut" && data?.special === 1 && (
-          <View
-            style={
-              [styles.tags]
-            }
-          >
-             {data.status === "booked" ?
-          <Text style={{color: Colors.BLACK_COLR,  fontFamily: 'Oxanium-Medium', }}> 
-               "BOOKED"
-
-            </Text>
-            :
-            <SpecialTag height={40} width={40} color="yellow"/>
-          //   <Image
-          //   source={require("../../assets/img/crown.png")}
-          //   resizeMode={'contain'}
-          //   style={{ height: 40, width: 40, margin:10}}
-          //   alt="SOLD OUT"
-          // />
-             }
-          </View>
-        )}
-
+     
     </View>
   );
 };
@@ -148,13 +147,14 @@ const styles = StyleSheet.create({
 
   },
   tags: {
-  zIndex: 10,
-    margin: 0,
+  // zIndex: 10,
+  //   margin: 0,
     padding: 10,
     position: 'absolute',
+    borderBottomStartRadius:10,
     top: 10,
     right: 10,
-    // backgroundColor: 'yellow',
+    backgroundColor: '#1677ff',
   }
 })
 

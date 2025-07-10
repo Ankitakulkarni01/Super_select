@@ -8,6 +8,7 @@ export type ApiResponseType = {
   message: string;
   data?: any;
   totalPages?: number;
+  status:number
 };
 
 // Get Header
@@ -46,12 +47,13 @@ console.log("req", req);
 
     const { success, message, data } = await req.data;
 
-    return { success, message, data };
+    return { success, message, data, status: 200 };
   } catch (err) {
-    const res = await err.response.data;
-    console.log("errpr",err.response.status)
-if(err.response.status === 401){
-  console.log("errpr",err.response.status)
+    const res = await err?.response?.data;
+    console.log("errpr",err?.response?.status)
+if(err?.response?.status === 401){
+  console.log("errpr",err?.response?.status)
+
   await AsyncStorage.removeItem("access_token")
             await AsyncStorage.removeItem("name")
             await AsyncStorage.removeItem('firebase_token');
@@ -61,6 +63,7 @@ if(err.response.status === 401){
       success: false,
       message: "Something went wrong, please try again.",
       data: undefined,
+      status: err?.response?.status
     };
   }
 };

@@ -4,15 +4,13 @@ buildscript {
     ext {
                 buildToolsVersion = "34.0.0"
         minSdkVersion = 24
-        compileSdkVersion = 35
-        targetSdkVersion = 35
+        compileSdkVersion = 34
+        targetSdkVersion = 34
 
         // These are important for RN 0.71.1
-        kotlinVersion = "1.6.10"
+        kotlinVersion = '1.8.0' // or 1.9.0
         ndkVersion = "25.1.8937393"
-
-
-               firebaseVersion = "17.3.4" // default: "+"
+        firebaseVersion = "17.3.4" // default: "+"
         
     }
     repositories {
@@ -32,6 +30,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.3.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath 'com.google.gms:google-services:4.3.13'
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         
     }
 }

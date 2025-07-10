@@ -3,7 +3,8 @@ import {
   ScrollView,
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native';
 import { Colors } from '../../utils/color';
 import { getWishlistAPI } from '../../utils/extraAPIs/wishlist';
@@ -12,6 +13,7 @@ import { CarList } from '../cars/carsDetail';
 import { CarFilterSkeleton } from '../../components/inventory/carFilter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FONT_FAMILY } from '../../utils/fonts';
+import { StackActions } from '@react-navigation/native';
 
 
 const WishListScreen = (props: any) => {
@@ -24,18 +26,20 @@ const WishListScreen = (props: any) => {
 
   const getWishlist = async () => {
     setLoading(true)
-    const access_token = await AsyncStorage.getItem("userId")
-    console.log("userId",access_token);
     
-    const { success, message, data } = await getWishlistAPI()
-    console.log("wishlist data", data);
+    const { success, message, data, status } = await getWishlistAPI()
     if (success) {
       setCarData(data)
       setLoading(false)
       
-      
     }
     else{
+      if(status === 401){
+         props.navigation.dispatch(
+                        StackActions.replace('SignIn')
+                    );
+                    Alert.alert("You have been logged out . Please login again")
+      }
       setLoading(false)
       console.log(message)
     }

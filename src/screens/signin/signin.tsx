@@ -95,19 +95,27 @@ const SignInScreen = (props: any) => {
 
     if (showResetPassword)
         return (
-            <View style={styles.forgotPassMainContainer}>
-                <View style={styles.logoContainer}>
-                    <Image
-                        source={require('../../assets/logo/logo.png')}
-                        resizeMode={'contain'}
-                        style={{ height: 80, width: '100%' }}
-                    />
-                </View>
+            <ScrollView style={styles.forgotPassMainContainer}>
+                 <View style={{ padding: 10 }}>
+                <TouchableOpacity onPress={() => setShowResetPassword(false)} style={{ height: 20, width: 20 }}>
+                    <MaterialIcons name={'arrow-back-ios'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                </TouchableOpacity>
+            </View>
+              {
+                error && 
                 <Text style={styles.errorText}>{error}</Text>
+              }
                 <KeyboardAvoidingView
                     style={styles.container}
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 >
+                      <View style={styles.logoContainer}>
+                    <Image
+                        source={require('../../assets/img/LoginBackgroud.jpg')}
+                        resizeMode={'stretch'}
+                       style={{ height: 300, width: '100%', paddingBottom:25 }}
+                    />
+                </View>
                     <View style={styles.forgotPassword}>
 
 
@@ -133,7 +141,7 @@ const SignInScreen = (props: any) => {
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
-            </View>
+            </ScrollView>
         );
     //
 
@@ -266,7 +274,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center',
+        // borderWidth:1
+        // justifyContent: 'center',
+        // paddingHorizontal: 25,
     },
     textinputParentContainer: {
         marginVertical: 15,
@@ -335,8 +345,8 @@ const styles = StyleSheet.create({
     },
     forgotPassMainContainer: {
         flex: 1,
-        justifyContent: 'center',
-        padding: 25,
+        // justifyContent: 'center',
+        // padding: 25,
         elevation: 10,
         backgroundColor: Colors.PURE_WHITE,
     },
@@ -356,7 +366,10 @@ const styles = StyleSheet.create({
     forgotPassword: {
         // marginHorizontal: 10,
         // alignItems: 'center',
-        justifyContent: 'center'
+        // justifyContent: 'center',
+        flex:1,
+        padding:10,
+        paddingTop:25
     },
     linkContainer: {
         // alignItems: 'flex-end',

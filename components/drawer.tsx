@@ -12,7 +12,10 @@ const SuperSelectDrawer = (props: any) => {
 
   React.useEffect(() => {
     getName()
-  }, [])
+  }, [props])
+
+  console.log(props);
+  
 
   const getName = async () => {
     const name = await AsyncStorage.getItem('name');
@@ -20,6 +23,13 @@ const SuperSelectDrawer = (props: any) => {
     setLogin(access_token !== null)
     setName(name)
   }
+
+  const navigateTo = (screenName : String) => {
+  props.navigation.navigate('HomeStack', { screen: screenName });
+};
+
+console.log(login);
+
 
 
   return (
@@ -32,39 +42,39 @@ const SuperSelectDrawer = (props: any) => {
         {
           !login &&
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, backgroundColor: Colors.BLACK_COLR, justifyContent: 'center' }]} onPress={() => props.navigation.navigate('SignIn')}>
+            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, backgroundColor: Colors.BLACK_COLR, justifyContent: 'center' }]} onPress={() => navigateTo('SignIn')}>
               <Text style={[styles.titleText, { color: Colors.PURE_WHITE }]}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, justifyContent: 'center', marginLeft: 10, borderWidth: 1 }]} onPress={() => props.navigation.navigate('SignUp')}>
+            <TouchableOpacity style={[styles.buttonContainer, { flex: 1, justifyContent: 'center', marginLeft: 10, borderWidth: 1 }]} onPress={() => navigateTo('SignUp')}>
               <Text style={styles.titleText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         }
         {
           login &&
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Registration')}>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('Registration')}>
             <Text style={styles.titleText}>Purchase details</Text>
           </TouchableOpacity>
         }
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Inventory')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('Inventory')}>
           <Text style={styles.titleText}>Buy Car</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('SellCar')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('SellCar')}>
           <Text style={styles.titleText}>Sell Car</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Contact')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('Contact')}>
           <Text style={styles.titleText}>Contact</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('ShowRoom')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('ShowRoom')}>
           <Text style={styles.titleText}>Showrooms</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('CarService')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('CarService')}>
           <Text style={styles.titleText}>Car Service</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Insurance')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('Insurance')}>
           <Text style={styles.titleText}>Insurance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => props.navigation.navigate('Calculator')}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigateTo('Calculator')}>
           <Text style={styles.titleText}>Emi Calculator</Text>
         </TouchableOpacity>
 

@@ -22,6 +22,7 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/material-top-tabs": "^6.6.13",
+    "@react-navigation/native": "^7.1.14",
     "@react-navigation/native-stack": "^6.9.17",
     "@tanstack/react-query": "^5.24.8",
     "@types/react-native-snap-carousel": "^3.8.11",

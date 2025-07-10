@@ -22,7 +22,7 @@ const showroomData = {
     address:
       'Mont Vert Spectra, Near Vijay Sales, Baner Road, Pallod Farms, Baner, Pune, Maharashtra - 411045',
     location: { latitude: 18.559, longitude: 73.789 },
-    image: require("../../assets//showroom/Pune_location.png")
+    image: require("../../assets//showroom/Pune_location.jpg")
   },
   Hyderabad: {
     phone: '+91 98480 12345',
@@ -30,7 +30,7 @@ const showroomData = {
     address:
       'Some Address, Road No. 2, Banjara Hills, Hyderabad, Telangana - 500034',
     location: { latitude: 17.4239, longitude: 78.4483 },
-     image: require("../../assets//showroom/Hydrabad_location.png")
+     image: require("../../assets//showroom/Hydrabad_location.jpg")
   },
 };
 
@@ -66,7 +66,7 @@ const ShowRoomScreen = () => {
           <Image
           source={data.image}
           resizeMode={'stretch'}
-          style={{ width: '100%' }}
+          style={{ width: '100%', height:200 }}
         />
 
           <TouchableOpacity onPress={openMap} style={styles.mapButton}>

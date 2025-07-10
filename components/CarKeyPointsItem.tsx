@@ -2,10 +2,6 @@ import { FC } from "react";
 
 import { Text, View } from "react-native";
 
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Car from '../assets/svg/car.svg'
-
-import { Colors } from "../src/utils/color";
 import { StyleSheet } from "react-native";
 import { Image } from "react-native";
 
@@ -19,7 +15,7 @@ const CarKeyPointsItem: FC<{
 
   return (
     <View style={styles.specChip}>
-      <Icon name={name}/>
+      <Icon name={name} />
       <Text style={styles.specText}>{value}</Text>
     </View>
   );
@@ -37,12 +33,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
-    paddingHorizontal: 12,
+    paddingLeft: 8,
     paddingVertical: 6,
     marginRight:10,
+    paddingRight:12,
     // marginHorizontal:10,
     borderRadius: 16,
-    gap: 6,
+    // gap: 6,
   },
   specText: {
     fontSize: 12,

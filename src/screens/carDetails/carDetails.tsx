@@ -78,12 +78,13 @@ const CarDetailScreen = ({ navigation, route }) => {
   //
 
   const postWishlist = async () => {
-    if (wishlist) {
+    if (wishListId !== null) {
       const { success, message, data } = await removeWishlistAPI(wishListId)
+          console.log(message);
       if (success) {
-        setwishlist(false)
+        setwishlist(!wishlist)
       }
-      console.log(message);
+  
 
     } else {
       const values = {
@@ -92,7 +93,7 @@ const CarDetailScreen = ({ navigation, route }) => {
       const { success, message, data } = await postWishlistAPI(values)
       console.log(message);
       if (success) {
-        setwishlist(true)
+        setwishlist(!wishlist)
       }
     }
   }
@@ -203,22 +204,6 @@ const CarDetailScreen = ({ navigation, route }) => {
     //     : ""
   }
 
-  // On Full View Media Click
-  const onFullViewMediaClick = useCallback(
-    (value: number) => {
-      console.log("values", value);
-
-    },
-    []
-  );
-  //
-
-  const makeSomeRequest = () => {
-    // setIsLoading(true);
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 3000);
-  };
 
 
   const handleBack = () => {
@@ -235,14 +220,8 @@ const CarDetailScreen = ({ navigation, route }) => {
     if (carDataRes?.data.exteriorImages !== undefined) {
       const dataImages = [...carDataRes?.data.exteriorImages]
 
-      console.log("wishlist data from", carDataRes?.data);
-      
-
-
       setwishlist(carDataRes?.data?.wishListId)
       setwishlistID(carDataRes?.data?.wishListId)
-
-      console.log("wishlist", carDataRes?.data?.wishListId)
 
 
       const both = [...carDataRes?.data.exteriorImages, ...carDataRes?.data.interiorImages];
@@ -297,8 +276,6 @@ const CarDetailScreen = ({ navigation, route }) => {
     Linking.openURL(phoneNumber);
   }
 
-  console.log("carData", carData);
-
 
   const specifications = [
     { icon: 'engine', label: 'Engine', value: `${carData?.engine} cc` },
@@ -342,6 +319,9 @@ const CarDetailScreen = ({ navigation, route }) => {
     );
   };
 
+  console.log(carData?.status);
+  
+
   return (
     <View style={styles.container}>
       {/* {renderHeader()} */}
@@ -355,12 +335,10 @@ const CarDetailScreen = ({ navigation, route }) => {
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
-              onScroll={(event) => {
-                const slide = Math.round(
-                  event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width,
-                );
-                setActiveImageIndex(slide);
-              }}
+              onScroll={(e) => {
+      const index = Math.round(e.nativeEvent.contentOffset.x / e.nativeEvent.layoutMeasurement.width);
+      setActiveImageIndex(index);
+    }}
               scrollEventThrottle={16}>
               {allImages?.map((image, index) => (
                 <Image key={index} source={{ uri: image }} style={styles.carImage} />
@@ -376,6 +354,7 @@ const CarDetailScreen = ({ navigation, route }) => {
                 style={styles.closeButton}
                 onPress={() => setIsFullScreen(false)}
               >
+
                 <Ionicons name="close" size={28} color="#FFFFFF" />
               </TouchableOpacity>
               <ScrollView
@@ -536,9 +515,10 @@ const CarDetailScreen = ({ navigation, route }) => {
 
       {/* Sticky Footer */}
       <View style={styles.stickyFooter}>
-        <TouchableOpacity style={styles.reserveButton} onPress={onReserveBtnClick}>
+           <TouchableOpacity style={styles.reserveButton} disabled={ carData?.status === "soldOut"} onPress={onReserveBtnClick}>
           <Text style={styles.reserveButtonText}>Reserve Now</Text>
         </TouchableOpacity>
+       
         <TouchableOpacity style={styles.callButton} onPress={() => onCall()}>
           <MaterialIcons name="phone" size={24} color="#000000" />
         </TouchableOpacity>
@@ -587,14 +567,14 @@ const Icon: FC<{ name: string, icon: string }> = ({ name, icon }) => {
     case "type":
       return <Image
         source={require("../../../assets/img/Car.png")}
-        resizeMode={'contain'}
-        style={{ height: 40, width: 60, padding: 10 }}
+        resizeMode={'cover'}
+        style={{ height: 30, width: 40, padding: 10 }}
       />;
     case "year":
       return <Image
         source={require("../../assets/img/CarIcon.png")}
         resizeMode={'contain'}
-        style={{ height: 40, width: 50, padding: 10 }}
+        style={{ height: 30, width: 50, padding: 10 }}
       />;
     case "fuel":
       return <Image
@@ -905,6 +885,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   }, stickyFooter: {
     position: 'absolute',
+    alignItems:'center',
+    justifyContent:'center',
     bottom: 0,
     left: 0,
     right: 0,

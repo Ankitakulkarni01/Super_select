@@ -6,11 +6,13 @@ import {
   TextInput,
   Linking,
   TouchableOpacity,
-  Platform
+  Platform,
+  ScrollView
 } from 'react-native'
 import { Formik } from 'formik'
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather'
 import * as yup from 'yup';
 import { useRoute } from '@react-navigation/native';
@@ -23,6 +25,7 @@ import { Colors } from '../../utils/color';
 import ActionButton from '../../components/actionButton';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { forgotPassword } from '../../utils/extraAPIs/forgotPassword';
+import { Alert } from 'react-native';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -83,6 +86,8 @@ const ForgotPasswordScreen = (props: any) => {
   console.log(message, success)
   if(success){
      console.log("message", message)
+     Alert.alert("Password Change SuccessFully")
+     props.navigation.navigate('HomeStack', { screen: "SignIn" });
   }else{
       console.log(message);
       
@@ -93,14 +98,19 @@ const ForgotPasswordScreen = (props: any) => {
   //
 
   return (
-    <View style={styles.loginContainer}>
-      <View style={styles.logoContainer}>
+    <ScrollView style={styles.loginContainer}>
+          <View style={{ padding: 10 }}>
+                            <TouchableOpacity onPress={() => props.navigation.goBack()} style={{height:20, width:20}}>
+                                <MaterialIcons name={'arrow-back-ios'} size={20} color={Colors.BLACK_COLR} style={styles.iconStyle} />
+                            </TouchableOpacity>
+                        </View>
+      {/* <View style={styles.logoContainer}> */}
         <Image
-          source={require('../../assets/logo/logo.png')}
+          source={require('../../assets/img/LoginBackgroud.jpg')}
           resizeMode={'contain'}
-          style={{ height: 80, width: '100%' }}
+          style={{ height: 300, width: '100%' }}
         />
-      </View>
+      {/* </View> */}
       {/* <Text></Text> */}
       {!complete ? (
         <Formik
@@ -218,15 +228,15 @@ const ForgotPasswordScreen = (props: any) => {
           )}>You can login now.</Text>
         </View>
       )}
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 25,
+    // justifyContent: 'center',
+    // padding: 25,
     elevation: 10,
     // backgroundColor: Colors.PURE_WHITE,
   },
@@ -237,6 +247,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginBottom: 20,
+    padding: 25,
     justifyContent: 'center'
   },
   textinputParentContainer: {
