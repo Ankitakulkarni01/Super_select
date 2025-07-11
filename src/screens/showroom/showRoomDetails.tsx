@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -40,6 +40,15 @@ const ShowroomGallery = ({ activeCity }) => {
   const scrollRef = useRef(null);
 
   const allImages = showroomImages[activeCity] || [];
+
+  useEffect(() =>{
+    setActiveImageIndex(0)
+    console.log(activeCity);
+    
+  },[activeCity])
+
+  console.log(activeImageIndex);
+  
 
   return (
     <View style={styles.galleryWrapper}>

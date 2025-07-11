@@ -66,7 +66,7 @@ const ShowRoomScreen = () => {
           <Image
           source={data.image}
           resizeMode={'stretch'}
-          style={{ width: '100%', height:200 }}
+          style={{ width: '100%', height:300 }}
         />
 
           <TouchableOpacity onPress={openMap} style={styles.mapButton}>

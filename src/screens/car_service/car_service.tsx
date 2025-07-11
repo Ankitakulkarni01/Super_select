@@ -14,19 +14,8 @@ import { Text } from 'react-native';
 import CarouselComponent from '../../../components/Carousel/Carousel';
 import { FONT_FAMILY } from '../../utils/fonts';
 import CoolHeading from '../../components/CoolHeading';
+import PremiumServices from './Icons';
 // import { SliderBox } from "react-native-image-slider-box";
-
-
-const carServiceImages = [
-  require('../../../assets/img/car-service/1.jpg'),
-  require('../../../assets/img/car-service/2.jpg'),
-  require('../../../assets/img/car-service/3.jpg'),
-  require('../../../assets/img/car-service/4.jpg'),
-  require('../../../assets/img/car-service/5.jpg'),
-  require('../../../assets/img/car-service/6.jpg'),
-  require('../../../assets/img/car-service/7.jpg'),
-  require('../../../assets/img/car-service/8.jpg'),
-]
 
 const CarServiceScreen = () => {
 
@@ -49,32 +38,7 @@ const CarServiceScreen = () => {
 
       </View> */}
       <View style={{ flex: 1, marginBottom: 20 }}>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <Image resizeMode='contain'
-            style={{ width: 150, height: 150, margin: 5 }}
-            source={require("../../assets/img/car_service_logo/value_added_services.png")} />
-          <Image resizeMode='contain'
-            style={{ width: 150, height: 150, margin: 5 }}
-            source={require("../../assets/img/car_service_logo/scanning_diagnostics.png")} />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <Image resizeMode='contain'
-            style={{ width: 150, height: 150, margin: 5 }}
-            source={require("../../assets/img/car_service_logo/periodic_service.png")} />
-          <Image resizeMode='contain'
-            style={{ width: 150, height: 150, margin: 5 }}
-            source={require("../../assets/img/car_service_logo/common_repairs.png")} />
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <Image resizeMode='contain'
-            style={{ width: 150, height: 150, margin: 5 }}
-            source={require("../../assets/img/car_service_logo/body_shop.png")} />
-            <TouchableOpacity onPress={() => Linking.openURL('https://www.autowerks.ae/')}>
-          <Image resizeMode='contain'
-            style={{ width: 150, height: 150, margin: 5 }}
-            source={require("../../assets/img/car_service_logo/detailing.png")} />
-            </TouchableOpacity>
-        </View>
+   <PremiumServices/>
       </View>
       <Text style={styles.heading}>
         To get the best service, fill this out and our executive will attend you shortly.
