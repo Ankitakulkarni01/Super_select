@@ -138,6 +138,7 @@ export default function SellCarForm() {
                   onChangeText={handleChange('makeModel')}
                   onBlur={handleBlur('makeModel')}
                   value={values.makeModel}
+                  placeholderTextColor="#888"
                 />
                 {touched.makeModel && errors.makeModel && (
                   <Text style={styles.error}>{errors.makeModel}</Text>
@@ -149,6 +150,7 @@ export default function SellCarForm() {
                   onChangeText={handleChange('name')}
                   onBlur={handleBlur('name')}
                   value={values.name}
+                  placeholderTextColor="#888"
                 />
                 {touched.name && errors.name && (
                   <Text style={styles.error}>{errors.name}</Text>
@@ -161,6 +163,7 @@ export default function SellCarForm() {
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
                   value={values.email}
+                  placeholderTextColor="#888"
                 />
                 {touched.email && errors.email && (
                   <Text style={styles.error}>{errors.email}</Text>
@@ -174,6 +177,7 @@ export default function SellCarForm() {
                   onChangeText={handleChange('phone')}
                   onBlur={handleBlur('phone')}
                   value={values.phone}
+                  placeholderTextColor="#888"
                 />
                 {touched.phone && errors.phone && (
                   <Text style={styles.error}>{errors.phone}</Text>
@@ -185,6 +189,7 @@ export default function SellCarForm() {
                   onChangeText={handleChange('folder')}
                   onBlur={handleBlur('folder')}
                   value={values.folder}
+                  placeholderTextColor="#888"
                 />
                 {touched.folder && errors.folder && (
                   <Text style={styles.error}>{errors.folder}</Text>

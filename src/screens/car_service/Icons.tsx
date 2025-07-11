@@ -24,7 +24,6 @@ const PremiumServices = () => {
   const handlePress = (label: string) => {
     // You can replace this Alert with navigation
     Linking.openURL('https://www.autowerks.ae/')
-    Alert.alert('Clicked', `You selected: ${label}`);
   };
 
   const renderItem = ({ item }: any) => {

@@ -30,7 +30,11 @@ function navigate(name: string, params?: any) {
 
 // ✅ Background handler (must be outside component!)
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('BG FCM:', remoteMessage);
+  if (Platform.OS === 'ios' && remoteMessage.notification) {
+    console.log('🚫 Skipping Notifee notification: already shown by iOS');
+    return;
+  }
+
   await displayNotification(remoteMessage);
 });
 
@@ -136,7 +140,16 @@ export default function App() {
     });
 
     const unsubMessage = messaging().onMessage(async remoteMessage => {
-      await displayNotification(remoteMessage);
+      console.log(remoteMessage.notification);
+      
+      if (Platform.OS === 'android') {
+        await displayNotification(remoteMessage); // Only Android
+      } else {
+        // iOS: only display if `notification` key is missing
+        // if (!remoteMessage.notification) {
+        //   await displayNotification(remoteMessage);
+        // }
+      }
     });
 
     const unsubNotifeeTap = notifee.onForegroundEvent(({ type, detail }) => {
@@ -153,12 +166,12 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (firebaseReady && navReady && initialCarId) {
-      navigate('CarDetails', { carId: initialCarId });
-      setInitialCarId(null);
-    }
-  }, [firebaseReady, navReady, initialCarId]);
+  // useEffect(() => {
+  //   if (firebaseReady && navReady && initialCarId) {
+  //     navigate('CarDetails', { carId: initialCarId });
+  //     setInitialCarId(null);
+  //   }
+  // }, [firebaseReady, navReady, initialCarId]);
 
   if (!firebaseReady) return null;
 
