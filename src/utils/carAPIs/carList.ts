@@ -16,6 +16,9 @@ export const getCarList = async (
   filters: { [key: string]: string | number } = {}
 ) => {
 
+  console.log(filters);
+  
+
   try {
     const query = queryObjectToString({
       page: page,

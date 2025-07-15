@@ -1,11 +1,12 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import HeaderNavigationMenu from "../../src/utils/navigation/HeaderNavigationMenu";
 import { Colors } from "../../src/utils/color";
 import PreviewImage from "./PreviewImage";
 import { FONT_FAMILY } from "../../src/utils/fonts";
-
+import CoolHeading from "../../src/components/CoolHeading";
+import Icon from "react-native-vector-icons/Ionicons"
 
 export const GALLERY_POPUP_NAME = "gallery";
 
@@ -15,6 +16,7 @@ interface Props {
   all: Array<string>;
   exterior: Array<string>;
   interior: Array<string>;
+  onClose: () =>{}
 }
 
 //
@@ -24,7 +26,7 @@ const Gallery: FC<Props> = ({
   all,
   exterior,
   interior,
-  
+  onClose
 }) => {
 
   console.log("galeery");
@@ -46,11 +48,6 @@ const Gallery: FC<Props> = ({
   }, [setOpen]);
   //
 
-  // On Close
-  const onClose = useCallback(() => {
-
-  }, []);
-  //
 
   //
   //
@@ -71,10 +68,8 @@ const Gallery: FC<Props> = ({
   //
 
   return (
-    <View style={styles.Gallery}>
-      <TouchableOpacity style={styles.close_btn} onPress={onClose}>
-        <Text>Close</Text>
-      </TouchableOpacity>
+    <SafeAreaView style={styles.Gallery}>
+   
 
       <PreviewImage
       modalVisible={previewImageScreen}
@@ -83,11 +78,11 @@ const Gallery: FC<Props> = ({
       imageURI={image}
       />
 
-      <Text style={{   color: Colors.BLACK_COLR,
-          fontFamily: FONT_FAMILY.REGULAR,
-          fontSize: 22,
-          fontWeight: '300',
-          marginTop: 10 }} >Gallery</Text>
+     
+<CoolHeading
+        title={"Gallery"}
+        // text={"Necessity"}
+      />
 
       <HeaderNavigationMenu menu={routes} activeValue={headerMenuValue} setActiveValue={(value: string) => {
         setHeaderMenu(value)
@@ -186,7 +181,10 @@ const Gallery: FC<Props> = ({
           />
         </View>
       }
-    </View>
+         <TouchableOpacity style={styles.close_btn} onPress={onClose}>
+         <Icon name="close-circle-outline" size={35}/>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 
@@ -196,7 +194,12 @@ const styles = StyleSheet.create({
     padding: 10
   },
   close_btn: {
-
+    margin:5,
+    position:"absolute",
+    top:60,
+    right:10,
+    width:50,
+    height:50
   },
   heading: {
 

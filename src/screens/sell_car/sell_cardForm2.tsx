@@ -28,7 +28,6 @@ const CarSchema = Yup.object().shape({
     .min(4, 'At least 4 photos are required')
     .max(8, 'You can upload up to 8 photos')
     .required('Car photos are required'),
-  folder: Yup.string().required('Folder name is required'),
 });
 
 export default function SellCarForm() {
@@ -196,17 +195,6 @@ export default function SellCarForm() {
                   <Text style={styles.error}>{errors.phone}</Text>
                 )}
 
-                <TextInput
-                  style={styles.input}
-                  placeholder="Folder Name"
-                  onChangeText={handleChange('folder')}
-                  onBlur={handleBlur('folder')}
-                  value={values.folder}
-                  placeholderTextColor="#888"
-                />
-                {touched.folder && errors.folder && (
-                  <Text style={styles.error}>{errors.folder}</Text>
-                )}
 
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                   <Text style={styles.buttonText}>Submit Request</Text>
@@ -253,6 +241,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
+    color:'#888',
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,

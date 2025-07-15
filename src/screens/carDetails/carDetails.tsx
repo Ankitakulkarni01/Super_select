@@ -29,6 +29,7 @@ import { Alert } from 'react-native';
 import { FONT_FAMILY } from '../../utils/fonts';
 import { Colors } from '../../utils/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Gallery from '../../../components/Gallery/gallery';
 
 
 const { width } = Dimensions.get('window');
@@ -319,6 +320,16 @@ const CarDetailScreen = ({ navigation, route }) => {
     );
   };
 
+
+    // On Full View Media Click
+    const onFullViewMediaClick = useCallback(
+      (value: number) => {
+        console.log("values", value);
+  
+      },
+      []
+    );
+
   console.log(carData?.status);
   
 
@@ -345,6 +356,57 @@ const CarDetailScreen = ({ navigation, route }) => {
               ))}
             </ScrollView>
           </TouchableOpacity>
+
+          <>
+            {
+              showGallery &&
+              <Modal
+                visible={showGallery}
+                onRequestClose={() => setshowGallery(false)}>
+                <Gallery
+                  carName={carData?.name}
+                  onOpenFullView={(v) => onFullViewMediaClick(v)}
+                  all={allImages}
+                  exterior={carData?.exteriorImages}
+                  interior={carData?.interiorImages}
+                  onClose={() => {
+                    setshowGallery(false)
+                  }}
+                />
+              </Modal>
+            }
+
+          </>
+
+            <TouchableOpacity
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                        zIndex: 100,
+                        width: 100,
+                        height: 75,
+                        position: 'absolute',
+                        left: 20,
+                        padding: 5,
+                        bottom: -40,
+                        overflow: 'hidden',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 10,
+                        marginBottom: 20,
+                        shadowColor: '#171717',
+                        shadowOffset: { width: -2, height: 4 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 3,
+                        elevation: 20
+                      }}
+                      onPress={() => {
+                        setshowGallery(true)
+                        console.log("show Gallery")
+                      }
+                      }
+                    >
+                      <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>{allImages?.length}'s photos</Text>
+                    </TouchableOpacity>
 
           {/* Full Screen Modal */}
           <Modal visible={isFullScreen} animationType="fade">
@@ -668,6 +730,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   }, detailsContainer: {
     padding: 16,
+    marginTop:10,
     paddingBottom: 90, // Add padding to account for sticky footer
     backgroundColor: '#fff',
   },

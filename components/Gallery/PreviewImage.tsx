@@ -35,7 +35,7 @@ const PreviewImage = (props) =>{
         }
     </View>
     <TouchableOpacity onPress={props.closed}  style={styles.closeContainer}>
-        <Icon name="close-circle-outline" size={35}/>
+        <Icon name="close-circle-outline" color={"white"}size={35}/>
     </TouchableOpacity>
 </SafeAreaView>
             </Modal>
